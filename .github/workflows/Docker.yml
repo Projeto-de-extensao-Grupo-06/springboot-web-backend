@@ -27,5 +27,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME=ghcr.io/minha-org/meu-projeto:latest
+          IMAGE_NAME=ghcr.io/projeto-de-extensao-grupo-06/meu-projeto:latest
           docker push $IMAGE_NAME
