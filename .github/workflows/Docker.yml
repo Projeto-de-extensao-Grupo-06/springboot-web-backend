@@ -28,5 +28,4 @@ jobs:
       - name: Push Docker image
         run: |
           IMAGE_NAME=ghcr.io/projeto-de-extensao-grupo-06/springboot-web-backend:latest
-:latest
           docker push $IMAGE_NAME
