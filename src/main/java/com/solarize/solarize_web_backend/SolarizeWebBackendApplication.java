@@ -8,6 +8,7 @@ public class SolarizeWebBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SolarizeWebBackendApplication.class, args);
+		
 	}
 
 }
