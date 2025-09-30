@@ -19,8 +19,6 @@ import java.util.List;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final JwtTokenManager jwtTokenManager;
-    private final AuthenticationManager authenticationManager;
 
     public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenManager jwtTokenManager, AuthenticationManager authenticationManager) {
         this.passwordEncoder = passwordEncoder;
@@ -38,21 +36,6 @@ public class UserService {
 
     }
 
-    public AuthResponseDto autenticar(User user){
-
-        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-
-        final Authentication authentication = this.authenticationManager.authenticate(credentials);
-
-        User userAuthenticated = userRepository.findByEmail(user.getEmail()).orElseThrow(()-> new ResponseStatusException(404, "Email do usuário não cadastrado", null));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final String token =  jwtTokenManager.generateToken(authentication, userAuthenticated.getId());
-
-        return UserMapper.of(userAuthenticated, token);
-
-    }
 
     public List<UserResponseDto> listarTodos(){
 
