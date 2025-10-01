@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(
                         HttpMethod.POST,
-                        "/users/login"
+                        "/auth/login"
                         )
                         .permitAll()
                         .anyRequest()

@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody UserCredentialsDto userCredentialsDto){
-        System.out.println(userCredentialsDto.getEmail());
-        System.out.println(userCredentialsDto.getPassword());
         final User user = UserMapper.of(userCredentialsDto);
-        AuthResponseDto authResponseDto = this.userService.autenticar(user);
+        AuthResponseDto authResponseDto = this.authService.login(user);
 
         return ResponseEntity.status(200).body(authResponseDto);
     }

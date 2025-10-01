@@ -1,5 +1,6 @@
 package com.solarize.solarize_web_backend.shared.security;
 
+import com.solarize.solarize_web_backend.modules.auth.dtos.UserDetailsDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -38,6 +39,7 @@ public class JwtTokenManager {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("authorities", authorities)
                 .signWith(parseSecret())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity * 1_000))

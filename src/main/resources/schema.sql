@@ -4,5 +4,5 @@ VALUES (
         'Rocha',
         'bryan@gmail.com',
         '11964275054',
-        '$2a$12$kUOhdoNY5.eo/HSYW2ZEAOeA8ZIu8PDXjv0z8dE0WcymSwDkeppoO'
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG'
        );
