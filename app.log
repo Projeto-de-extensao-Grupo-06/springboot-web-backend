@@ -4204,3 +4204,39 @@ java.lang.NoSuchMethodError: 'void org.springframework.web.method.ControllerAdvi
 2025-10-02T17:11:08.024-03:00  INFO 14192 --- [solarize-web-backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-10-02T17:11:08.027-03:00  INFO 14192 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-10-02T17:11:08.029-03:00  INFO 14192 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-02T20:09:25.230-03:00  INFO 12644 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 12644 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-02T20:09:25.232-03:00  INFO 12644 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : No active profile set, falling back to 1 default profile: "default"
+2025-10-02T20:09:26.265-03:00  INFO 12644 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-02T20:09:26.327-03:00  INFO 12644 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 1 JPA repository interface.
+2025-10-02T20:09:26.881-03:00  INFO 12644 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-02T20:09:26.900-03:00  INFO 12644 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-02T20:09:26.901-03:00  INFO 12644 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-02T20:09:26.955-03:00  INFO 12644 --- [solarize-web-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2025-10-02T20:09:26.956-03:00  INFO 12644 --- [solarize-web-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1675 ms
+2025-10-02T20:09:27.080-03:00  INFO 12644 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-02T20:09:27.293-03:00  INFO 12644 --- [solarize-web-backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:teste-security user=ADMIN
+2025-10-02T20:09:27.295-03:00  INFO 12644 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-02T20:09:27.367-03:00  INFO 12644 --- [solarize-web-backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-02T20:09:27.429-03:00  INFO 12644 --- [solarize-web-backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-02T20:09:27.459-03:00  INFO 12644 --- [solarize-web-backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-02T20:09:27.774-03:00  INFO 12644 --- [solarize-web-backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-02T20:09:27.845-03:00  INFO 12644 --- [solarize-web-backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-02T20:09:28.813-03:00  INFO 12644 --- [solarize-web-backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-02T20:09:28.860-03:00  INFO 12644 --- [solarize-web-backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-02T20:09:29.376-03:00  WARN 12644 --- [solarize-web-backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-02T20:09:29.417-03:00  INFO 12644 --- [solarize-web-backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
+2025-10-02T20:09:30.220-03:00  INFO 12644 --- [solarize-web-backend] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:teste-security'
+2025-10-02T20:09:30.342-03:00  INFO 12644 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2025-10-02T20:09:30.350-03:00  INFO 12644 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Started SolarizeWebBackendApplication in 5.687 seconds (process running for 6.445)
+2025-10-02T20:09:34.323-03:00  INFO 12644 --- [solarize-web-backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-02T20:09:34.347-03:00  INFO 12644 --- [solarize-web-backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-02T20:09:34.360-03:00  INFO 12644 --- [solarize-web-backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-02T20:09:34.366-03:00  INFO 12644 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-02T20:09:34.369-03:00  INFO 12644 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
