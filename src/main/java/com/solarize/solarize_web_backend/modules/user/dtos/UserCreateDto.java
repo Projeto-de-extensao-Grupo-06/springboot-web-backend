@@ -12,10 +12,10 @@ import lombok.Setter;
 public class UserCreateDto {
     @Size(min = 3, max = 20)
     @Schema(description = "Nome do usuário", example = "John")
-    private String firstName;@Size(min = 3, max = 20)
+    private String firstName;
 
     @Size(min = 3, max = 20)
-    @Schema(description = "Sobrenome do usuário", example = "Due")
+    @Schema(description = "Sobrenome do usuário", example = "Doe")
     private String lastName;
 
     @Email

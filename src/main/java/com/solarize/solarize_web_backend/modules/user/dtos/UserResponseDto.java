@@ -19,7 +19,7 @@ public class UserResponseDto {
     @Schema(description = "Email do usuário", example = "john@doe.com")
     private String email;
 
-    @Schema(description = "Telegone do usuário", example = "11969166583")
+    @Schema(description = "Telefone do usuário", example = "11969166583")
     private String phone;
 
 }
