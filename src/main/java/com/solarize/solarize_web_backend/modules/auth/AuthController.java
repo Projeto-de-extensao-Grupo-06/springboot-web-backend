@@ -3,6 +3,12 @@ package com.solarize.solarize_web_backend.modules.auth;
 import com.solarize.solarize_web_backend.modules.user.User;
 import com.solarize.solarize_web_backend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarize_web_backend.modules.user.dtos.UserCredentialsDto;
+import com.solarize.solarize_web_backend.shared.globalExceptionHandler.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +26,25 @@ public class AuthController {
         this.authService = authService;
     }
 
+
+    @Operation(summary = "Login de usuário", description = "Autentica um usuário e retorna token JWT")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Login realizado com sucesso",
+                    content = @Content(schema = @Schema(implementation = AuthResponseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Credenciais incorretas",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro interno do servidor",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(
             @RequestBody UserCredentialsDto userCredentialsDto,
