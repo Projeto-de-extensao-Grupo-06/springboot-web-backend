@@ -1,6 +1,5 @@
 package com.solarize.solarize_web_backend.shared.security;
 
-import com.solarize.solarize_web_backend.modules.auth.dtos.UserDetailsDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

@@ -3,8 +3,7 @@ package com.solarize.solarize_web_backend.modules.auth;
 import com.solarize.solarize_web_backend.modules.auth.dtos.UserDetailsDto;
 import com.solarize.solarize_web_backend.modules.user.User;
 import com.solarize.solarize_web_backend.modules.user.UserRepository;
-import com.solarize.solarize_web_backend.modules.user.dtos.AuthResponseDto;
-import com.solarize.solarize_web_backend.modules.user.dtos.UserMapper;
+import com.solarize.solarize_web_backend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarize_web_backend.shared.security.JwtTokenManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -32,11 +31,11 @@ public class AuthService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+    public UserDetails loadUserByUsername(String username) {
         Optional<User> usuarioOpt = userRepository.findByEmail(username);
 
         if (usuarioOpt.isEmpty()){
-            throw new UsernameNotFoundException(String.format("usuario: %s não encontrado", username));
+            throw new UsernameNotFoundException("User not found");
         }
 
         return new UserDetailsDto(usuarioOpt.get());
@@ -55,7 +54,7 @@ public class AuthService implements UserDetailsService {
 
             final String token =  jwtTokenManager.generateToken(authentication, userAuthenticated.getId());
 
-            return UserMapper.of(userAuthenticated, token);
+            return AuthMapper.of(userAuthenticated, token);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

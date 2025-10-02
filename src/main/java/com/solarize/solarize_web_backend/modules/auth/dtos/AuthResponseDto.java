@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user.dtos;
+package com.solarize.solarize_web_backend.modules.auth.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,5 +10,4 @@ public class AuthResponseDto {
     private String firstName;
     private String lastName;
     private String token;
-
 }

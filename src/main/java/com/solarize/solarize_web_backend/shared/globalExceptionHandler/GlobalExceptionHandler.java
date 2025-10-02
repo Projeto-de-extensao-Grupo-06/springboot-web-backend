@@ -1,30 +1,25 @@
 package com.solarize.solarize_web_backend.shared.globalExceptionHandler;
 
-import com.solarize.solarize_web_backend.shared.exceptions.InternalServerError;
-import com.solarize.solarize_web_backend.shared.exceptions.UnauthorizedException;
 import com.solarize.solarize_web_backend.shared.globalExceptionHandler.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponse> handleException(HttpServletRequest request, Exception exception) {
-//        InternalServerError ex = new InternalServerError();
-//
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-//                new ErrorResponse(
-//                        ex.getMessage(),
-//                        ex.getSTATUS(),
-//                        ex.getSTATUS_DESC(),
-//                        ex.getPATH(),
-//                        ex.getTIMESTAMP()
-//                )
-//        );
-//    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(HttpServletRequest request, BadCredentialsException ex){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(
+                ex.getMessage(),
+                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        ));
+    }
 }

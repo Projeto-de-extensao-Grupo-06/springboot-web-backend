@@ -1,10 +1,10 @@
-package com.solarize.solarize_web_backend.modules.user.dtos;
+package com.solarize.solarize_web_backend.modules.user;
 
 
-import com.solarize.solarize_web_backend.modules.user.User;
+import com.solarize.solarize_web_backend.modules.user.dtos.UserCreateDto;
+import com.solarize.solarize_web_backend.modules.user.dtos.UserResponseDto;
 
 public class UserMapper {
-
     public static User of(UserCreateDto userCreateDto){
         User user = new User();
 
@@ -16,26 +16,6 @@ public class UserMapper {
 
         return user;
 
-    }
-
-    public static User of(UserCredentialsDto userCredentialsDto){
-        User user = new User();
-
-        user.setEmail(userCredentialsDto.getEmail());
-        user.setPassword(userCredentialsDto.getPassword());
-
-        return user;
-    }
-
-    public static AuthResponseDto of(User user, String token){
-        AuthResponseDto authResponseDto = new AuthResponseDto();
-
-        authResponseDto.setUserId(user.getId());
-        authResponseDto.setFirstName(user.getFirstName());
-        authResponseDto.setLastName(user.getLastName());
-        authResponseDto.setToken(token);
-
-        return authResponseDto;
     }
 
     public static UserResponseDto of(User user){

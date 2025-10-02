@@ -2,8 +2,10 @@ package com.solarize.solarize_web_backend.shared.security;
 
 import com.solarize.solarize_web_backend.modules.auth.AuthService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -16,7 +18,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class AuthFilter extends OncePerRequestFilter {
@@ -42,21 +47,29 @@ public class AuthFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
-        String requestTokenHeader = request.getHeader("Authorization");
+        Cookie[] cookies = request.getCookies();
 
-        if (Objects.nonNull(requestTokenHeader) && requestTokenHeader.startsWith("Bearer ")){
-            jwtToken = requestTokenHeader.substring(7);
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("Authorization")){
+                    jwtToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
+
+        if (Objects.nonNull(jwtToken)) {
             try{
                 username = jwtTokenManager.getUserIdFromToken(jwtToken);
-            }catch (ExpiredJwtException exception){
-
-                LOGGER.info("[FALHA AUTENTICAÇÃO] - Token expirado, usuario: {} - {}", exception.getClaims().getSubject(), exception.getMessage());
-
-                LOGGER.trace("[FALHA AUTENTICAÇÃO] -  stack trace: %s", exception);
+            } catch (ExpiredJwtException exception){
+                LOGGER.info("[FALHA AUTENTICAÇÃO] - Expired token: {} - {}", exception.getClaims().getSubject(), exception.getMessage());
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            } catch (MalformedJwtException exception) {
+                LOGGER.info("[FALHA AUTENTICAÇÃO] - Malformed JWT JSON: {}", exception.getMessage());
 
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
 
         }

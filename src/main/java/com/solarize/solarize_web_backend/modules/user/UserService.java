@@ -2,7 +2,6 @@ package com.solarize.solarize_web_backend.modules.user;
 
 import com.solarize.solarize_web_backend.shared.security.JwtTokenManager;
 import com.solarize.solarize_web_backend.modules.user.dtos.UserResponseDto;
-import com.solarize.solarize_web_backend.modules.user.dtos.UserMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

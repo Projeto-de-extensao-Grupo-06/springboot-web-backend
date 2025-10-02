@@ -107,6 +107,4 @@ public class SecurityConfig {
         return origem;
 
     }
-
-
 }
