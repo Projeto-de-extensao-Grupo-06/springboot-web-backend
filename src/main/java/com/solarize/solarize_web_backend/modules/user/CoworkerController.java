@@ -4,6 +4,7 @@ import com.solarize.solarize_web_backend.modules.user.dtos.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,7 +29,7 @@ public class CoworkerController {
     }
     
     @GetMapping
-    @SecurityRequirement(name = "Bearer")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<CoworkerResponseDto>> listarTodos(){
 
         List<CoworkerResponseDto> usuariosEncontrados  = this.coworkerService.listarTodos();

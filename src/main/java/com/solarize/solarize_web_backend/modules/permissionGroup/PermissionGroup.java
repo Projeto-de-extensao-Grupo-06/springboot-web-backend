@@ -1,6 +1,7 @@
 package com.solarize.solarize_web_backend.modules.permissionGroup;
 
 import com.solarize.solarize_web_backend.modules.permissionGroup.annotation.ModulePermission;
+import com.solarize.solarize_web_backend.modules.permissionGroup.annotation.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,9 @@ public class PermissionGroup {
     @Column(name = "id_permission_group")
     private Long id;
 
+    @Role
     private String role;
+
     private String mainScreen;
 
     @ModulePermission("CLIENT")

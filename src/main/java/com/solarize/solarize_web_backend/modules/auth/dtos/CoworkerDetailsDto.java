@@ -1,6 +1,6 @@
 package com.solarize.solarize_web_backend.modules.auth.dtos;
 
-import com.solarize.solarize_web_backend.modules.permissionGroup.BitMaskResolver;
+import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionsResolver;
 import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionGroup;
 import com.solarize.solarize_web_backend.modules.user.Coworker;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.security.Permission;
 import java.util.Collection;
 
 @Getter
@@ -33,7 +32,7 @@ public class CoworkerDetailsDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new BitMaskResolver().resolve(this.permission);
+        return new PermissionsResolver().resolve(this.permission);
     }
 
     @Override
