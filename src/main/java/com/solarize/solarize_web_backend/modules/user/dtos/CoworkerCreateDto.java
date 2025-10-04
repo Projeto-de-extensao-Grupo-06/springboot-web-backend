@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserCreateDto {
+public class CoworkerCreateDto {
     @Size(min = 3, max = 20)
     @Schema(description = "Nome do usuário", example = "John")
     private String firstName;

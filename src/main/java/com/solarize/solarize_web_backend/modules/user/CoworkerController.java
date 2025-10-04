@@ -11,27 +11,27 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
-    private final UserService userService;
+public class CoworkerController {
+    private final CoworkerService coworkerService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public CoworkerController(CoworkerService coworkerService) {
+        this.coworkerService = coworkerService;
     }
 
     @PostMapping
     @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<Void> criar(@RequestBody @Valid UserCreateDto userCreateDto){
-        final User newUser = UserMapper.of(userCreateDto);
-        this.userService.criar(newUser);
+    public ResponseEntity<Void> criar(@RequestBody @Valid CoworkerCreateDto coworkerCreateDto){
+        final Coworker newCoworker = CoworkerMapper.of(coworkerCreateDto);
+        this.coworkerService.criar(newCoworker);
         return ResponseEntity.status(201).build();
 
     }
-
+    
     @GetMapping
     @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<List<UserResponseDto>> listarTodos(){
+    public ResponseEntity<List<CoworkerResponseDto>> listarTodos(){
 
-        List<UserResponseDto> usuariosEncontrados  = this.userService.listarTodos();
+        List<CoworkerResponseDto> usuariosEncontrados  = this.coworkerService.listarTodos();
 
         if (usuariosEncontrados.isEmpty()){
             return ResponseEntity.status(204).build();

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserResponseDto {
+public class CoworkerResponseDto {
     @Schema(description = "Id do usuário", example = "1")
     private Long id;
 

@@ -1,5 +1,6 @@
 package com.solarize.solarize_web_backend.modules.user;
 
+import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +8,10 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "\"user\"")
-public class User {
+public class Coworker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_coworker")
     private Long id;
 
     private String firstName;
@@ -18,4 +19,8 @@ public class User {
     private String email;
     private String phone;
     private String password;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_permission_group")
+    private PermissionGroup permission;
 }

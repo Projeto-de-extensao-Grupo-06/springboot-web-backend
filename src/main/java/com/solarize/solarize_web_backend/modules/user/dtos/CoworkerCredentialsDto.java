@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCredentialsDto {
+public class CoworkerCredentialsDto {
 
     @Schema(description = "Email do usuário", example = "john@doe.com")
     private String email;
