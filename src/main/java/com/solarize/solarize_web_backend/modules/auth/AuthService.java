@@ -1,8 +1,8 @@
 package com.solarize.solarize_web_backend.modules.auth;
 
 import com.solarize.solarize_web_backend.modules.auth.dtos.CoworkerDetailsDto;
-import com.solarize.solarize_web_backend.modules.user.Coworker;
-import com.solarize.solarize_web_backend.modules.user.CoworkerRepository;
+import com.solarize.solarize_web_backend.modules.coworker.Coworker;
+import com.solarize.solarize_web_backend.modules.coworker.CoworkerRepository;
 import com.solarize.solarize_web_backend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarize_web_backend.shared.security.JwtTokenManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

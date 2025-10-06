@@ -1,8 +1,8 @@
-package com.solarize.solarize_web_backend.modules.user;
+package com.solarize.solarize_web_backend.modules.coworker;
 
 
-import com.solarize.solarize_web_backend.modules.user.dtos.CoworkerCreateDto;
-import com.solarize.solarize_web_backend.modules.user.dtos.CoworkerResponseDto;
+import com.solarize.solarize_web_backend.modules.coworker.dtos.CoworkerCreateDto;
+import com.solarize.solarize_web_backend.modules.coworker.dtos.CoworkerResponseDto;
 
 public class CoworkerMapper {
     public static Coworker of(CoworkerCreateDto coworkerCreateDto){

@@ -2,7 +2,7 @@ package com.solarize.solarize_web_backend.modules.auth.dtos;
 
 import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionsResolver;
 import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionGroup;
-import com.solarize.solarize_web_backend.modules.user.Coworker;
+import com.solarize.solarize_web_backend.modules.coworker.Coworker;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user.dtos;
+package com.solarize.solarize_web_backend.modules.coworker.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
