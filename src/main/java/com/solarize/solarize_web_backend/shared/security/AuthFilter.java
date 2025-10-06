@@ -12,16 +12,15 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 public class AuthFilter extends OncePerRequestFilter {
@@ -46,6 +45,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwtToken = null;
+        List<SimpleGrantedAuthority> authorities = null;
 
         Cookie[] cookies = request.getCookies();
 
@@ -62,6 +62,8 @@ public class AuthFilter extends OncePerRequestFilter {
         if (Objects.nonNull(jwtToken)) {
             try{
                 username = jwtTokenManager.getUserIdFromToken(jwtToken);
+                authorities = jwtTokenManager.getAuthorities(jwtToken);
+
             } catch (ExpiredJwtException exception){
                 LOGGER.info("[FALHA AUTENTICAÇÃO] - Expired token: {} - {}", exception.getClaims().getSubject(), exception.getMessage());
 
@@ -75,25 +77,24 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            addUsernameInContext(request, username, jwtToken);
+            addUsernameInContext(request, username, jwtToken, authorities);
         }
 
         filterChain.doFilter(request, response);
 
     }
 
-    private void  addUsernameInContext(HttpServletRequest request, String username, String jwtToken){
+    private void  addUsernameInContext(HttpServletRequest request, String username, String jwtToken, List<SimpleGrantedAuthority> authorities){
 
         UserDetails userDetails = authService.loadUserByUsername(username);
 
         if (jwtTokenManager.validateToken(jwtToken, userDetails)){
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
         }
 
     }

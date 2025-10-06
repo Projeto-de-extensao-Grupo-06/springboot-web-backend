@@ -1,6 +1,7 @@
 package com.solarize.solarize_web_backend.shared.security;
 
 import com.solarize.solarize_web_backend.modules.auth.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -30,11 +31,9 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final AuthService authService;
-    private final AuthEntryPoint authEntryPoint;
 
-    public SecurityConfig(AuthService authService, AuthEntryPoint authEntryPoint) {
+    public SecurityConfig(AuthService authService) {
         this.authService = authService;
-        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -51,7 +50,12 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint(authEntryPoint))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        }))
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

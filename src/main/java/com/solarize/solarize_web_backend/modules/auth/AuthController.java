@@ -1,8 +1,8 @@
 package com.solarize.solarize_web_backend.modules.auth;
 
-import com.solarize.solarize_web_backend.modules.user.User;
+import com.solarize.solarize_web_backend.modules.coworker.Coworker;
 import com.solarize.solarize_web_backend.modules.auth.dtos.AuthResponseDto;
-import com.solarize.solarize_web_backend.modules.user.dtos.UserCredentialsDto;
+import com.solarize.solarize_web_backend.modules.coworker.dtos.CoworkerCredentialsDto;
 import com.solarize.solarize_web_backend.shared.globalExceptionHandler.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,8 +25,6 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-
-
     @Operation(summary = "Login de usuário", description = "Autentica um usuário e retorna token JWT")
     @ApiResponses({
             @ApiResponse(
@@ -47,11 +45,11 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(
-            @RequestBody UserCredentialsDto userCredentialsDto,
+            @RequestBody CoworkerCredentialsDto coworkerCredentialsDto,
             HttpServletResponse response
     ){
-        final User user = AuthMapper.of(userCredentialsDto);
-        AuthResponseDto authResponseDto = this.authService.login(user);
+        final Coworker coworker = AuthMapper.of(coworkerCredentialsDto);
+        AuthResponseDto authResponseDto = this.authService.login(coworker);
 
         Cookie tokenCookie = new Cookie("Authorization", authResponseDto.getToken());
         tokenCookie.setPath("/");

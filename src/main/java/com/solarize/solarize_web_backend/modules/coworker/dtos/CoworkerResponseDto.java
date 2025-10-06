@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user.dtos;
+package com.solarize.solarize_web_backend.modules.coworker.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserResponseDto {
+public class CoworkerResponseDto {
     @Schema(description = "Id do usuário", example = "1")
     private Long id;
 

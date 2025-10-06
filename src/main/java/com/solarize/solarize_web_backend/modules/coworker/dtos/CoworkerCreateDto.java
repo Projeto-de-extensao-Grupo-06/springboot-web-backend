@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user.dtos;
+package com.solarize.solarize_web_backend.modules.coworker.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserCreateDto {
+public class CoworkerCreateDto {
     @Size(min = 3, max = 20)
     @Schema(description = "Nome do usuário", example = "John")
     private String firstName;

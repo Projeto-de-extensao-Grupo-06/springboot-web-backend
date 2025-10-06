@@ -1,6 +1,8 @@
 package com.solarize.solarize_web_backend.modules.auth.dtos;
 
-import com.solarize.solarize_web_backend.modules.user.User;
+import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionsResolver;
+import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionGroup;
+import com.solarize.solarize_web_backend.modules.coworker.Coworker;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,25 +12,27 @@ import java.util.Collection;
 
 @Getter
 @Setter
-public class UserDetailsDto implements UserDetails {
+public class CoworkerDetailsDto implements UserDetails {
 
     private Long id;
     private final String firstName;
     private final String lastName;
     private final String email;
     private final String password;
+    private final PermissionGroup permission;
 
-    public UserDetailsDto(User user) {
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
+    public CoworkerDetailsDto(Coworker coworker) {
+        this.id = coworker.getId();
+        this.firstName = coworker.getFirstName();
+        this.lastName = coworker.getLastName();
+        this.email = coworker.getEmail();
+        this.password = coworker.getPassword();
+        this.permission = coworker.getPermission();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new PermissionsResolver().resolve(this.permission);
     }
 
     @Override
