@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -54,7 +55,7 @@ public class AuthService implements UserDetailsService {
 
             final String token =  jwtTokenManager.generateToken(authentication, coworkerAuthenticated.getId());
 
-            return AuthMapper.of(coworkerAuthenticated, token);
+            return AuthMapper.of(coworkerAuthenticated, token, authentication.getAuthorities().stream().collect(Collectors.toList()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

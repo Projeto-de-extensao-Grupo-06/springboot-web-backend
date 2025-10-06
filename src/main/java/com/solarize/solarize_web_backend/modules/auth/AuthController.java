@@ -12,10 +12,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/auth")
@@ -70,6 +75,25 @@ public class AuthController {
         userLastNameCookie.setAttribute("SameSite", "Strict");
         response.addCookie(userLastNameCookie);
 
-        return ResponseEntity.status(200).body(authResponseDto);
+
+        Cookie authoritiesCookie = new Cookie("userAuthorities", Base64.getEncoder().encodeToString(authResponseDto
+                .getAuthorities()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)));
+        authoritiesCookie.setPath("/");
+        authoritiesCookie.setMaxAge(60 * 60 * 6);
+        authoritiesCookie.setAttribute("SameSite", "Strict");
+        response.addCookie(authoritiesCookie);
+
+        return ResponseEntity.status(200).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("Authorization", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return  ResponseEntity.status(200).build();
     }
 }
