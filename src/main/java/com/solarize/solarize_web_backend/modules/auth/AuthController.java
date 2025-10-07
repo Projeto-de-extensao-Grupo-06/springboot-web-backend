@@ -1,8 +1,8 @@
 package com.solarize.solarize_web_backend.modules.auth;
 
-import com.solarize.solarize_web_backend.modules.user.Coworker;
+import com.solarize.solarize_web_backend.modules.coworker.Coworker;
 import com.solarize.solarize_web_backend.modules.auth.dtos.AuthResponseDto;
-import com.solarize.solarize_web_backend.modules.user.dtos.CoworkerCredentialsDto;
+import com.solarize.solarize_web_backend.modules.coworker.dtos.CoworkerCredentialsDto;
 import com.solarize.solarize_web_backend.shared.globalExceptionHandler.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

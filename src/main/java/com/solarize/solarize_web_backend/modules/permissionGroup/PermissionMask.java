@@ -1,6 +1,10 @@
 package com.solarize.solarize_web_backend.modules.permissionGroup;
 
-import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.*;
+import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.PermissionVerifier;
+import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.ReadVerifier;
+import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.WriteVerifier;
+import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.UpdateVerifier;
+import com.solarize.solarize_web_backend.modules.permissionGroup.permissionStrategy.DeleteVerifier;
 
 public enum PermissionMask {
     READ(0x1, "READ", ReadVerifier.class),

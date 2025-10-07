@@ -1,6 +1,6 @@
-package com.solarize.solarize_web_backend.modules.user;
+package com.solarize.solarize_web_backend.modules.coworker;
 
-import com.solarize.solarize_web_backend.modules.user.dtos.*;
+import com.solarize.solarize_web_backend.modules.coworker.dtos.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

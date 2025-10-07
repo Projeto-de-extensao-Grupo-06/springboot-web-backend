@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user;
+package com.solarize.solarize_web_backend.modules.coworker;
 
 import com.solarize.solarize_web_backend.modules.permissionGroup.PermissionGroup;
 import jakarta.persistence.*;

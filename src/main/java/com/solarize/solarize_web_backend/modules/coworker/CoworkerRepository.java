@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.user;
+package com.solarize.solarize_web_backend.modules.coworker;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
