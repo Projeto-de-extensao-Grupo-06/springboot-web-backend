@@ -90,26 +90,22 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response){
-        // Clear Authorization cookie
         Cookie authCookie = new Cookie("Authorization", "");
         authCookie.setHttpOnly(true);
         authCookie.setPath("/");
         authCookie.setMaxAge(0);
         response.addCookie(authCookie);
 
-        // Clear userFirstName cookie
         Cookie firstNameCookie = new Cookie("userFirstName", "");
         firstNameCookie.setPath("/");
         firstNameCookie.setMaxAge(0);
         response.addCookie(firstNameCookie);
 
-        // Clear userLastName cookie
         Cookie lastNameCookie = new Cookie("userLastName", "");
         lastNameCookie.setPath("/");
         lastNameCookie.setMaxAge(0);
         response.addCookie(lastNameCookie);
 
-        // Clear userAuthorities cookie
         Cookie authoritiesCookie = new Cookie("userAuthorities", "");
         authoritiesCookie.setPath("/");
         authoritiesCookie.setMaxAge(0);
