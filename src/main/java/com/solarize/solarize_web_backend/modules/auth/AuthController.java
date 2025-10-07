@@ -12,10 +12,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/auth")
@@ -70,6 +75,45 @@ public class AuthController {
         userLastNameCookie.setAttribute("SameSite", "Strict");
         response.addCookie(userLastNameCookie);
 
-        return ResponseEntity.status(200).body(authResponseDto);
+
+        Cookie authoritiesCookie = new Cookie("userAuthorities", Base64.getEncoder().encodeToString(authResponseDto
+                .getAuthorities()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)));
+        authoritiesCookie.setPath("/");
+        authoritiesCookie.setMaxAge(60 * 60 * 6);
+        authoritiesCookie.setAttribute("SameSite", "Strict");
+        response.addCookie(authoritiesCookie);
+
+        return ResponseEntity.status(200).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response){
+        // Clear Authorization cookie
+        Cookie authCookie = new Cookie("Authorization", "");
+        authCookie.setHttpOnly(true);
+        authCookie.setPath("/");
+        authCookie.setMaxAge(0);
+        response.addCookie(authCookie);
+
+        // Clear userFirstName cookie
+        Cookie firstNameCookie = new Cookie("userFirstName", "");
+        firstNameCookie.setPath("/");
+        firstNameCookie.setMaxAge(0);
+        response.addCookie(firstNameCookie);
+
+        // Clear userLastName cookie
+        Cookie lastNameCookie = new Cookie("userLastName", "");
+        lastNameCookie.setPath("/");
+        lastNameCookie.setMaxAge(0);
+        response.addCookie(lastNameCookie);
+
+        // Clear userAuthorities cookie
+        Cookie authoritiesCookie = new Cookie("userAuthorities", "");
+        authoritiesCookie.setPath("/");
+        authoritiesCookie.setMaxAge(0);
+        response.addCookie(authoritiesCookie);
+        return  ResponseEntity.status(200).build();
     }
 }
