@@ -1,4 +1,4 @@
-package com.solarize.solarize_web_backend.modules.material_catalog;
+package com.solarize.solarizeWebBackend.material_catalog;
 
 import jakarta.persistence.Entity;
 
