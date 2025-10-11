@@ -8,6 +8,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@Data
 @Entity
 public class Coworker {
     @Id
