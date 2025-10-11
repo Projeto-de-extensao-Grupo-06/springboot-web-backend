@@ -3,11 +3,7 @@ name: Java CI
 on:
   push:
     branches:
-      - '**'   # roda em todas as branches
-  pull_request:
-    branches:
-      - main   # roda quando PR é aberto para main
-
+      - '**'
 jobs:
   build:
     runs-on: ubuntu-latest
