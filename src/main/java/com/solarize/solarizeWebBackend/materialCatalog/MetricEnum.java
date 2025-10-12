@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.material_catalog;
+package com.solarize.solarizeWebBackend.materialCatalog;
 
 public enum MetricEnum {
     UNIT("unit"),
