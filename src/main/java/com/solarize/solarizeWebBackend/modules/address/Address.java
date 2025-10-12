@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_addres")
+    @Column(name = "id_address")
     private Integer id;
 
     private String postalCode;
