@@ -13,7 +13,7 @@ public class MaterialCatalog {
     @Column(name = "id_material")
     private Integer id;
 
-    private Integer name;
+    private String name;
     private Double price;
     private String supplier;
     private String url;
