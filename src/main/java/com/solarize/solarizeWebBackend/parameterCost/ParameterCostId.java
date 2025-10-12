@@ -9,7 +9,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParameterCostId extends Serializable {
+public class ParameterCostId implements Serializable {
     private Integer parameter;
     private Integer option;
 }
