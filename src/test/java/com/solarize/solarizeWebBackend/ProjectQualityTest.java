@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.PostLoad;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -332,6 +331,22 @@ public class ProjectQualityTest {
                         assertTrue(ResponseEntity.class.isAssignableFrom(returnType),
                                 "Controller precisa retornar um ResponseEntity: " + c.getName() + "." + method.getName());
                     }
+                }
+            }
+        });
+    }
+
+
+    @Test
+    @DisplayName("Modulos devem estar dentro de modules ou shared.")
+    void packageInModulesOrShared() {
+        classes.forEach(c -> {
+            String className = c.getName();
+
+            if(!className.contains("modules") && !className.contains("shared") && !className.endsWith("Test") && !className.endsWith("Tests")) {
+                if(!c.getSimpleName().equals("SolarizeWebBackendApplication")) {
+                    fail("Uma classe precisa estar inserida em um modulo do sistema ou um modulo compartilhado." +
+                            "Mova para /shared ou /modules: " + className);
                 }
             }
         });
