@@ -343,7 +343,12 @@ public class ProjectQualityTest {
         classes.forEach(c -> {
             String className = c.getName();
 
-            if(!className.contains("modules") && !className.contains("shared") && !className.endsWith("Test") && !className.endsWith("Tests")) {
+            if(
+                    !className.startsWith("com.solarize.solarizeWebBackend.modules.") &&
+                            !className.startsWith("com.solarize.solarizeWebBackend.shared.") &&
+                            !className.endsWith("Test") &&
+                            !className.endsWith("Tests")
+            ) {
                 if(!c.getSimpleName().equals("SolarizeWebBackendApplication")) {
                     fail("Uma classe precisa estar inserida em um modulo do sistema ou um modulo compartilhado." +
                             "Mova para /shared ou /modules: " + className);
