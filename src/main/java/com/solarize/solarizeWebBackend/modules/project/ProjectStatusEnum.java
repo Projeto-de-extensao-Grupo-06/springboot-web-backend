@@ -5,7 +5,7 @@ public enum ProjectStatusEnum {
     SCHEDULED_TECHNICAL_VISIT("scheduled_technical_visit"),
     VISITING("visiting"),
     FINAL_BUDGET("final_budget"),
-    INSTALING("instaling"),
+    INSTALLING("installing"),
     INSTALLING_AND_HOMOLOGATING("installing and homologating"),
     HOMOLOGATED("homologated"),
     FINISHED("finished");
