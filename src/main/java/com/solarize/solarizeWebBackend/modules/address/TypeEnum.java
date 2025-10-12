@@ -10,6 +10,5 @@ public enum TypeEnum {
 
     TypeEnum(String value) {
         this.value = value;
-
     }
 }
