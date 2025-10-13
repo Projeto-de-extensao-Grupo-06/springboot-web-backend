@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.Role;
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.ModulePermissionsDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.permissionStrategy.PermissionVerifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -53,15 +54,13 @@ public class PermissionsResolver {
                     String moduleName =  field.getAnnotation(ModulePermission.class).value();
 
                     for(PermissionMask permissionMask : PermissionMask.values()) {
-                        Constructor<? extends PermissionVerifier> constructor = permissionMask.permissionVerifierClass.getConstructor();
-                        PermissionVerifier permissionVerifier = constructor.newInstance();
+                        PermissionVerifier permissionVerifier = permissionMask.permissionVerifierClass;
 
                         if(permissionVerifier.verifyPermission(bitMask)) {
                             this.grantedAuthorities.add(new SimpleGrantedAuthority(moduleName + "_" + permissionMask.name()));
                         }
                     }
-                } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException |
-                         InstantiationException e) {
+                } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
             }
