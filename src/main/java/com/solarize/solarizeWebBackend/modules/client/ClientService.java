@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.client;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.shared.exceptions.ClientNotFoundException;
 import javassist.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClientService {
 
     private final ClientRepository REPOSITORY;
-
-    public ClientService(ClientRepository repository){
-        this.REPOSITORY = repository;
-    }
 
     public ClientResponseDTO getClient(int id){
         Optional<Client> client = REPOSITORY.findById(id);
