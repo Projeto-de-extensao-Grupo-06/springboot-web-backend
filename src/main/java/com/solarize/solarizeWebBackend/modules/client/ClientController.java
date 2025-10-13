@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
+@RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService SERVICE;
-
-    public ClientController(ClientService service){
-        this.SERVICE = service;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> getClient(@PathVariable int id){
