@@ -17,7 +17,6 @@ public class Client {
     @Column(name = "id_client")
     private Integer id;
 
-
     private String firstName;
     private String lastName;
     private String documentNumber;

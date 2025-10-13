@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
+import com.solarize.solarizeWebBackend.shared.exceptions.ClientNotFoundException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(HttpServletRequest request, BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(
+                ex.getMessage(),
+                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        ));
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleClientNotFoundException(HttpServletRequest request, ClientNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(
                 ex.getMessage(),
                 String.valueOf(HttpStatus.UNAUTHORIZED.value()),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
