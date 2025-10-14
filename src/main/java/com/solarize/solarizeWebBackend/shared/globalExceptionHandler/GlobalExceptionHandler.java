@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -21,5 +22,12 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 LocalDateTime.now()
         ));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(HttpServletRequest request, NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ExceptionsMapper.of(ex)
+        );
     }
 }
