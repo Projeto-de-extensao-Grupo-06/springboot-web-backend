@@ -1,11 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
-import com.solarize.solarizeWebBackend.shared.exceptions.ClientNotFoundException;
-import javassist.NotFoundException;
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +16,7 @@ public class ClientService {
 
     public ClientResponseDTO getClient(int id){
         Optional<Client> client = REPOSITORY.findById(id);
-        if(client.isEmpty()) throw new ClientNotFoundException("Usuário não encontrado", HttpStatus.NOT_FOUND);
+        if(client.isEmpty()) throw new NotFoundException("User not found.");
         return ClientMapper.of(client.get());
     }
 
