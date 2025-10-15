@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.Role;
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.ModulePermissionsDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.permissionStrategy.PermissionVerifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,18 +14,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class PermissionsResolver {
-    private final List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+    static public List<GrantedAuthority> resolve(Object permissionSource) {
+        final List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-    public List<GrantedAuthority> resolve(Object permissionSource) {
-        this.resolveRole(permissionSource);
-        this.resolveModulePermissions(permissionSource);
+        resolveRole(permissionSource, grantedAuthorities);
+        resolveModulePermissions(permissionSource, grantedAuthorities);
 
-        return this.grantedAuthorities;
+        return grantedAuthorities;
     }
 
-    private void resolveRole(Object permissionSource) {
+    private static void resolveRole(Object permissionSource, List<GrantedAuthority> grantedAuthorities) {
         Field[] fields = permissionSource.getClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -34,7 +34,7 @@ public class PermissionsResolver {
                     Role role = field.getAnnotation(Role.class);
                     String roleName = (String) field.get(permissionSource);
 
-                    this.grantedAuthorities.add(new SimpleGrantedAuthority(role.value() + "_" + roleName.toUpperCase()));
+                    grantedAuthorities.add(new SimpleGrantedAuthority(role.value() + "_" + roleName.toUpperCase()));
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -42,7 +42,7 @@ public class PermissionsResolver {
         }
     }
 
-    private void resolveModulePermissions(Object permissionSource) {
+    private static void resolveModulePermissions(Object permissionSource, List<GrantedAuthority> grantedAuthorities) {
         Field[] fields = permissionSource.getClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -53,15 +53,13 @@ public class PermissionsResolver {
                     String moduleName =  field.getAnnotation(ModulePermission.class).value();
 
                     for(PermissionMask permissionMask : PermissionMask.values()) {
-                        Constructor<? extends PermissionVerifier> constructor = permissionMask.permissionVerifierClass.getConstructor();
-                        PermissionVerifier permissionVerifier = constructor.newInstance();
+                        PermissionVerifier permissionVerifier = permissionMask.permissionVerifierClass;
 
                         if(permissionVerifier.verifyPermission(bitMask)) {
-                            this.grantedAuthorities.add(new SimpleGrantedAuthority(moduleName + "_" + permissionMask.name()));
+                            grantedAuthorities.add(new SimpleGrantedAuthority(moduleName + "_" + permissionMask.name()));
                         }
                     }
-                } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException |
-                         InstantiationException e) {
+                } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
             }
