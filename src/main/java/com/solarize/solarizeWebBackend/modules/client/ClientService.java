@@ -18,7 +18,7 @@ public class ClientService {
 
     public ClientResponseDTO getClient(int id){
         Optional<Client> client = REPOSITORY.findById(id);
-        if(client.isEmpty()) throw new NotFoundException("User not found.");
+        if(client.isEmpty()) throw new NotFoundException("Client not found.");
         return ClientMapper.of(client.get());
     }
 
