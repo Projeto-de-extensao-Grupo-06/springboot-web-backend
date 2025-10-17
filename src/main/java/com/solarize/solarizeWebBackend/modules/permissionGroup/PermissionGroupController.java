@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/permision-groups")
+@RequestMapping("/permission-groups")
 @RequiredArgsConstructor
 public class PermissionGroupController {
     private final PermissionGroupService service;
