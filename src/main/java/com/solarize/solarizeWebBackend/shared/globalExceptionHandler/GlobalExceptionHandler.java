@@ -1,14 +1,18 @@
 package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
-import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
+import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
+import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,5 +25,19 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 LocalDateTime.now()
         ));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(HttpServletRequest request, NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ExceptionsMapper.of(ex)
+        );
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflictException(HttpServletRequest request, ConflictException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ExceptionsMapper.of(ex)
+        );
     }
 }

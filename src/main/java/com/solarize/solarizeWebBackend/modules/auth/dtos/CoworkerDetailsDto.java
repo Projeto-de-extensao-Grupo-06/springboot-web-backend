@@ -32,7 +32,7 @@ public class CoworkerDetailsDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new PermissionsResolver().resolve(this.permission);
+        return PermissionsResolver.resolve(this.permission);
     }
 
     @Override
