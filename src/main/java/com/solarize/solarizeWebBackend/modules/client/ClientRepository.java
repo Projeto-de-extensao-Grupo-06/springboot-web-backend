@@ -1,9 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
-import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
