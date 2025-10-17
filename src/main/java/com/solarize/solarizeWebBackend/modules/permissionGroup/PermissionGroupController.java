@@ -16,7 +16,7 @@ public class PermissionGroupController {
     private final PermissionGroupService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetRolesDto> getRolesById(@PathVariable int id) {
+    public ResponseEntity<GetRolesDto> getRolesById(@PathVariable long id) {
         PermissionGroup pg = this.service.permissionGroupById(id);
 
         return ResponseEntity
