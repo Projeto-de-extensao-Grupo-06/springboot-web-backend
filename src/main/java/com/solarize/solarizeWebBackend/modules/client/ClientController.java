@@ -37,7 +37,6 @@ public class ClientController {
     @GetMapping()
     public ResponseEntity<List<ClientResponseDTO>> getClients(){
         final List<ClientResponseDTO> clients = SERVICE.getClients();
-        HttpStatus status = HttpStatus.OK;
 
         if(clients.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(clients);
