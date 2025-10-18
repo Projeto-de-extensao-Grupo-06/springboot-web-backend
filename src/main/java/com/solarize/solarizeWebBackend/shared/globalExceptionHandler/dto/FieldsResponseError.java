@@ -12,6 +12,6 @@ public record FieldsResponseError(
         String typeError,
         String path,
         LocalDateTime timestamp,
-        List<ValidationError> validationErrors
+        List<ValidationErrorDto> validationErrors
 ) {
 }
