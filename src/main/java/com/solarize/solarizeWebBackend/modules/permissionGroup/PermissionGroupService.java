@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class PermissionGroupService {
         }
 
         return permissionGroup.get();
+    }
+
+    public PermissionGroup createPermissionGroup(PermissionGroup permissionGroup) {
+        return repository.save(permissionGroup);
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PermissionsResolver {
-    static public List<GrantedAuthority> resolve(Object permissionSource) {
+    static public List<GrantedAuthority> resolve(PermissionGroup permissionSource) {
         final List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
         resolveRole(permissionSource, grantedAuthorities);
@@ -24,7 +24,7 @@ public class PermissionsResolver {
         return grantedAuthorities;
     }
 
-    private static void resolveRole(Object permissionSource, List<GrantedAuthority> grantedAuthorities) {
+    private static void resolveRole(PermissionGroup permissionSource, List<GrantedAuthority> grantedAuthorities) {
         Field[] fields = permissionSource.getClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -42,7 +42,7 @@ public class PermissionsResolver {
         }
     }
 
-    private static void resolveModulePermissions(Object permissionSource, List<GrantedAuthority> grantedAuthorities) {
+    private static void resolveModulePermissions(PermissionGroup permissionSource, List<GrantedAuthority> grantedAuthorities) {
         Field[] fields = permissionSource.getClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -64,5 +64,21 @@ public class PermissionsResolver {
                 }
             }
         }
+    }
+
+
+    public static List<String> listModulesSystemModules(Class<PermissionGroup> permissionGroupClass) {
+        Field[] fields = permissionGroupClass.getDeclaredFields();
+        List<String> moduleNames = new ArrayList<>();
+
+        for(Field f : fields) {
+            if(f.isAnnotationPresent(ModulePermission.class)) {
+                f.setAccessible(true);
+                String moduleName = f.getAnnotation(ModulePermission.class).value();
+                moduleNames.add(moduleName);
+            }
+        }
+
+        return moduleNames;
     }
 }
