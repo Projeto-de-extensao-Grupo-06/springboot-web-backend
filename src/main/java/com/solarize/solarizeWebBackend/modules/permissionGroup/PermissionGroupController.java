@@ -1,6 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
+import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
+import com.solarize.solarizeWebBackend.shared.exceptions.MappingException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,8 @@ public class PermissionGroupController {
                     .body(PermissionGroupMapper.toDto(createdPermissionGroup));
         } catch (IllegalAccessException e) {
             throw new ServerErrorException("Dto mapping error");
+        } catch (MappingException e) {
+            throw new BadRequestException(e.getMessage());
         }
     }
 

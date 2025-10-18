@@ -3,6 +3,8 @@ package com.solarize.solarizeWebBackend.modules.permissionGroup;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.ModulePermissionsDto;
+import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
+import com.solarize.solarizeWebBackend.shared.exceptions.MappingException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -24,7 +26,14 @@ public class PermissionGroupMapper {
                 try {
                     f.setAccessible(true);
                     String moduleName = f.getAnnotation(ModulePermission.class).value();
-                    int bitMask = (int) f.get(permissionGroup);
+                    Object bitMaskO = f.get(permissionGroup);
+                    int bitMask;
+
+                    if(bitMaskO == null) {
+                        continue;
+                    }
+
+                    bitMask = (int) bitMaskO;
 
                     permissions.add(
                             ModulePermissionsDto
@@ -58,10 +67,10 @@ public class PermissionGroupMapper {
                 ModulePermissionsDto::getModuleName,
                 m -> {
                     String binary = String.format("%d%d%d%d",
-                            m.isDelete() ? 1 : 0,
-                            m.isUpdate() ? 1 : 0,
-                            m.isWrite() ? 1 : 0,
-                            m.isWrite() ? 1 : 0
+                            m.getDelete() ? 1 : 0,
+                            m.getUpdate() ? 1 : 0,
+                            m.getWrite() ? 1 : 0,
+                            m.getWrite() ? 1 : 0
                     );
 
                     return Integer.parseInt(binary, 2);
@@ -75,15 +84,18 @@ public class PermissionGroupMapper {
             if(f.isAnnotationPresent(ModulePermission.class)) {
                 f.setAccessible(true);
 
-                Integer permission = permissionsMap.get(f.getAnnotation(ModulePermission.class).value());
+                String module = f.getAnnotation(ModulePermission.class).value();
 
-                if(permission != null) {
-                    f.set(permissionGroup, permission);
+                Integer permission = permissionsMap.get(module);
+
+                if(permission == null) {
+                    throw new MappingException("Module " + module + " does not have a permission defined.");
                 }
+
+                f.set(permissionGroup, permission);
             }
         }
 
         return permissionGroup;
     }
-
 }

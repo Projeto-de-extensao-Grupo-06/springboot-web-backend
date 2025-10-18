@@ -14,14 +14,14 @@ public class ModulePermissionsDto {
     private String moduleName;
 
     @NotNull
-    private boolean read;
+    private Boolean read;
 
     @NotNull
-    private boolean write;
+    private Boolean write;
 
     @NotNull
-    private boolean update;
+    private Boolean update;
 
     @NotNull
-    private boolean delete;
+    private Boolean delete;
 }

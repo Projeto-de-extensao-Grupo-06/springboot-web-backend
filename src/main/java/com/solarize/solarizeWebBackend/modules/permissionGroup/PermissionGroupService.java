@@ -22,7 +22,13 @@ public class PermissionGroupService {
         return permissionGroup.get();
     }
 
-    public PermissionGroup createPermissionGroup(PermissionGroup permissionGroup) {
-        return repository.save(permissionGroup);
-    }
+//    public PermissionGroup createPermissionGroup(PermissionGroup permissionGroup) {
+//        boolean isPermissionGroupExists = repository.existsByRole(permissionGroup.getRole());
+//
+//        if(isPermissionGroupExists) {
+//
+//        }
+//
+//        return repository.save(permissionGroup);
+//    }
 }
