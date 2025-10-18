@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +10,18 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ModulePermissionsDto {
+    @NotBlank
     private String moduleName;
-    private boolean read;
-    private boolean write;
-    private boolean update;
-    private boolean delete;
+
+    @NotNull
+    private Boolean read;
+
+    @NotNull
+    private Boolean write;
+
+    @NotNull
+    private Boolean update;
+
+    @NotNull
+    private Boolean delete;
 }

@@ -2,6 +2,17 @@ package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
 import com.solarize.solarizeWebBackend.shared.exceptions.BaseException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
+import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
+import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationErrorDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExceptionsMapper {
     public static ErrorResponse of(BaseException ex) {
@@ -12,6 +23,45 @@ public class ExceptionsMapper {
                 .typeError(ex.getSTATUS_DESC())
                 .path(ex.getPATH())
                 .timestamp(ex.getTIMESTAMP())
+                .build();
+    }
+
+    public static FieldsResponseError of(MethodArgumentNotValidException ex) {
+        List<ValidationErrorDto> validationsErros =  ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(e -> new ValidationErrorDto(e.getField(), e.getDefaultMessage()))
+                .toList();
+
+        return FieldsResponseError
+                .builder()
+                .message("Fields Validation error")
+                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .validationErrors(validationsErros)
+                .build();
+    }
+
+    public static ErrorResponse internalServerError() {
+        return new ErrorResponse(
+                "Internal Server Error",
+                String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI(),
+                LocalDateTime.now()
+        );
+    }
+
+    public static ErrorResponse of(HttpMessageNotReadableException ex) {
+        return ErrorResponse
+                .builder()
+                .message(ex.getMessage())
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 }

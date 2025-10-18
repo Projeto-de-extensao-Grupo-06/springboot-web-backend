@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/permission-groups")
-@RequiredArgsConstructor
+@RequestMapping("/permision-groups")
 public class PermissionGroupController {
     private final PermissionGroupService service;
 
+    public PermissionGroupController(PermissionGroupService service) {
+        this.service = service;
+    }
+
+
     @GetMapping("/{id}")
-    public ResponseEntity<GetRolesDto> getRolesById(@PathVariable long id) {
+    public ResponseEntity<GetRolesDto> getRolesById(@PathVariable int id) {
         PermissionGroup pg = this.service.permissionGroupById(id);
 
         return ResponseEntity
