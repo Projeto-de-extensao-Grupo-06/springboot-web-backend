@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ErrorResponse> handleConflictException(HttpServletRequest request, ConflictException ex) {
+    public ResponseEntity<ErrorResponse> handleConflictException(ConflictException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 ExceptionsMapper.of(ex)
         );
