@@ -3,7 +3,7 @@ package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 import com.solarize.solarizeWebBackend.shared.exceptions.BaseException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
-import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationErrorDto;
+import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +12,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ExceptionsMapper {
     public static ErrorResponse of(BaseException ex) {
@@ -27,10 +26,10 @@ public class ExceptionsMapper {
     }
 
     public static FieldsResponseError of(MethodArgumentNotValidException ex) {
-        List<ValidationErrorDto> validationsErros =  ex.getBindingResult()
+        List<ValidationError> validationsErros =  ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(e -> new ValidationErrorDto(e.getField(), e.getDefaultMessage()))
+                .map(e -> new ValidationError(e.getField(), e.getDefaultMessage()))
                 .toList();
 
         return FieldsResponseError
