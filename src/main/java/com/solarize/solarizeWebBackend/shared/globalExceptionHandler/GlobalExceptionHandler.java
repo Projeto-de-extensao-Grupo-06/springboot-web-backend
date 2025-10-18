@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ServerErrorException.class)
-    public ResponseEntity<ErrorResponse> handleServerErrorException(NotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ExceptionsMapper.of(ex)
         );
