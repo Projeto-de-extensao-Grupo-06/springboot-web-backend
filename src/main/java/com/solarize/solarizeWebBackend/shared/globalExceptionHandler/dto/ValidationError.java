@@ -3,7 +3,7 @@ package com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto;
 import lombok.Builder;
 
 @Builder
-public record ValidationErrorDto (
+public record ValidationError(
         String field,
         String message
 )
