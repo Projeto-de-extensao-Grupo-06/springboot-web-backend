@@ -37,7 +37,7 @@ public class PermissionGroupController {
                     .status(HttpStatus.CREATED)
                     .body(PermissionGroupMapper.toDto(createdPermissionGroup));
         } catch (IllegalAccessException e) {
-            throw new ServerErrorException("Error mapping DTO to entity during permission group creation", e);
+            throw new ServerErrorException("Error mapping DTO to entity during permission group creation");
         } catch (MappingException e) {
             throw new BadRequestException(e.getMessage());
         }
