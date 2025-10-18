@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 
@@ -74,12 +75,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException() {
+        return new ResponseEntity<>(ExceptionsMapper.uriNotFound(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.error("Unhandled exception", ex);
-        return new ResponseEntity<>(
-                ExceptionsMapper.internalServerError(),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
+        return new ResponseEntity<>(ExceptionsMapper.internalServerError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

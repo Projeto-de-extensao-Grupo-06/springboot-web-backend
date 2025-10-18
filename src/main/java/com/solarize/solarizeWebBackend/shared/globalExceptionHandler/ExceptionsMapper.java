@@ -63,4 +63,15 @@ public class ExceptionsMapper {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    public static ErrorResponse uriNotFound() {
+        return ErrorResponse
+                .builder()
+                .message("Endpoint not found.")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.NOT_FOUND.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 }
