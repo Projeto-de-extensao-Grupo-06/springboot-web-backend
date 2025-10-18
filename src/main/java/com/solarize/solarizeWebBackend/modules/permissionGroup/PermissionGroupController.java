@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/permision-groups")
+@RequestMapping("/permission-groups")
 @RequiredArgsConstructor
 public class PermissionGroupController {
     private final PermissionGroupService service;
