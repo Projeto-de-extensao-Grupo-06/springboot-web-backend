@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsR
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -71,6 +72,18 @@ public class ExceptionsMapper {
                 .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
                 .typeError(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.NOT_FOUND.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+
+    public static ErrorResponse of(BadCredentialsException ex) {
+        return ErrorResponse
+                .builder()
+                .message(ex.getMessage())
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
                 .timestamp(LocalDateTime.now())
                 .build();
     }

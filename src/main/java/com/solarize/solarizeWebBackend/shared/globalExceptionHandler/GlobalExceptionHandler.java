@@ -25,35 +25,19 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(HttpServletRequest request, BadCredentialsException ex){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(
-                ex.getMessage(),
-                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
-                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-                request.getRequestURI(),
-                LocalDateTime.now()
-        ));
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                ExceptionsMapper.of(ex)
-        );
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                ExceptionsMapper.of(ex)
-        );
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ServerErrorException.class)
-    public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                ExceptionsMapper.of(ex)
-        );
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<FieldsResponseError> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -62,22 +46,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return new ResponseEntity<>(
-                ExceptionsMapper.of(ex),
-                HttpStatus.BAD_REQUEST
-        );
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handleConflictException(ConflictException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                ExceptionsMapper.of(ex)
-        );
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFoundException() {
         return new ResponseEntity<>(ExceptionsMapper.uriNotFound(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ServerErrorException.class)
+    public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)

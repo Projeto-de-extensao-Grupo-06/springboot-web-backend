@@ -16,6 +16,9 @@ public class PermissionGroupDto {
     @NotBlank
     private String role;
 
+    @NotBlank
+    private String mainModule;
+
     @NotEmpty
     @Valid
     private List<ModulePermissionsDto> permissions;

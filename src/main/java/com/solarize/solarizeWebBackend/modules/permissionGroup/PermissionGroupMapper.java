@@ -56,6 +56,7 @@ public class PermissionGroupMapper {
         return PermissionGroupDto
                 .builder()
                 .role(permissionGroup.getRole())
+                .mainModule(permissionGroup.getMainModule())
                 .permissions(permissions)
                 .build();
     }
@@ -79,6 +80,7 @@ public class PermissionGroupMapper {
 
         PermissionGroup permissionGroup = new PermissionGroup();
         permissionGroup.setRole(dto.getRole());
+        boolean validMainScreen = false;
 
         for(Field f : permissionGroup.getClass().getDeclaredFields()) {
             if(f.isAnnotationPresent(ModulePermission.class)) {
@@ -91,10 +93,20 @@ public class PermissionGroupMapper {
                 if(permission == null) {
                     throw new MappingException("Module " + module + " does not have a permission defined.");
                 }
-
+ 
                 f.set(permissionGroup, permission);
+
+
+                if(!validMainScreen) validMainScreen = module.equals(dto.getMainModule());
+
             }
         }
+
+        if(!validMainScreen) {
+            throw new MappingException("Main module " + dto.getMainModule() + " does not exist.");
+        }
+
+        permissionGroup.setMainModule(dto.getMainModule());
 
         return permissionGroup;
     }
