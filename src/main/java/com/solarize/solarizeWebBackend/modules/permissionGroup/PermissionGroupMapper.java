@@ -71,7 +71,7 @@ public class PermissionGroupMapper {
                             m.getDelete() ? 1 : 0,
                             m.getUpdate() ? 1 : 0,
                             m.getWrite() ? 1 : 0,
-                            m.getWrite() ? 1 : 0
+                            m.getRead() ? 1 : 0
                     );
 
                     return Integer.parseInt(binary, 2);
