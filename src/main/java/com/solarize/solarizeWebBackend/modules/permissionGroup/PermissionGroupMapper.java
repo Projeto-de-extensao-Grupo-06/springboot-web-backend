@@ -1,22 +1,21 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.GetPermissionGroupDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.ModulePermissionsDto;
-import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.MappingException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class PermissionGroupMapper {
-    public static PermissionGroupDto toDto(PermissionGroup permissionGroup) {
+    public static GetPermissionGroupDto toDto(PermissionGroup permissionGroup) {
         List<ModulePermissionsDto> permissions = new ArrayList<>();
 
         Field[] fields = permissionGroup.getClass().getDeclaredFields();
@@ -53,8 +52,9 @@ public class PermissionGroupMapper {
             }
         }
 
-        return PermissionGroupDto
+        return GetPermissionGroupDto
                 .builder()
+                .id(permissionGroup.getId())
                 .role(permissionGroup.getRole())
                 .mainModule(permissionGroup.getMainModule())
                 .permissions(permissions)
@@ -64,19 +64,25 @@ public class PermissionGroupMapper {
     public static PermissionGroup toEntity(PermissionGroupDto dto) throws IllegalAccessException {
         List<ModulePermissionsDto> modulePermissions = dto.getPermissions();
 
-        Map<String, Integer> permissionsMap = modulePermissions.stream().collect(Collectors.toMap(
-                ModulePermissionsDto::getModuleName,
-                m -> {
-                    int bitMask = 0;
+        Map<String, Integer> permissionsMap;
 
-                    if (m.getRead()) bitMask |= 1;
-                    if (m.getWrite()) bitMask |= 2;
-                    if (m.getUpdate()) bitMask |= 4;
-                    if (m.getDelete()) bitMask |= 8;
+        try {
+            permissionsMap = modulePermissions.stream().collect(Collectors.toMap(
+                    ModulePermissionsDto::getModuleName,
+                    m -> {
+                        int bitMask = 0;
 
-                    return bitMask;
-                }
-        ));
+                        if (m.getRead()) bitMask |= 1;
+                        if (m.getWrite()) bitMask |= 2;
+                        if (m.getUpdate()) bitMask |= 4;
+                        if (m.getDelete()) bitMask |= 8;
+
+                        return bitMask;
+                    }
+            ));
+        } catch (IllegalStateException ex) {
+            throw new MappingException("Duplicate Module");
+        }
 
         PermissionGroup permissionGroup = new PermissionGroup();
         permissionGroup.setRole(dto.getRole());
@@ -93,7 +99,7 @@ public class PermissionGroupMapper {
                 if(permission == null) {
                     throw new MappingException("Module " + module + " does not have a permission defined.");
                 }
- 
+
                 f.set(permissionGroup, permission);
 
 

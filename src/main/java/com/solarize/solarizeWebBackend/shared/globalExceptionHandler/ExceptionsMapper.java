@@ -57,7 +57,7 @@ public class ExceptionsMapper {
     public static ErrorResponse of(HttpMessageNotReadableException ex) {
         return ErrorResponse
                 .builder()
-                .message(ex.getMessage())
+                .message("The request body is malformed or contains invalid data. Please check your JSON payload and try again.")
                 .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
                 .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))

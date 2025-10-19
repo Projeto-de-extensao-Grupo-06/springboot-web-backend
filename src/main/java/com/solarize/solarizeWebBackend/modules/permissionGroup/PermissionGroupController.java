@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.GetPermissionGroupDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.MappingException;
@@ -18,7 +19,7 @@ public class PermissionGroupController {
     private final PermissionGroupService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PermissionGroupDto> getRolesById(@PathVariable int id) {
+    public ResponseEntity<GetPermissionGroupDto> getRolesById(@PathVariable int id) {
         PermissionGroup pg = this.service.permissionGroupById(id);
 
         return ResponseEntity
@@ -29,7 +30,7 @@ public class PermissionGroupController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<PermissionGroupDto> createRole(@RequestBody @Valid PermissionGroupDto dto) {
+    public ResponseEntity<GetPermissionGroupDto> createRole(@RequestBody @Valid PermissionGroupDto dto) {
         try {
             PermissionGroup createdPermissionGroup = service.createPermissionGroup(PermissionGroupMapper.toEntity(dto));
 
