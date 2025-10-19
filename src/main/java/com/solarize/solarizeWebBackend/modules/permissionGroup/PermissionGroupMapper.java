@@ -67,14 +67,14 @@ public class PermissionGroupMapper {
         Map<String, Integer> permissionsMap = modulePermissions.stream().collect(Collectors.toMap(
                 ModulePermissionsDto::getModuleName,
                 m -> {
-                    String binary = String.format("%d%d%d%d",
-                            m.getDelete() ? 1 : 0,
-                            m.getUpdate() ? 1 : 0,
-                            m.getWrite() ? 1 : 0,
-                            m.getRead() ? 1 : 0
-                    );
+                    int bitMask = 0;
 
-                    return Integer.parseInt(binary, 2);
+                    if (m.getRead()) bitMask |= 1;
+                    if (m.getWrite()) bitMask |= 2;
+                    if (m.getUpdate()) bitMask |= 4;
+                    if (m.getDelete()) bitMask |= 8;
+
+                    return bitMask;
                 }
         ));
 
