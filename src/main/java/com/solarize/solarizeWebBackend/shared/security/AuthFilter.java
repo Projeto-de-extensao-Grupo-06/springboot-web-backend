@@ -59,20 +59,16 @@ public class AuthFilter extends OncePerRequestFilter {
 
 
         if (Objects.nonNull(jwtToken)) {
-            try{
+            try {
                 username = jwtTokenManager.getUserIdFromToken(jwtToken);
                 authorities = jwtTokenManager.getAuthorities(jwtToken);
-
-            } catch (ExpiredJwtException exception){
-                LOGGER.info("[FALHA AUTENTICAÇÃO] - Expired token: {} - {}", exception.getClaims().getSubject(), exception.getMessage());
-
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            } catch (MalformedJwtException exception) {
-                LOGGER.info("[FALHA AUTENTICAÇÃO] - Malformed JWT JSON: {}", exception.getMessage());
-
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            } catch (ExpiredJwtException e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Expired token");
+                return;
+            } catch (MalformedJwtException e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Malformed token");
+                return;
             }
-
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -80,7 +76,6 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
     }
 
     private void  addUsernameInContext(HttpServletRequest request, String username, String jwtToken, List<SimpleGrantedAuthority> authorities){

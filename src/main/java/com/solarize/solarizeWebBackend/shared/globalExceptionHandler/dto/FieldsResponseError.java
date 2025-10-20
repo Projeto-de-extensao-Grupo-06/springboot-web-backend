@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-public record ErrorResponse(
+public record FieldsResponseError(
         String message,
         String status,
         String typeError,
         String path,
-        LocalDateTime timestamp
-) {}
-
+        LocalDateTime timestamp,
+        List<ValidationError> validationErrors
+) {
+}

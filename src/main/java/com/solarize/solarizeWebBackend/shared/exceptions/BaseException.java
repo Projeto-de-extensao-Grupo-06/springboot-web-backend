@@ -18,8 +18,7 @@ public class BaseException extends RuntimeException {
     public BaseException(String message, HttpStatus status) {
         super(message);
 
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         this.PATH = request.getRequestURI();
         this.STATUS = String.valueOf(status.value());

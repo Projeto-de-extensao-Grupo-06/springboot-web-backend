@@ -1,6 +1,6 @@
 INSERT INTO permission_group (
                               role,
-                              main_screen,
+                              main_module,
                               access_client,
                               access_project,
                               access_budget,
