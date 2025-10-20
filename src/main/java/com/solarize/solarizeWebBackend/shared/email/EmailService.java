@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.shared.email;
 
+import com.solarize.solarizeWebBackend.shared.utils.MailTemplateReader;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -24,7 +25,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     public void sendEmail(String to, String subject, String body) throws IOException, MessagingException {
-
+       String htmlTemplate = MailTemplateReader.read("teste.html");
         MimeMessage message = mailSender.createMimeMessage();
 
 
