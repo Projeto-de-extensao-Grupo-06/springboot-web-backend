@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ClientResponseDTO {
 
     @Schema(description = "Client identifier number", example = "101")
-    private Integer id;
+    private Long id;
 
     @Schema(description = "Client first name", example = "John")
     private String firstName;

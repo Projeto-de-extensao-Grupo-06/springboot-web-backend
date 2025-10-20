@@ -11,7 +11,7 @@ public class MaterialCatalog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_material")
-    private Integer id;
+    private Long id;
 
     private String name;
     private Double price;
