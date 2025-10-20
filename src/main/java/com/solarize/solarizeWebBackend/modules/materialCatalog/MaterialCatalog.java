@@ -15,8 +15,6 @@ public class MaterialCatalog {
 
     private String name;
     private Double price;
-    private String supplier;
-    private String url;
 
     @Enumerated(EnumType.STRING)
     private MetricEnum metric;

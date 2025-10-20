@@ -14,10 +14,6 @@ public class BudgetParameter {
     @Column(name = "id_parameter")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_budget", nullable = false)
-    private Budget budget;
-
     private String name;
     private String description;
     private String metric;

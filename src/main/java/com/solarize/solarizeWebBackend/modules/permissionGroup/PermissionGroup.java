@@ -19,7 +19,7 @@ public class PermissionGroup {
     @Role
     private String role;
 
-    private String mainModule;
+    private String mainScreen;
 
     @ModulePermission("CLIENT")
     private Integer accessClient;

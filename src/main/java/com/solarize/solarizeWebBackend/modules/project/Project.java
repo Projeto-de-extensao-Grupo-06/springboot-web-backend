@@ -44,7 +44,7 @@ public class Project {
     private SystemTypeEnum systemType;
 
     @Enumerated(EnumType.STRING)
-    private ProjectSourceEnum projectSource;
+    private ProjectSourceEnum projectFrom;
 
     private String name;
 
