@@ -16,7 +16,7 @@ public class ClientService {
 
     private final ClientRepository REPOSITORY;
 
-    public ClientResponseDTO getClient(int id){
+    public ClientResponseDTO getClient(Long id){
         Optional<Client> client = REPOSITORY.findById(id);
         if(client.isEmpty()) throw new NotFoundException("Client not found.");
         return ClientMapper.of(client.get());
