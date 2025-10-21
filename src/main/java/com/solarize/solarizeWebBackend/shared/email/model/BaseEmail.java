@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-abstract public class BaseEmail {
+public abstract class BaseEmail {
     private String to;
     private String subject;
     private String template;
