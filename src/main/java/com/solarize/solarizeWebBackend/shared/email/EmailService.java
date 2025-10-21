@@ -14,10 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 public class EmailService {
     private final JavaMailSender mailSender;
 
+    @Value("spring.mail.username")
+    private String email;
+
     public void sendEmail(String to, String subject, String body) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            message.setFrom(new InternetAddress(System.getenv("EMAIL")));
+            message.setFrom(new InternetAddress(email));
             message.setRecipients(MimeMessage.RecipientType.TO, to);
             message.setSubject(subject);
             message.setContent(body, "text/html; charset=utf-8");
