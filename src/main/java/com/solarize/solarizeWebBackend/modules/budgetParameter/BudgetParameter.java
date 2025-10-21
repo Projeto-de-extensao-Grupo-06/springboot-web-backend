@@ -14,6 +14,9 @@ public class BudgetParameter {
     @Column(name = "id_parameter")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "id_budget", nullable = false)
+    private Budget budget;
     private String name;
     private String description;
     private String metric;
