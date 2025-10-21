@@ -13,10 +13,11 @@ import java.time.LocalTime;
 @Setter
 @Entity
 public class Schedule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_schedule")
-    private Integer id;
+    private Long id;
 
     private LocalTime notificationAlertTime;
 
@@ -39,5 +40,6 @@ public class Schedule {
     private ScheduleStatusEnum status = ScheduleStatusEnum.MARKED;
 
     private String title;
+
     private String description;
 }

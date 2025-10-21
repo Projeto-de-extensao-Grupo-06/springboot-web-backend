@@ -11,7 +11,7 @@ public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_budget")
-    private Integer id;
+    private Long id;
 
     private Double totalCost;
     private Double discount;

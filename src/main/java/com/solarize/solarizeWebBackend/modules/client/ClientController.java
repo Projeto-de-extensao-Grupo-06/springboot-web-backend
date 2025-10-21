@@ -27,7 +27,7 @@ public class ClientController {
     @PreAuthorize("hasAuthority('CLIENT_READ')")
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> getClient(
-            @PathVariable int id
+            @PathVariable Long id
     ){
         final ClientResponseDTO client = SERVICE.getClient(id);
         return ResponseEntity.ok(client);
