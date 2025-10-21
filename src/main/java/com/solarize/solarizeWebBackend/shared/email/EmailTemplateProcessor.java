@@ -27,7 +27,7 @@ public class EmailTemplateProcessor {
         }
     }
 
-    private static String buildTemplate(PasswordRecoveryEmail model) {
+    public static String buildTemplate(PasswordRecoveryEmail model) {
         String template = readTemplate("passwordRecoveryTemplate.html");
 
         return template
