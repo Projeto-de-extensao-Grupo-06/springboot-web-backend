@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class EmailTemplateProcessor {
-    private static String readTemplate (String templateName){
+    private static String readTemplate(String templateName){
         try {
             InputStream resource = EmailTemplateProcessor.class.getResourceAsStream("template/" + templateName);
 
