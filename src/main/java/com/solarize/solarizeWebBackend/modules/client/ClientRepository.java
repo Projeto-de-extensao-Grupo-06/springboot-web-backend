@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 
     boolean existsByDocumentNumber(String documentNumber);
     boolean existsByEmail(String email);

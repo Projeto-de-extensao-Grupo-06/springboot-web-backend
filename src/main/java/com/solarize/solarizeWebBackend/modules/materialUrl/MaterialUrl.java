@@ -18,7 +18,6 @@ public class MaterialUrl {
     private String description;
     private String url;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_material")
     private MaterialCatalog material;
