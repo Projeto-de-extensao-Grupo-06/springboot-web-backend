@@ -15,7 +15,7 @@ public class EmailTemplateProcessor {
             InputStream resource = EmailTemplateProcessor.class.getResourceAsStream("template/" + templateName);
 
             if(resource == null) {
-                throw new FileNotFoundException("Template não encontrado: " + templateName);
+                throw new FileNotFoundException("Template not found: " + templateName);
             }
 
             String template = new String(resource.readAllBytes(), StandardCharsets.UTF_8);
