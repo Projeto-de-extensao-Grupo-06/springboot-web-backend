@@ -7,6 +7,7 @@ import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.Validat
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -84,6 +85,17 @@ public class ExceptionsMapper {
                 .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
                 .typeError(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static ErrorResponse of(HttpRequestMethodNotSupportedException ex) {
+        return ErrorResponse
+                .builder()
+                .message("Request method is not supported")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()))
                 .timestamp(LocalDateTime.now())
                 .build();
     }

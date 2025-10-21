@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
@@ -53,9 +54,7 @@ public class AuthService implements UserDetailsService {
 
             return AuthMapper.of(coworkerAuthenticated, token, authentication.getAuthorities().stream().collect(Collectors.toList()));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BadCredentialsException("Invalid Credentials");
         }
-
-
     }
 }
