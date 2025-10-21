@@ -7,17 +7,20 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender mailSender;
 
+    @Value("${EMAIL}")
+    private String emailAddress;
+
     public void sendEmail(String to, String subject, String body) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            message.setFrom(new InternetAddress(System.getenv("EMAIL")));
+            message.setFrom(new InternetAddress(emailAddress));
             message.setRecipients(MimeMessage.RecipientType.TO, to);
             message.setSubject(subject);
             message.setContent(body, "text/html; charset=utf-8");
