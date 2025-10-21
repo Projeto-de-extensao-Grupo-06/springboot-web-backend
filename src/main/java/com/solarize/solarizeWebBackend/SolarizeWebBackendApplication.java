@@ -7,9 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SolarizeWebBackendApplication {
 
 	public static void main(String[] args) {
-		System.out.println("EMAIL -> " + System.getenv("EMAIL"));
-		System.out.println("PASSWORD_EMAIL -> " + System.getenv("PASSWORD_EMAIL"));
-
 		SpringApplication.run(SolarizeWebBackendApplication.class, args);
 	}
 
