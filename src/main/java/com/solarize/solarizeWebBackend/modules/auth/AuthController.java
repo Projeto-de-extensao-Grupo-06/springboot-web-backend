@@ -107,6 +107,11 @@ public class AuthController {
         authoritiesCookie.setPath("/");
         authoritiesCookie.setMaxAge(0);
         response.addCookie(authoritiesCookie);
+
         return  ResponseEntity.status(200).build();
     }
+
+
+//    @PostMapping
+
 }

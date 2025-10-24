@@ -2,28 +2,25 @@ package com.solarize.solarizeWebBackend.shared.caffeine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-@Component
-public class OtpCodeCacheConfig {
-    private final Cache<String, String> cache = Caffeine.newBuilder()
+public abstract class CacheManager<K, V> {
+    private final Cache<K, V> cache = Caffeine.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .maximumSize(1000)
             .build();
 
 
-    public void saveOtp(String code, String userId) {
+    public void saveCache(K code, V userId) {
         cache.put(code, userId);
     }
 
-    public String getUserId(String code) {
+    public V getCache(K code) {
         return cache.getIfPresent(code);
     }
 
-    public void invalidateCode(String code) {
+    public void invalidateCache(K code) {
         cache.invalidate(code);
     }
-
 }
