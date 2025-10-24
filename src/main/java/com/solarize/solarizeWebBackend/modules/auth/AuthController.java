@@ -10,13 +10,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ua_parser.Client;
+import ua_parser.Parser;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -112,6 +112,27 @@ public class AuthController {
     }
 
 
-//    @PostMapping
+    @PostMapping("/forget-password/{email}")
+    public ResponseEntity<Void> requestRecoveryPasswordCode(HttpServletRequest request, @PathVariable String email) {
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        String userAgent = request.getHeader("User-Agent");
+
+        if(ipAddress == null || ipAddress.isBlank()) {
+            ipAddress = request.getRemoteAddr();
+        }
+
+        Parser headerParser = new Parser();
+        Client client = headerParser.parse(userAgent);
+
+        this.authService.requestRecoveryPasswordCode(
+                email,
+                client.userAgent.family,
+                client.os.family + client.os.major,
+                ipAddress
+        );
+
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

@@ -114,6 +114,11 @@
             <artifactId>caffeine</artifactId>
             <version>3.1.8</version>
         </dependency>
+		<dependency>
+			<groupId>com.github.ua-parser</groupId>
+			<artifactId>uap-java</artifactId>
+			<version>1.6.1</version>
+		</dependency>
     </dependencies>
 
 	<build>

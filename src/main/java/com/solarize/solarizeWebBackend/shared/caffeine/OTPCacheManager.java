@@ -3,4 +3,4 @@ package com.solarize.solarizeWebBackend.shared.caffeine;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OTPCacheManager extends CacheManager<String, Integer>{}
+public class OTPCacheManager extends CacheManager<String, String>{}

@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.LocalDateTime;
-
-
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -62,6 +59,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
+        log.error("Handled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -75,5 +73,4 @@ public class GlobalExceptionHandler {
         log.error("Unhandled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.internalServerError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

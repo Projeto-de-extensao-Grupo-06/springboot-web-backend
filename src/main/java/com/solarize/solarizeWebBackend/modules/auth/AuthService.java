@@ -4,6 +4,11 @@ import com.solarize.solarizeWebBackend.modules.auth.dtos.CoworkerDetailsDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
+import com.solarize.solarizeWebBackend.shared.caffeine.OTPCacheManager;
+import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryPasswordTokenCacheManager;
+import com.solarize.solarizeWebBackend.shared.email.EmailService;
+import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
+import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,6 +33,10 @@ public class AuthService implements UserDetailsService {
     private final CoworkerRepository coworkerRepository;
     private final JwtTokenManager jwtTokenManager;
     private final AuthenticationConfiguration authenticationManager;
+    private final OTPCacheManager otpCacheManager;
+    private final RecoveryPasswordTokenCacheManager tokenCacheManager;
+    private final EmailService emailService;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -55,6 +65,34 @@ public class AuthService implements UserDetailsService {
             return AuthMapper.of(coworkerAuthenticated, token, authentication.getAuthorities().stream().collect(Collectors.toList()));
         } catch (Exception e) {
             throw new BadCredentialsException("Invalid Credentials");
+        }
+    }
+
+    public void requestRecoveryPasswordCode(String email, String browser, String operationalSystem, String ip) {
+        Optional<Coworker> coworker = coworkerRepository.findByEmail(email);
+
+        if(coworker.isPresent()) {
+            SecureRandom secureRandom = new SecureRandom();
+
+            String otpCode = String.format("%06d", secureRandom.nextInt(1_000_000));
+
+            Coworker user = coworker.get();
+
+            this.otpCacheManager.saveCache(otpCode, user.getEmail());
+
+            PasswordRecoveryEmail emailModel = PasswordRecoveryEmail.builder()
+                    .to(email)
+                    .subject("Recuperação de Senha Solarize")
+                    .name(user.getFirstName())
+                    .code(otpCode)
+                    .operatingSystem(operationalSystem)
+                    .browser(browser)
+                    .ip(ip)
+                    .build();
+
+            String template = EmailTemplateProcessor.buildTemplate(emailModel);
+
+            this.emailService.sendEmail(email, "Recuperação de senha Solarize", template);
         }
     }
 }
