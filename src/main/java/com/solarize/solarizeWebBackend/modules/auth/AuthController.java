@@ -127,7 +127,7 @@ public class AuthController {
         this.authService.requestRecoveryPasswordCode(
                 email,
                 client.userAgent.family,
-                client.os.family + client.os.major,
+                client.os.family + " " + client.os.major,
                 ipAddress
         );
 
