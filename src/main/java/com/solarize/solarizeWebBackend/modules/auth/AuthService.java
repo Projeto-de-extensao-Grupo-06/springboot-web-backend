@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryPasswordTokenCach
 import com.solarize.solarizeWebBackend.shared.email.EmailService;
 import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
 import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -106,6 +108,8 @@ public class AuthService implements UserDetailsService {
             throw new BadCredentialsException("Invalid Code");
         }
 
+        this.otpCacheManager.invalidateCache(email);
+
         byte[] bytes = new byte[64];
         secureRandom.nextBytes(bytes);
 
@@ -113,5 +117,23 @@ public class AuthService implements UserDetailsService {
 
         tokenCacheManager.saveCache(token, email);
         return token;
+    }
+
+    public void changePassword(String token, String password) {
+        if(token == null) {
+            throw new BadCredentialsException("Invalid Credential");
+        }
+
+        String coworkerEmail = this.tokenCacheManager.getCache(token);
+
+        Coworker coworker = this.coworkerRepository.findByEmail(coworkerEmail)
+                .orElseThrow(() -> new BadCredentialsException("Invalid Credential"));
+
+        String passHash = new BCryptPasswordEncoder().encode(password);
+        coworker.setPassword(passHash);
+
+        this.coworkerRepository.save(coworker);
+
+        this.tokenCacheManager.invalidateCache(token);
     }
 }

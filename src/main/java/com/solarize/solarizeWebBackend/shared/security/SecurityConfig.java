@@ -46,7 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(
                         "/auth/login",
                         "/auth/forget-password",
-                        "/auth/confirm-otp"
+                        "/auth/confirm-otp",
+                        "/auth/change-password/token"
                         )
                         .permitAll()
                         .anyRequest()

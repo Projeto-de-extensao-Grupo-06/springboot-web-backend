@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.auth;
 
+import com.solarize.solarizeWebBackend.modules.auth.dtos.ChangePasswordDto;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordDto;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordOtpDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
@@ -23,6 +24,7 @@ import ua_parser.Parser;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,24 +32,6 @@ import java.util.Base64;
 public class AuthController {
     private final AuthService authService;
 
-    @Operation(summary = "Login de usuário", description = "Autentica um usuário e retorna token JWT")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Login realizado com sucesso",
-                    content = @Content(schema = @Schema(implementation = AuthResponseDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Credenciais incorretas",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Erro interno do servidor",
-                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-            )
-    })
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(
             @RequestBody CoworkerCredentialsDto coworkerCredentialsDto,
@@ -147,6 +131,24 @@ public class AuthController {
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
 
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/change-password/token")
+    public ResponseEntity<Void> changePasswordWithToken(HttpServletRequest request, @RequestBody @Valid ChangePasswordDto body) {
+        String token = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null) {
+            for(Cookie cookie : cookies) {
+                if(cookie.getName().equals("reset-pass-token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        this.authService.changePassword(token, body.getPassword());
         return ResponseEntity.noContent().build();
     }
 
