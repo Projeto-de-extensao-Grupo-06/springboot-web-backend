@@ -1,9 +1,6 @@
 package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
-import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
-import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
-import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
-import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
+import com.solarize.solarizeWebBackend.shared.exceptions.*;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,6 +47,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handleConflictException(ConflictException ex) {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ErrorResponse> handleToManyRequestsException(TooManyRequestsException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)

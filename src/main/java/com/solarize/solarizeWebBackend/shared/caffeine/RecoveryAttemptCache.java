@@ -3,8 +3,8 @@ package com.solarize.solarizeWebBackend.shared.caffeine;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OTPCacheManager extends CacheManager<String, String>{
-    public OTPCacheManager() {
-        super(10);
+public class RecoveryAttemptCache extends CacheManager<String, Boolean>{
+    public RecoveryAttemptCache() {
+        super(1);
     }
 }

@@ -1,19 +1,18 @@
 package com.solarize.solarizeWebBackend.modules.auth;
 
 import com.solarize.solarizeWebBackend.modules.auth.dtos.CoworkerDetailsDto;
-import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordOtpDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarizeWebBackend.shared.caffeine.OTPCacheManager;
+import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryAttemptCache;
 import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryPasswordTokenCacheManager;
 import com.solarize.solarizeWebBackend.shared.email.EmailService;
 import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
 import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
-import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
+import com.solarize.solarizeWebBackend.shared.exceptions.TooManyRequestsException;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.TooManyListenersException;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +40,7 @@ public class AuthService implements UserDetailsService {
     private final AuthenticationConfiguration authenticationManager;
     private final OTPCacheManager otpCacheManager;
     private final RecoveryPasswordTokenCacheManager tokenCacheManager;
+    private final RecoveryAttemptCache recoveryAttemptCache;
     private final EmailService emailService;
     private final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
@@ -76,6 +77,13 @@ public class AuthService implements UserDetailsService {
     }
 
     public void requestRecoveryPasswordCode(String email, String browser, String operationalSystem, String ip) {
+        Boolean attempt = this.recoveryAttemptCache.getCache(email);
+
+        if(attempt != null && attempt) {
+            throw new TooManyRequestsException("Please wait 1 minute to request a new code.");
+        }
+
+
         Optional<Coworker> coworker = coworkerRepository.findByEmail(email);
 
         if(coworker.isPresent()) {
@@ -98,6 +106,8 @@ public class AuthService implements UserDetailsService {
             String template = EmailTemplateProcessor.buildTemplate(emailModel);
 
             this.emailService.sendEmail(email, "Recuperação de senha Solarize", template);
+
+            this.recoveryAttemptCache.saveCache(email, true);
         }
     }
 
