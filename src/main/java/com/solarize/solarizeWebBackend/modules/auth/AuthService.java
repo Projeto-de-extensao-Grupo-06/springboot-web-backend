@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.auth;
 
 import com.solarize.solarizeWebBackend.modules.auth.dtos.CoworkerDetailsDto;
+import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordOtpDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
@@ -11,6 +12,7 @@ import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
 import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,8 @@ public class AuthService implements UserDetailsService {
     private final OTPCacheManager otpCacheManager;
     private final RecoveryPasswordTokenCacheManager tokenCacheManager;
     private final EmailService emailService;
+    private final SecureRandom secureRandom = new SecureRandom();
+    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
 
 
     @Override
@@ -72,13 +77,11 @@ public class AuthService implements UserDetailsService {
         Optional<Coworker> coworker = coworkerRepository.findByEmail(email);
 
         if(coworker.isPresent()) {
-            SecureRandom secureRandom = new SecureRandom();
-
             String otpCode = String.format("%06d", secureRandom.nextInt(1_000_000));
 
             Coworker user = coworker.get();
 
-            this.otpCacheManager.saveCache(otpCode, user.getEmail());
+            this.otpCacheManager.saveCache(user.getEmail(), otpCode);
 
             PasswordRecoveryEmail emailModel = PasswordRecoveryEmail.builder()
                     .to(email)
@@ -94,5 +97,21 @@ public class AuthService implements UserDetailsService {
 
             this.emailService.sendEmail(email, "Recuperação de senha Solarize", template);
         }
+    }
+
+    public String confirmOtpCode(String email, String otp) {
+        String cachedOtp = this.otpCacheManager.getCache(email);
+
+        if(cachedOtp == null || !cachedOtp.equals(otp)) {
+            throw new BadCredentialsException("Invalid Code");
+        }
+
+        byte[] bytes = new byte[64];
+        secureRandom.nextBytes(bytes);
+
+        String token = base64Encoder.encodeToString(bytes);
+
+        tokenCacheManager.saveCache(token, email);
+        return token;
     }
 }

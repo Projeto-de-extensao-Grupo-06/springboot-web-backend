@@ -45,7 +45,8 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(
                         "/auth/login",
-                        "/auth/forget-password/*"
+                        "/auth/forget-password",
+                        "/auth/confirm-otp"
                         )
                         .permitAll()
                         .anyRequest()

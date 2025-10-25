@@ -6,6 +6,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -17,9 +18,8 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String email;
 
+    @Async
     public void sendEmail(String to, String subject, String body) {
-        System.out.println(email);
-
         try {
             MimeMessage message = mailSender.createMimeMessage();
             message.setFrom(new InternetAddress(email));

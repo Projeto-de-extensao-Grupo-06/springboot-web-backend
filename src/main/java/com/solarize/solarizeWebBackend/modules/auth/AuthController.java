@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.auth;
 
+import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordDto;
+import com.solarize.solarizeWebBackend.modules.auth.dtos.RecoveryPasswordOtpDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCredentialsDto;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -112,8 +115,8 @@ public class AuthController {
     }
 
 
-    @PostMapping("/forget-password/{email}")
-    public ResponseEntity<Void> requestRecoveryPasswordCode(HttpServletRequest request, @PathVariable String email) {
+    @PostMapping("/forget-password")
+    public ResponseEntity<Void> requestRecoveryPasswordCode(HttpServletRequest request, @RequestBody @Valid RecoveryPasswordDto body) {
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         String userAgent = request.getHeader("User-Agent");
 
@@ -125,7 +128,7 @@ public class AuthController {
         Client client = headerParser.parse(userAgent);
 
         this.authService.requestRecoveryPasswordCode(
-                email,
+                body.getEmail(),
                 client.userAgent.family,
                 client.os.family + " " + client.os.major,
                 ipAddress
@@ -134,5 +137,17 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/confirm-otp")
+    public ResponseEntity<Void> confirmOtpCode(@RequestBody @Valid RecoveryPasswordOtpDto body, HttpServletResponse response) {
+        String resetPassToken = this.authService.confirmOtpCode(body.getEmail(), body.getOtp());
+
+        Cookie cookie = new Cookie("reset-pass-token", resetPassToken);
+        cookie.setMaxAge(60 * 15);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
