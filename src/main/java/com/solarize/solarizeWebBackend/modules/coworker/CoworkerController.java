@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.coworker;
 
+import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -12,32 +13,59 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/coworkers")
 @RequiredArgsConstructor
 public class CoworkerController {
-    private final CoworkerService coworkerService;
+    private final CoworkerService SERVICE;
 
-    @PostMapping
-    @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<Void> criar(@RequestBody @Valid CoworkerCreateDto coworkerCreateDto){
-        final Coworker newCoworker = CoworkerMapper.of(coworkerCreateDto);
-        this.coworkerService.criar(newCoworker);
-        return ResponseEntity.status(201).build();
+//    @PostMapping
+//    @SecurityRequirement(name = "Bearer")
+//    public ResponseEntity<Void> criar(@RequestBody @Valid CoworkerCreateDto coworkerCreateDto){
+//        final Coworker newCoworker = CoworkerMapper.of(coworkerCreateDto);
+//        this.SERVICE.criar(newCoworker);
+//        return ResponseEntity.status(201).build();
+//    }
 
-    }
-    
-    @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<CoworkerResponseDto>> listarTodos(){
-
-        List<CoworkerResponseDto> usuariosEncontrados  = this.coworkerService.listarTodos();
-
-        if (usuariosEncontrados.isEmpty()){
-            return ResponseEntity.status(204).build();
-        }
-
-        return ResponseEntity.status(200).body(usuariosEncontrados);
-
+    @GetMapping("/{id}")
+    public ResponseEntity<CoworkerResponseDto> getCoworker(
+            @PathVariable long id
+    ) {
+        final CoworkerResponseDto coworker = SERVICE.getCoworker(id);
+        return ResponseEntity.ok(coworker);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping()
+    public ResponseEntity<List<CoworkerResponseDto>> getCoworkers() {
+        final List<CoworkerResponseDto> coworkers = SERVICE.getCoworkers();
+
+        if(coworkers.isEmpty()) return ResponseEntity.status(204).build();
+        return ResponseEntity.ok(coworkers);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping
+    public ResponseEntity<CoworkerResponseDto> postCoworker(
+        @Valid @RequestBody CoworkerCreateDto coworker
+    ) {
+        final CoworkerResponseDto createdCoworker = SERVICE.createCoworker(coworker);
+        return ResponseEntity.status(201).body(createdCoworker);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<CoworkerResponseDto> putCoworker(@PathVariable long id,
+            @Valid @RequestBody CoworkerCreateDto coworker
+    ) {
+        final CoworkerResponseDto updatedCoworker = SERVICE.updateCoworker(id,coworker);
+        return ResponseEntity.status(200).body(updatedCoworker);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCoworker(@PathVariable long id) {
+        SERVICE.deleteCoworker(id);
+        return ResponseEntity.status(204).build();
+    }
 }
