@@ -24,7 +24,6 @@ import ua_parser.Parser;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/auth")
