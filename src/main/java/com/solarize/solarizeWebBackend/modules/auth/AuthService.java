@@ -43,6 +43,7 @@ public class AuthService implements UserDetailsService {
     private final EmailService emailService;
     private final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Override
@@ -138,7 +139,7 @@ public class AuthService implements UserDetailsService {
         Coworker coworker = this.coworkerRepository.findByEmail(coworkerEmail)
                 .orElseThrow(() -> new BadCredentialsException("Invalid Credential"));
 
-        String passHash = new BCryptPasswordEncoder().encode(password);
+        String passHash = bCryptPasswordEncoder.encode(password);
         coworker.setPassword(passHash);
 
         this.coworkerRepository.save(coworker);
