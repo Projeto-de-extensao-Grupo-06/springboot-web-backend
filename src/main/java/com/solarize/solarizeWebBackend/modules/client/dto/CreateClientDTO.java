@@ -50,10 +50,4 @@ public class CreateClientDTO {
     @Email(message = "Invalid e-mail")
     @NotBlank(message = "E-mail is obligatory")
     private String email;
-
-    @Schema(description = "ID of the coworker responsible for last update", example = "3")
-    private Long coworkerLastUpdateId;
-
-    @Schema(description = "ID of the main address associated with the client", example = "12")
-    private Integer mainAddressId;
 }

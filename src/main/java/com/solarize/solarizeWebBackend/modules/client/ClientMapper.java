@@ -23,9 +23,6 @@ public class ClientMapper {
                 .cnpj(client.getCnpj())
                 .note(client.getNote())
                 .createdAt(client.getCreatedAt())
-                .updatedAt(client.getUpdatedAt())
-                .coworkerLastUpdateId(client.getCoworkerLastUpdate() != null ? client.getCoworkerLastUpdate().getId() : null)
-                .mainAddressId(client.getMainAddress() != null ? client.getMainAddress().getId() : null)
                 .build();
     }
 
@@ -46,7 +43,6 @@ public class ClientMapper {
                         .cnpj(client.getCnpj())
                         .note(client.getNote())
                         .createdAt(client.getCreatedAt())
-                        .updatedAt(client.getUpdatedAt())
                         .build()
             );
         });
