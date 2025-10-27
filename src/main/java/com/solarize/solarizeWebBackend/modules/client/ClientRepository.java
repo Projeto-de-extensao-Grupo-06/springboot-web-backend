@@ -6,13 +6,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-
     boolean existsByDocumentNumber(String documentNumber);
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     boolean existsByCnpj(String cnpj);
-    boolean existsByDocumentNumberAndIdNot(String documentNumber, Integer id);
-    boolean existsByEmailAndIdNot(String email, Integer id);
-    boolean existsByPhoneAndIdNot(String phone, Integer id);
-    boolean existsByCnpjAndIdNot(String cnpj, Integer id);
+    boolean existsByDocumentNumberAndIdNot(String documentNumber, Long id);
+    boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByPhoneAndIdNot(String phone, Long id);
+    boolean existsByCnpjAndIdNot(String cnpj, Long id);
 }

@@ -67,7 +67,7 @@ public class ClientService {
         }
     }
 
-    public ClientResponseDTO putClient(int id, CreateClientDTO dto) {
+    public ClientResponseDTO putClient(Long id, CreateClientDTO dto) {
         Optional<Client> optionalClient = REPOSITORY.findById(id);
         if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
 
@@ -80,7 +80,7 @@ public class ClientService {
         return ClientMapper.of(client);
     }
 
-    private void validateConflictOnUpdate(CreateClientDTO dto, Integer id) {
+    private void validateConflictOnUpdate(CreateClientDTO dto, Long id) {
         if (REPOSITORY.existsByDocumentNumberAndIdNot(dto.getDocumentNumber(), id))
             throw new ConflictException("Document number already exists");
 
@@ -96,7 +96,7 @@ public class ClientService {
         }
     }
 
-    public void deleteClient(int id) {
+    public void deleteClient(Long id) {
         Optional<Client> optionalClient = REPOSITORY.findById(id);
         if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
 

@@ -50,5 +50,5 @@ public class ClientResponseDTO {
     private Long coworkerLastUpdateId;
 
     @Schema(description = "ID of the main address associated with this client", example = "12")
-    private Integer mainAddressId;
+    private Long mainAddressId;
 }
