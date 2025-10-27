@@ -2,7 +2,6 @@ package com.solarize.solarizeWebBackend.shared.email;
 
 import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
 import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class EmailTemplateProcessor {
     private static String readTemplate(String templateName){
         try {
-            InputStream resource = EmailTemplateProcessor.class.getResourceAsStream("template/" + templateName);
+            InputStream resource = EmailTemplateProcessor.class.getResourceAsStream("/template/" + templateName);
 
             if(resource == null) {
                 throw new FileNotFoundException("Template not found: " + templateName);
@@ -23,7 +22,7 @@ public class EmailTemplateProcessor {
 
             return template;
         } catch (IOException e) {
-            throw new ServerErrorException("Internal server error");
+            throw new ServerErrorException(e.getMessage());
         }
     }
 
@@ -34,6 +33,7 @@ public class EmailTemplateProcessor {
                 .replace("${name}", model.getName())
                 .replace("${code}", model.getCode())
                 .replace("${operating_system}", model.getOperatingSystem())
-                .replace("${browser_name}", model.getBrowser());
+                .replace("${browser_name}", model.getBrowser())
+                .replace("${ip}", model.getIp());
     }
 }
