@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.coworker;
 
-import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
