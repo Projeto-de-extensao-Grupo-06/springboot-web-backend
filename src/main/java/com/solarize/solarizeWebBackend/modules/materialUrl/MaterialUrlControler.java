@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Material")
+@RequestMapping("/material")
 @RequiredArgsConstructor
 public class MaterialUrlControler {
     private final MaterialUrlService SERVICE;
 
     @GetMapping("/{id}")
     public ResponseEntity<MaterialUrlResponseDTO> getMaterialUrl(@PathVariable Long id){
-        final MaterialUrlResponseDTO materalUrl = SERVICE.getMaterialUrl(id);
-        return ResponseEntity.ok(materalUrl);
+        final MaterialUrlResponseDTO materialUrl = SERVICE.getMaterialUrl(id);
+        return ResponseEntity.ok(materialUrl);
     }
 
 
