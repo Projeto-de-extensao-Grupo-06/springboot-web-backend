@@ -18,14 +18,6 @@ import java.util.List;
 public class CoworkerController {
     private final CoworkerService SERVICE;
 
-//    @PostMapping
-//    @SecurityRequirement(name = "Bearer")
-//    public ResponseEntity<Void> criar(@RequestBody @Valid CoworkerCreateDto coworkerCreateDto){
-//        final Coworker newCoworker = CoworkerMapper.of(coworkerCreateDto);
-//        this.SERVICE.criar(newCoworker);
-//        return ResponseEntity.status(201).build();
-//    }
-
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<CoworkerResponseDto> getCoworker(
