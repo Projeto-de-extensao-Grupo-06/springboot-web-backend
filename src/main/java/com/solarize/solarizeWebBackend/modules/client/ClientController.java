@@ -52,17 +52,22 @@ public class ClientController {
     }
 
     @PreAuthorize("hasAuthority('CLIENT_UPDATE')")
-    @PutMapping
-    public ResponseEntity<Void> putClient(){
-        // TODO Implementar funcionalidade
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientResponseDTO> putClient(
+            @PathVariable int id,
+            @Valid @RequestBody CreateClientDTO client
+    ){
+        final ClientResponseDTO updated = SERVICE.putClient(id, client);
+        return ResponseEntity.ok(updated);
     }
 
     @PreAuthorize("hasAuthority('CLIENT_DELETE')")
-    @DeleteMapping
-    public ResponseEntity<Void> deleteClient(){
-        // TODO Implementar funcionalidade
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteClient(
+            @PathVariable int id
+    ){
+        SERVICE.deleteClient(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
