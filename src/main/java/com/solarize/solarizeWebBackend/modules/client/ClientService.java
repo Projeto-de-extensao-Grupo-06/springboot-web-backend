@@ -19,9 +19,6 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientRepository REPOSITORY;
-//    private final CoworkerRepository coworkerRepository;
-//    private final AddressRepository addressRepository;
-
 
     public ClientResponseDTO getClient(Long id){
         Optional<Client> client = REPOSITORY.findById(id);
@@ -37,20 +34,6 @@ public class ClientService {
     public ClientResponseDTO postClient(CreateClientDTO dto){
         validateConflict(dto);
         Client client = ClientMapper.of(dto);
-
-
-//        if (dto.getCoworkerLastUpdateId() != null) {
-//            Coworker coworker = coworkerRepository.findById(dto.getCoworkerLastUpdateId())
-//                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
-//            client.setCoworkerLastUpdate(coworker);
-//        }
-//
-//        if (dto.getMainAddressId() != null) {
-//            Address address = addressRepository.findById(dto.getMainAddressId())
-//                    .orElseThrow(() -> new NotFoundException("Address not found."));
-//            client.setMainAddress(address);
-//        }
-
         client = REPOSITORY.save(client);
         return ClientMapper.of(client);
     }
@@ -67,7 +50,7 @@ public class ClientService {
         }
     }
 
-    public ClientResponseDTO putClient(int id, CreateClientDTO dto) {
+    public ClientResponseDTO putClient(Long id, CreateClientDTO dto) {
         Optional<Client> optionalClient = REPOSITORY.findById(id);
         if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
 
@@ -80,7 +63,7 @@ public class ClientService {
         return ClientMapper.of(client);
     }
 
-    private void validateConflictOnUpdate(CreateClientDTO dto, Integer id) {
+    private void validateConflictOnUpdate(CreateClientDTO dto, Long id) {
         if (REPOSITORY.existsByDocumentNumberAndIdNot(dto.getDocumentNumber(), id))
             throw new ConflictException("Document number already exists");
 
@@ -96,7 +79,7 @@ public class ClientService {
         }
     }
 
-    public void deleteClient(int id) {
+    public void deleteClient(Long id) {
         Optional<Client> optionalClient = REPOSITORY.findById(id);
         if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
 

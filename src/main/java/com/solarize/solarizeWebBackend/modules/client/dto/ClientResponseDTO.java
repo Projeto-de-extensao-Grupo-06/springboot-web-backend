@@ -46,9 +46,4 @@ public class ClientResponseDTO {
     @Schema(description = "Date and time when the client was last updated")
     private LocalDateTime updatedAt;
 
-    @Schema(description = "ID of the coworker who last updated this client", example = "3")
-    private Long coworkerLastUpdateId;
-
-    @Schema(description = "ID of the main address associated with this client", example = "12")
-    private Integer mainAddressId;
 }

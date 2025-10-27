@@ -54,7 +54,7 @@ public class ClientController {
     @PreAuthorize("hasAuthority('CLIENT_UPDATE')")
     @PutMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> putClient(
-            @PathVariable int id,
+            @PathVariable Long id,
             @Valid @RequestBody CreateClientDTO client
     ){
         final ClientResponseDTO updated = SERVICE.putClient(id, client);
@@ -64,7 +64,7 @@ public class ClientController {
     @PreAuthorize("hasAuthority('CLIENT_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(
-            @PathVariable int id
+            @PathVariable Long id
     ){
         SERVICE.deleteClient(id);
         return ResponseEntity.noContent().build();
