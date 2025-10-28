@@ -8,7 +8,6 @@ public class MaterialUrlMapper {
         return MaterialUrlResponseDTO.builder()
                 .description(materialUrl.getDescription())
                 .url(materialUrl.getUrl())
-                .material(materialUrl.getMaterial())
                 .build();
     }
 }

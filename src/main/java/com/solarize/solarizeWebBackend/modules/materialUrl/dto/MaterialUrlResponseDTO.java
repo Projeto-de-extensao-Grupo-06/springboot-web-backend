@@ -11,5 +11,4 @@ import lombok.*;
 public class MaterialUrlResponseDTO {
     private String description;
     private String url;
-    private MaterialCatalog material;
 }

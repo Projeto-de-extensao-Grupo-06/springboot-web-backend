@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.materialUrl;
 
-import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.materialUrl.dto.MaterialUrlResponseDTO;
+import com.solarize.solarizeWebBackend.modules.materialUrl.dto.MaterialWithUrlsResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Material")
+@RequestMapping("/materials")
 @RequiredArgsConstructor
-public class MaterialUrlControler {
+public class MaterialUrlController {
     private final MaterialUrlService SERVICE;
 
     @GetMapping("/{id}")
-    public ResponseEntity<MaterialUrlResponseDTO> getMaterialUrl(@PathVariable Long id){
-        final MaterialUrlResponseDTO materalUrl = SERVICE.getMaterialUrl(id);
-        return ResponseEntity.ok(materalUrl);
+    public ResponseEntity<MaterialWithUrlsResponseDTO> getMaterialUrls(@PathVariable Long id) {
+        MaterialWithUrlsResponseDTO material = SERVICE.getMaterialWithUrls(id);
+        return ResponseEntity.ok(material);
     }
+
 
 
 }
