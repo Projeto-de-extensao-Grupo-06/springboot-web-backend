@@ -68,7 +68,7 @@ public class AuthController {
         authoritiesCookie.setAttribute("SameSite", "Strict");
         response.addCookie(authoritiesCookie);
 
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
 
     @PostMapping("/logout")
