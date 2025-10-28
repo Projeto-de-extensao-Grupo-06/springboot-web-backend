@@ -24,12 +24,12 @@ VALUES (
         1
        );
 
-INSERT INTO material (name, metric, description, supplier)
+INSERT INTO material_catalog (name, metric, price)
 VALUES
-    ('Painel Solar 550W', 'unit', 'Painel monocristalino de alta eficiência', 'Solar Center'),
-    ('Inversor On-Grid 5kW', 'unit', 'Inversor para sistemas conectados à rede', 'Painel Forte'),
-    ('Cabo Solar 6mm', 'meter', 'Cabo flexível para conexões fotovoltaicas', 'Solar Center'),
-    ('Bateria 5kWh', 'unit', 'Bateria de lítio de alta durabilidade', 'EcoSolar');
+    ('Painel Solar 550W', 'unit', 900.0),
+    ('Inversor On-Grid 5kW', 'unit', 349.99),
+    ('Cabo Solar 6mm', 'meter', 100.0),
+    ('Bateria 5kWh', 'unit', 1500.0);
 
 INSERT INTO material_url (description, url, fk_material)
 VALUES

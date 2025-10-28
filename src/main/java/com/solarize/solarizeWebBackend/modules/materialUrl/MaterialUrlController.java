@@ -21,6 +21,4 @@ public class MaterialUrlController {
         return ResponseEntity.ok(material);
     }
 
-
-
 }
