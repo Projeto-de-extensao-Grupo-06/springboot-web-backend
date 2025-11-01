@@ -4,9 +4,9 @@ import com.solarize.solarizeWebBackend.modules.auth.dtos.CoworkerDetailsDto;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
-import com.solarize.solarizeWebBackend.shared.caffeine.OTPCacheManager;
-import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryAttemptCache;
-import com.solarize.solarizeWebBackend.shared.caffeine.RecoveryPasswordTokenCacheManager;
+import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.OTPCache;
+import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryAttemptCache;
+import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryPasswordTokenCache;
 import com.solarize.solarizeWebBackend.shared.email.EmailService;
 import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
 import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
@@ -37,9 +37,9 @@ public class AuthService implements UserDetailsService {
     private final CoworkerRepository coworkerRepository;
     private final JwtTokenManager jwtTokenManager;
     private final AuthenticationConfiguration authenticationManager;
-    private final OTPCacheManager otpCacheManager;
-    private final RecoveryPasswordTokenCacheManager tokenCacheManager;
-    private final RecoveryAttemptCache recoveryAttemptCache;
+    private final OTPCache otpCaffeineManager;
+    private final RecoveryPasswordTokenCache tokenCacheManager;
+    private final RecoveryAttemptCache recoveryAttemptCaffeine;
     private final EmailService emailService;
     private final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
@@ -77,7 +77,7 @@ public class AuthService implements UserDetailsService {
     }
 
     public void requestRecoveryPasswordCode(String email, String browser, String operationalSystem, String ip) {
-        Boolean attempt = this.recoveryAttemptCache.getCache(email);
+        Boolean attempt = this.recoveryAttemptCaffeine.getCache(email);
 
         if(attempt != null && attempt) {
             throw new TooManyRequestsException("Please wait 1 minute to request a new code.");
@@ -91,7 +91,7 @@ public class AuthService implements UserDetailsService {
 
             Coworker user = coworker.get();
 
-            this.otpCacheManager.saveCache(user.getEmail(), otpCode);
+            this.otpCaffeineManager.saveCache(user.getEmail(), otpCode);
 
             PasswordRecoveryEmail emailModel = PasswordRecoveryEmail.builder()
                     .to(email)
@@ -107,18 +107,18 @@ public class AuthService implements UserDetailsService {
 
             this.emailService.sendEmail(email, "Recuperação de senha Solarize", template);
 
-            this.recoveryAttemptCache.saveCache(email, true);
+            this.recoveryAttemptCaffeine.saveCache(email, true);
         }
     }
 
     public String confirmOtpCode(String email, String otp) {
-        String cachedOtp = this.otpCacheManager.getCache(email);
+        String cachedOtp = this.otpCaffeineManager.getCache(email);
 
         if(cachedOtp == null || !cachedOtp.equals(otp)) {
             throw new BadCredentialsException("Invalid Code");
         }
 
-        this.otpCacheManager.invalidateCache(email);
+        this.otpCaffeineManager.invalidateCache(email);
 
         byte[] bytes = new byte[64];
         secureRandom.nextBytes(bytes);
