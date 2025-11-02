@@ -2,11 +2,15 @@ package com.solarize.solarizeWebBackend.modules.coworker;
 
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCreateDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
+import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
+import com.solarize.solarizeWebBackend.shared.exceptions.BaseException;
+import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +57,18 @@ public class CoworkerService {
                 .orElseThrow(() -> new NotFoundException("Coworker not found."));
 
         REPOSITORY.delete(coworker);
+    }
+
+    public void validateConflict(CoworkerCreateDto dto) {
+        if(REPOSITORY.existsByEmail(dto.getEmail())) throw new ConflictException("Email already exists");
+        if(REPOSITORY.existsByPhone(dto.getPhone())) throw new ConflictException("Phone already exists.");
+    }
+
+    public void validateConflicUpdate(Long id, CoworkerCreateDto dto) {
+        Optional<Coworker> existingByEmail = REPOSITORY.findByEmail(dto.getEmail());
+        Optional<Coworker> existingByPhone = REPOSITORY.findByEmail(dto.getPhone());
+
+        if(existingByEmail.isPresent() && !existingByEmail.get().getId().equals(id)) throw new ConflictException("This e-mail is already registered by another coworker.");
+        if(existingByPhone.isPresent() && !existingByPhone.get().getId().equals(id)) throw new ConflictException("This phone is already registered by another coworker.");
     }
 }
