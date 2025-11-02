@@ -8,19 +8,25 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class DocumentService {
 
-    private final Map<String, DocumentStrategy> documentStrategyMap;
+//    private final Map<String, DocumentStrategy> documentStrategyMap;
 
-    public DocumentService() {
-        this.documentStrategyMap = Map.of(
-                DocumentTypeEnum.CPF.name(), new CpfValidatorImpl(),
-                DocumentTypeEnum.CNPJ.name(), new CnpjValidatorImpl(),
-                DocumentTypeEnum.RG.name(), new RgValidatorImpl(),
-                DocumentTypeEnum.PASSPORT.name(), new PassportValidatorImpl()
-        );
-    }
+//    public DocumentService() {
+//        this.documentStrategyMap = Map.of(
+//                DocumentTypeEnum.CPF.name(), new CpfValidatorImpl(),
+//                DocumentTypeEnum.CNPJ.name(), new CnpjValidatorImpl(),
+//                DocumentTypeEnum.RG.name(), new RgValidatorImpl(),
+//                DocumentTypeEnum.PASSPORT.name(), new PassportValidatorImpl()
+//        );
+//    }
+
+    private Map<String, DocumentStrategy> documentStrategyMap = Map.of(
+            DocumentTypeEnum.CPF.name(), new CpfValidatorImpl(),
+            DocumentTypeEnum.CNPJ.name(), new CnpjValidatorImpl(),
+            DocumentTypeEnum.RG.name(), new RgValidatorImpl(),
+            DocumentTypeEnum.PASSPORT.name(), new PassportValidatorImpl()
+    );
 
     public void validateDocument(DocumentTypeEnum documentType, String documentNumber) {
         DocumentStrategy strategy = documentStrategyMap.get(documentType.name());
