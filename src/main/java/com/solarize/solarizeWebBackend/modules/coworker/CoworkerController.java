@@ -50,7 +50,7 @@ public class CoworkerController {
     public ResponseEntity<CoworkerResponseDto> putCoworker(@PathVariable long id,
             @Valid @RequestBody CoworkerCreateDto coworker
     ) {
-        SERVICE.validateConflict(coworker);
+        SERVICE.validateConflicUpdate(id,coworker);
         final CoworkerResponseDto updatedCoworker = SERVICE.updateCoworker(id,coworker);
         return ResponseEntity.status(200).body(updatedCoworker);
     }
