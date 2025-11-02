@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -19,10 +20,18 @@ import lombok.NoArgsConstructor;
 public class CreateClientDTO {
     @Schema(description = "Client first name", example = "John")
     @NotBlank(message = "First name is obligatory")
+    @Pattern(
+            regexp = "^[\\p{L}'\\-]+$",
+            message = "First name must contain only letters (any alphabet), hyphens or apostrophes"
+    )
     private String firstName;
 
     @Schema(description = "Client nickname or last name", example = "Doe")
     @NotBlank(message = "Nick name is obligatory")
+    @Pattern(
+            regexp = "^[\\p{L}'\\-]+$",
+            message = "Last name must contain only letters (any alphabet), hyphens or apostrophes"
+    )
     private String lastName;
 
     @Schema(description = "Document number", example = "91280161060")
@@ -33,10 +42,6 @@ public class CreateClientDTO {
     @Schema(description = "Type of document (CPF, RG, CNPJ or PASSPORT)", example = "CPF")
     @NotBlank(message = "Document type is obligatory")
     private String documentType;
-
-    @Schema(description = "CNPJ of the client", example = "59603348000116")
-    @Pattern(regexp = "\\d{14}", message = "CNPJ must contain 14 digits")
-    private String cnpj;
 
     @Schema(description = "Additional notes/description", example = "VIP client, handle with priority")
     @Size(max = 255, message = "Note cannot exceed 255 characters")
@@ -50,4 +55,9 @@ public class CreateClientDTO {
     @Email(message = "Invalid e-mail")
     @NotBlank(message = "E-mail is obligatory")
     private String email;
+
+    @Schema(description = "Client main address (optional)")
+    @Valid
+    private AddressDTO mainAddress;
+
 }

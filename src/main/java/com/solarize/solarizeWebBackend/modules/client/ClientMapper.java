@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
+import com.solarize.solarizeWebBackend.modules.address.Address;
+import com.solarize.solarizeWebBackend.modules.client.dto.AddressDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 
@@ -20,9 +22,9 @@ public class ClientMapper {
                 .email(client.getEmail())
                 .documentNumber(client.getDocumentNumber())
                 .documentType(client.getDocumentType())
-                .cnpj(client.getCnpj())
                 .note(client.getNote())
                 .createdAt(client.getCreatedAt())
+                .mainAddress(of(client.getMainAddress()))
                 .build();
     }
 
@@ -40,16 +42,16 @@ public class ClientMapper {
                         .email(client.getEmail())
                         .documentNumber(client.getDocumentNumber())
                         .documentType(client.getDocumentType())
-                        .cnpj(client.getCnpj())
                         .note(client.getNote())
                         .createdAt(client.getCreatedAt())
+                        .mainAddress(of(client.getMainAddress()))
                         .build()
             );
         });
         return clientsDTO;
     }
 
-    public static Client of(CreateClientDTO dto){
+    public static Client of(CreateClientDTO dto, Address address){
         if (dto == null) return null;
         return Client.builder()
                 .firstName(dto.getFirstName())
@@ -58,14 +60,14 @@ public class ClientMapper {
                 .email(dto.getEmail())
                 .documentNumber(dto.getDocumentNumber())
                 .documentType(dto.getDocumentType())
-                .cnpj(dto.getCnpj())
                 .note(dto.getNote())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .mainAddress(address)
                 .build();
     }
 
-    public static void updateClientData(Client client, CreateClientDTO dto) {
+    public static void updateClientData(Client client, CreateClientDTO dto, Address address) {
         if (client == null || dto == null) return;
 
         client.setFirstName(dto.getFirstName());
@@ -74,8 +76,23 @@ public class ClientMapper {
         client.setEmail(dto.getEmail());
         client.setDocumentNumber(dto.getDocumentNumber());
         client.setDocumentType(dto.getDocumentType());
-        client.setCnpj(dto.getCnpj());
         client.setNote(dto.getNote());
+        client.setMainAddress(address);
         client.setUpdatedAt(LocalDateTime.now());
+    }
+
+    private static AddressDTO of(Address address){
+        if (address == null) return null;
+
+        return AddressDTO.builder()
+                .id(address.getId())
+                .postalCode(address.getPostalCode())
+                .streetName(address.getStreetName())
+                .number(address.getNumber())
+                .neighborhood(address.getNeighborhood())
+                .city(address.getCity())
+                .state(address.getState())
+                .type(address.getType())
+                .build();
     }
 }
