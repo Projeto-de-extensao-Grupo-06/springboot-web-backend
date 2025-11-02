@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SolarizeWebBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="solarize-web-backend" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.solarize.solarizeWebBackend.SolarizeWebBackendApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
