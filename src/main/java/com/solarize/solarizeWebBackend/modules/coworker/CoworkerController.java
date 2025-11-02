@@ -40,6 +40,7 @@ public class CoworkerController {
     public ResponseEntity<CoworkerResponseDto> postCoworker(
         @Valid @RequestBody CoworkerCreateDto coworker
     ) {
+        SERVICE.validateConflict(coworker);
         final CoworkerResponseDto createdCoworker = SERVICE.createCoworker(coworker);
         return ResponseEntity.status(201).body(createdCoworker);
     }
@@ -49,6 +50,7 @@ public class CoworkerController {
     public ResponseEntity<CoworkerResponseDto> putCoworker(@PathVariable long id,
             @Valid @RequestBody CoworkerCreateDto coworker
     ) {
+        SERVICE.validateConflict(coworker);
         final CoworkerResponseDto updatedCoworker = SERVICE.updateCoworker(id,coworker);
         return ResponseEntity.status(200).body(updatedCoworker);
     }
