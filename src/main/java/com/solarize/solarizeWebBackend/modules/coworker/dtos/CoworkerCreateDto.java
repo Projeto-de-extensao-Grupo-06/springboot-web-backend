@@ -13,11 +13,17 @@ import lombok.*;
 public class CoworkerCreateDto {
     @NotBlank(message = "First Name is obligatory.")
     @Size(min = 3, max = 20)
+    @Pattern(
+            regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
+    )
     @Schema(description = "Coworker first name", example = "John")
     private String firstName;
 
     @NotBlank(message = "Nickname or last name is obligatory.")
     @Size(min = 3, max = 20)
+    @Pattern(
+            regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
+    )
     @Schema(description = "Coworker nickname or last name", example = "Doe")
     private String lastName;
 
