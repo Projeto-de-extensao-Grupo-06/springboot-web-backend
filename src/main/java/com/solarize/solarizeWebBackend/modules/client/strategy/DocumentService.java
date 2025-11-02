@@ -2,11 +2,13 @@ package com.solarize.solarizeWebBackend.modules.client.strategy;
 
 import com.solarize.solarizeWebBackend.modules.client.DocumentTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class DocumentService {
 
     private final Map<String, DocumentStrategy> documentStrategyMap;
