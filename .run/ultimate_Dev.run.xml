@@ -1,5 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SolarizeWebBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="Dev" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev" />
+    <envs>
+      <env name="EMAIL" value="projeto.solarize@gmail.com" />
+      <env name="PASSWORD_EMAIL" value="lssk anjm wxfo ylop" />
+    </envs>
     <module name="solarize-web-backend" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.solarize.solarizeWebBackend.SolarizeWebBackendApplication" />
     <method v="2">
