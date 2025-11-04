@@ -1,14 +1,17 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
+import com.solarize.solarizeWebBackend.modules.client.strategy.*;
+
 public enum DocumentTypeEnum {
-    CPF("cpf"),
-    RG("rg"),
-    CNPJ("cnpj"),
-    PASSPORT("passport");
+    CPF(new CpfValidatorImpl()),
+    RG(new RgValidatorImpl()),
+    CNPJ(new CnpjValidatorImpl()),
+    PASSPORT(new PassportValidatorImpl());
 
-    public String value;
+    public final DocumentStrategy strategy;
 
-    DocumentTypeEnum(String value) {
-        this.value = value;
+    DocumentTypeEnum(DocumentStrategy strategy) {
+        this.strategy = strategy;
     }
+
 }

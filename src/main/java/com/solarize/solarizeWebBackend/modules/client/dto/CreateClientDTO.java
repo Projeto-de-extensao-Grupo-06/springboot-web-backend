@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
+import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

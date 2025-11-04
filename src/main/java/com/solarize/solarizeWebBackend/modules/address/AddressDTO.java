@@ -1,6 +1,5 @@
-package com.solarize.solarizeWebBackend.modules.client.dto;
+package com.solarize.solarizeWebBackend.modules.address;
 
-import com.solarize.solarizeWebBackend.modules.address.TypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

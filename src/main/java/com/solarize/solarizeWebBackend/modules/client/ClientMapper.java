@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
-import com.solarize.solarizeWebBackend.modules.client.dto.AddressDTO;
+import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 
