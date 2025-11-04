@@ -5,5 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MaterialUrlRepository extends JpaRepository<MaterialUrl, Long> {
-    List<MaterialUrl> findByMaterial_Id(Long materialId);
+    List<MaterialUrl> findByMaterialId(Long materialId);
+
 }
