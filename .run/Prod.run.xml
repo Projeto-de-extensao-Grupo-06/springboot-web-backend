@@ -1,18 +1,18 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Prod" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="prod" />
-    <envs>
-      <env name="EMAIL" value="projeto.solarize@gmail.com" />
-      <env name="MYSQL_PASSWORD" value="06241234" />
-      <env name="PASSWORD_EMAIL" value="lssk anjm wxfo ylop" />
-      <env name="REDIS_HOST" value="localhost" />
-      <env name="MYSQL_USERNAME" value="solarize" />
-    </envs>
-    <module name="solarize-web-backend" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.solarize.solarizeWebBackend.SolarizeWebBackendApplication" />
-    <option name="VM_PARAMETERS" value="--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
+    <configuration default="false" name="Prod" type="Application" factoryName="Application">
+        <option name="ACTIVE_PROFILES" value="prod" />
+        <envs>
+            <env name="EMAIL" value="projeto.solarize@gmail.com" />
+            <env name="MYSQL_PASSWORD" value="06241234" />
+            <env name="PASSWORD_EMAIL" value="lssk anjm wxfo ylop" />
+            <env name="REDIS_HOST" value="localhost" />
+            <env name="MYSQL_USERNAME" value="solarize" />
+        </envs>
+        <module name="solarize-web-backend" />
+        <option name="MAIN_CLASS_NAME" value="com.solarize.solarizeWebBackend.SolarizeWebBackendApplication" />
+        <option name="VM_PARAMETERS" value="--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true" />
+        <method v="2">
+            <option name="Make" enabled="true" />
+        </method>
+    </configuration>
 </component>
