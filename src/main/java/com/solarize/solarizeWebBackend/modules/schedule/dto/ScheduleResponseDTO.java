@@ -14,7 +14,8 @@ import java.time.LocalTime;
 public class ScheduleResponseDTO {
 
     private Long id;
-    private LocalDateTime date;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Boolean isActive;
     private Long projectId;
     private String type;

@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.schedule;
 
+import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,19 @@ public class ScheduleController {
     private final ScheduleService service;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDTO> createSchedule(@Valid @RequestBody Schedule schedule) {
-        Schedule createdSchedule = service.createSchedule(schedule);
+    public ResponseEntity<ScheduleResponseDTO> createSchedule(@Valid @RequestBody CreateScheduleDTO scheduleDTO) {
+        Schedule createdSchedule = service.createSchedule(scheduleDTO);
         ScheduleResponseDTO dto = ScheduleMapper.toDto(createdSchedule);
         return ResponseEntity.status(201).body(dto);
     }
 
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDTO> updateSchedule(@PathVariable Long id, @Valid @RequestBody CreateScheduleDTO scheduleDTO){
+        Schedule updatedSchedule = service.updateSchedule(id, scheduleDTO);
+        ScheduleResponseDTO dto = ScheduleMapper.toDto(updatedSchedule);
+        return ResponseEntity.ok(dto);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDTO> getScheduleById(@PathVariable Long id) {
