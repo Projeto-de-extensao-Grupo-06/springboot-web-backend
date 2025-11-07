@@ -11,6 +11,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CoworkerProjectId implements Serializable {
-    private Integer coworker;
-    private Integer project;
+    private Long coworker;
+    private Long project;
 }

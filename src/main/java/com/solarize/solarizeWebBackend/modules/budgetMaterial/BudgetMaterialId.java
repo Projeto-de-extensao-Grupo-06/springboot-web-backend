@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BudgetMaterialId implements Serializable {
-    private Integer budget;
-    private Integer material;
+    private Long budget;
+    private Long material;
 }
