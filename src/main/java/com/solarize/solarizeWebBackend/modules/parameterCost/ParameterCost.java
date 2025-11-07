@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity
 @IdClass(ParameterCostId.class)
 public class ParameterCost {
+
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_parameter")

@@ -2,7 +2,6 @@ package com.solarize.solarizeWebBackend.modules.coworker;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.PermissionGroup;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

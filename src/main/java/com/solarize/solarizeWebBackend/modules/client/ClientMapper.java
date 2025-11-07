@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.client;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,11 @@ public class ClientMapper {
                 .lastName(client.getLastName())
                 .phone(client.getPhone())
                 .email(client.getEmail())
+                .documentNumber(client.getDocumentNumber())
+                .documentType(client.getDocumentType())
+                .cnpj(client.getCnpj())
+                .note(client.getNote())
+                .createdAt(client.getCreatedAt())
                 .build();
     }
 
@@ -32,6 +38,11 @@ public class ClientMapper {
                         .lastName(client.getLastName())
                         .phone(client.getPhone())
                         .email(client.getEmail())
+                        .documentNumber(client.getDocumentNumber())
+                        .documentType(client.getDocumentType())
+                        .cnpj(client.getCnpj())
+                        .note(client.getNote())
+                        .createdAt(client.getCreatedAt())
                         .build()
             );
         });
@@ -49,6 +60,22 @@ public class ClientMapper {
                 .documentType(dto.getDocumentType())
                 .cnpj(dto.getCnpj())
                 .note(dto.getNote())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
+    }
+
+    public static void updateClientData(Client client, CreateClientDTO dto) {
+        if (client == null || dto == null) return;
+
+        client.setFirstName(dto.getFirstName());
+        client.setLastName(dto.getLastName());
+        client.setPhone(dto.getPhone());
+        client.setEmail(dto.getEmail());
+        client.setDocumentNumber(dto.getDocumentNumber());
+        client.setDocumentType(dto.getDocumentType());
+        client.setCnpj(dto.getCnpj());
+        client.setNote(dto.getNote());
+        client.setUpdatedAt(LocalDateTime.now());
     }
 }

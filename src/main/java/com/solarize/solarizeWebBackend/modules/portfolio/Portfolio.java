@@ -9,10 +9,11 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Portfolio {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_portfolio")
-    private Integer id;
+    private Long id;
 
     private String title;
     private String description;

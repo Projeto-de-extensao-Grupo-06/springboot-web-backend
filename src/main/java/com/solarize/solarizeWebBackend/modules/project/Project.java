@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_project")
-    private Integer id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private ProjectStatusEnum status;
@@ -36,14 +37,16 @@ public class Project {
     private Address address;
 
     private LocalDateTime createdAt;
+
     private LocalDateTime deadline;
 
     @Enumerated(EnumType.STRING)
     private SystemTypeEnum systemType;
 
     @Enumerated(EnumType.STRING)
-    private ProjectSourceEnum projectSource;
+    private ProjectSourceEnum projectFrom;
 
     private String name;
+
     private String description;
 }

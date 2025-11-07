@@ -67,7 +67,7 @@ public class PermissionsResolver {
     }
 
 
-    public static List<String> listModulesSystemModules(Class<PermissionGroup> permissionGroupClass) {
+    public static List<String> listSystemModules(Class<PermissionGroup> permissionGroupClass) {
         Field[] fields = permissionGroupClass.getDeclaredFields();
         List<String> moduleNames = new ArrayList<>();
 

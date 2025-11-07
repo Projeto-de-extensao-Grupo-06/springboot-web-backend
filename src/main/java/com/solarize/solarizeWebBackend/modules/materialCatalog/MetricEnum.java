@@ -5,7 +5,7 @@ public enum MetricEnum {
     METER("meter"),
     CENTIMETER("centimeter");
 
-    public String metric;
+    public final String metric;
 
     MetricEnum(String metric) {
         this.metric = metric;

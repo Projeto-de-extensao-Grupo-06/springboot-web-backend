@@ -12,7 +12,7 @@ public class ParameterOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_service_option")
-    private Integer id;
+    private Long id;
 
     private String type;
     private Double additionTax;

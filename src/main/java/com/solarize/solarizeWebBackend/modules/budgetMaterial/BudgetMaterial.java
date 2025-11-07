@@ -22,5 +22,6 @@ public class BudgetMaterial {
     private MaterialCatalog material;
 
     private Double quantity;
+
     private Double price;
 }

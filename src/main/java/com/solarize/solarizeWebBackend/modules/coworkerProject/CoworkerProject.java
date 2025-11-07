@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity
 @IdClass(CoworkerProjectId.class)
 public class CoworkerProject {
+
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_coworker")

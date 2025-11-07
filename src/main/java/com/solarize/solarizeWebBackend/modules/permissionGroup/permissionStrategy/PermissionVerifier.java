@@ -3,3 +3,5 @@ package com.solarize.solarizeWebBackend.modules.permissionGroup.permissionStrate
 public interface PermissionVerifier {
     public boolean verifyPermission(int permissionMask);
 }
+
+
