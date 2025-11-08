@@ -55,8 +55,7 @@ public class CoworkerService {
     public void deleteCoworker(long id) {
         Coworker coworker = REPOSITORY.findById(id)
                 .orElseThrow(() -> new NotFoundException("Coworker not found."));
-
-        REPOSITORY.delete(coworker);
+        coworker.setIsActive(false);
     }
 
     public void validateConflict(CoworkerCreateDto dto) {
@@ -66,7 +65,7 @@ public class CoworkerService {
 
     public void validateConflicUpdate(Long id, CoworkerCreateDto dto) {
         Optional<Coworker> existingByEmail = REPOSITORY.findByEmail(dto.getEmail());
-        Optional<Coworker> existingByPhone = REPOSITORY.findByEmail(dto.getPhone());
+        Optional<Coworker> existingByPhone = REPOSITORY.findByPhone(dto.getPhone());
 
         if(existingByEmail.isPresent() && !existingByEmail.get().getId().equals(id)) throw new ConflictException("This e-mail is already registered by another coworker.");
         if(existingByPhone.isPresent() && !existingByPhone.get().getId().equals(id)) throw new ConflictException("This phone is already registered by another coworker.");
