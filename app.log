@@ -1,0 +1,256 @@
+2025-10-31T18:03:28.164-03:00  INFO 15980 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 15980 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:03:28.167-03:00  INFO 15980 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "dev"
+2025-10-31T18:03:31.158-03:00  INFO 15980 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:03:31.799-03:00  INFO 15980 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 615 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:03:34.445-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-31T18:03:34.473-03:00  INFO 15980 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-31T18:03:34.474-03:00  INFO 15980 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-31T18:03:34.588-03:00  INFO 15980 --- [solarize-web-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2025-10-31T18:03:34.588-03:00  INFO 15980 --- [solarize-web-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6273 ms
+2025-10-31T18:03:34.927-03:00  INFO 15980 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-31T18:03:35.196-03:00  INFO 15980 --- [solarize-web-backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:teste-security user=ADMIN
+2025-10-31T18:03:35.198-03:00  INFO 15980 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-31T18:03:35.259-03:00  INFO 15980 --- [solarize-web-backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-31T18:03:35.344-03:00  INFO 15980 --- [solarize-web-backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-31T18:03:35.393-03:00  INFO 15980 --- [solarize-web-backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-31T18:03:35.769-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31T18:03:35.873-03:00  INFO 15980 --- [solarize-web-backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-31T18:03:37.467-03:00  INFO 15980 --- [solarize-web-backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-31T18:03:37.566-03:00  INFO 15980 --- [solarize-web-backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:03:37.855-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-31T18:03:38.914-03:00  WARN 15980 --- [solarize-web-backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-31T18:03:39.500-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-10-31T18:03:39.566-03:00  INFO 15980 --- [solarize-web-backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
+2025-10-31T18:03:40.366-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:teste-security'
+2025-10-31T18:03:40.509-03:00  INFO 15980 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2025-10-31T18:03:40.523-03:00  INFO 15980 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Started SolarizeWebBackendApplication in 13.252 seconds (process running for 14.778)
+2025-10-31T18:05:42.589-03:00  INFO 15980 --- [solarize-web-backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-31T18:05:42.600-03:00  INFO 15980 --- [solarize-web-backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-31T18:05:42.607-03:00  INFO 15980 --- [solarize-web-backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:05:42.616-03:00  INFO 15980 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-31T18:05:42.618-03:00  INFO 15980 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-31T18:25:52.072-03:00  INFO 16456 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 16456 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:25:52.075-03:00  INFO 16456 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:25:53.333-03:00  INFO 16456 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:25:53.472-03:00  INFO 16456 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 129 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:25:54.098-03:00  INFO 16456 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-31T18:25:54.220-03:00  INFO 16456 --- [solarize-web-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2098 ms
+2025-10-31T18:25:54.509-03:00  INFO 16456 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-31T18:25:54.691-03:00  INFO 16456 --- [solarize-web-backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:teste-security user=ADMIN
+2025-10-31T18:25:54.692-03:00  INFO 16456 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-31T18:25:54.741-03:00  INFO 16456 --- [solarize-web-backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-31T18:25:54.784-03:00  INFO 16456 --- [solarize-web-backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-31T18:25:54.809-03:00  INFO 16456 --- [solarize-web-backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-31T18:25:55.035-03:00  INFO 16456 --- [solarize-web-backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31T18:25:55.097-03:00  INFO 16456 --- [solarize-web-backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-31T18:25:56.115-03:00  INFO 16456 --- [solarize-web-backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-31T18:25:58.656-03:00  INFO 23228 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 23228 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:25:58.659-03:00  INFO 23228 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:25:59.768-03:00  INFO 23228 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:25:59.846-03:00  INFO 23228 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:26:00.411-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-31T18:26:00.427-03:00  INFO 23228 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-31T18:26:00.427-03:00  INFO 23228 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-31T18:26:00.490-03:00  INFO 23228 --- [solarize-web-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2025-10-31T18:26:00.491-03:00  INFO 23228 --- [solarize-web-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1768 ms
+2025-10-31T18:26:00.715-03:00  INFO 23228 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-31T18:26:00.877-03:00  INFO 23228 --- [solarize-web-backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:teste-security user=ADMIN
+2025-10-31T18:26:00.879-03:00  INFO 23228 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-31T18:26:00.921-03:00  INFO 23228 --- [solarize-web-backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-31T18:26:00.968-03:00  INFO 23228 --- [solarize-web-backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-31T18:26:00.998-03:00  INFO 23228 --- [solarize-web-backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-31T18:26:01.213-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31T18:26:01.280-03:00  INFO 23228 --- [solarize-web-backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-31T18:26:02.272-03:00  INFO 23228 --- [solarize-web-backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-31T18:26:02.345-03:00  INFO 23228 --- [solarize-web-backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:26:02.595-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-31T18:26:03.414-03:00  WARN 23228 --- [solarize-web-backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-31T18:26:03.794-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-10-31T18:26:03.835-03:00  INFO 23228 --- [solarize-web-backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
+2025-10-31T18:26:04.348-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:teste-security'
+2025-10-31T18:26:04.457-03:00  INFO 23228 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2025-10-31T18:26:04.467-03:00  INFO 23228 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Started SolarizeWebBackendApplication in 6.293 seconds (process running for 6.902)
+2025-10-31T18:26:04.871-03:00  INFO 23228 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-31T18:26:04.871-03:00  INFO 23228 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-31T18:26:04.873-03:00  INFO 23228 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-10-31T18:31:28.527-03:00  INFO 23228 --- [solarize-web-backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-31T18:31:28.538-03:00  INFO 23228 --- [solarize-web-backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-31T18:31:28.547-03:00  INFO 23228 --- [solarize-web-backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:31:28.554-03:00  INFO 23228 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-31T18:31:28.556-03:00  INFO 23228 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-31T18:32:38.801-03:00  INFO 22436 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 22436 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:32:38.803-03:00  INFO 22436 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:32:39.881-03:00  INFO 22436 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:32:39.960-03:00  INFO 22436 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 72 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:32:40.408-03:00  WARN 22436 --- [solarize-web-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2025-10-31T18:32:40.419-03:00  INFO 22436 --- [solarize-web-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-31T18:32:40.431-03:00 ERROR 22436 --- [solarize-web-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.11.jar:6.2.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.6.jar:3.5.6]
+	at com.solarize.solarizeWebBackend.SolarizeWebBackendApplication.main(SolarizeWebBackendApplication.java:16) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to create tempDir. java.io.tmpdir is set to C:\WINDOWS\
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:221) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:201) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 8 common frames omitted
+Caused by: java.nio.file.AccessDeniedException: C:\WINDOWS\tomcat.8080.2675442590432262162
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:89) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[na:na]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(WindowsFileSystemProvider.java:503) ~[na:na]
+	at java.base/java.nio.file.Files.createDirectory(Files.java:647) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.create(TempFileHelper.java:130) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.createTempDirectory(TempFileHelper.java:162) ~[na:na]
+	at java.base/java.nio.file.Files.createTempDirectory(Files.java:926) ~[na:na]
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:215) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 11 common frames omitted
+
+2025-10-31T18:33:08.687-03:00  INFO 24708 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 24708 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:33:08.689-03:00  INFO 24708 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:33:09.856-03:00  INFO 24708 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:33:09.949-03:00  INFO 24708 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:33:10.394-03:00  WARN 24708 --- [solarize-web-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2025-10-31T18:33:10.404-03:00  INFO 24708 --- [solarize-web-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-31T18:33:10.417-03:00 ERROR 24708 --- [solarize-web-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.11.jar:6.2.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.6.jar:3.5.6]
+	at com.solarize.solarizeWebBackend.SolarizeWebBackendApplication.main(SolarizeWebBackendApplication.java:16) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to create tempDir. java.io.tmpdir is set to C:\WINDOWS\
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:221) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:201) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 8 common frames omitted
+Caused by: java.nio.file.AccessDeniedException: C:\WINDOWS\tomcat.8080.16520016516126164603
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:89) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[na:na]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(WindowsFileSystemProvider.java:503) ~[na:na]
+	at java.base/java.nio.file.Files.createDirectory(Files.java:647) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.create(TempFileHelper.java:130) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.createTempDirectory(TempFileHelper.java:162) ~[na:na]
+	at java.base/java.nio.file.Files.createTempDirectory(Files.java:926) ~[na:na]
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:215) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 11 common frames omitted
+
+2025-10-31T18:33:36.664-03:00  INFO 5348 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 5348 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:33:36.665-03:00  INFO 5348 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:33:37.969-03:00  INFO 5348 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:33:38.054-03:00  INFO 5348 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 74 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:33:38.611-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-31T18:33:38.623-03:00  INFO 5348 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-31T18:33:38.624-03:00  INFO 5348 --- [solarize-web-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-31T18:33:38.683-03:00  INFO 5348 --- [solarize-web-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2025-10-31T18:33:38.683-03:00  INFO 5348 --- [solarize-web-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1949 ms
+2025-10-31T18:33:38.901-03:00  INFO 5348 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-31T18:33:39.077-03:00  INFO 5348 --- [solarize-web-backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:teste-security user=ADMIN
+2025-10-31T18:33:39.080-03:00  INFO 5348 --- [solarize-web-backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-31T18:33:39.127-03:00  INFO 5348 --- [solarize-web-backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-31T18:33:39.187-03:00  INFO 5348 --- [solarize-web-backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-31T18:33:39.218-03:00  INFO 5348 --- [solarize-web-backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-31T18:33:39.492-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31T18:33:39.558-03:00  INFO 5348 --- [solarize-web-backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-31T18:33:40.634-03:00  INFO 5348 --- [solarize-web-backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-31T18:33:40.714-03:00  INFO 5348 --- [solarize-web-backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:33:40.934-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-31T18:33:41.818-03:00  WARN 5348 --- [solarize-web-backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-31T18:33:42.220-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-10-31T18:33:42.265-03:00  INFO 5348 --- [solarize-web-backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
+2025-10-31T18:33:42.830-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:teste-security'
+2025-10-31T18:33:42.936-03:00  INFO 5348 --- [solarize-web-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2025-10-31T18:33:42.948-03:00  INFO 5348 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Started SolarizeWebBackendApplication in 6.919 seconds (process running for 7.849)
+2025-10-31T18:33:43.453-03:00  INFO 5348 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-31T18:33:43.453-03:00  INFO 5348 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-31T18:33:43.454-03:00  INFO 5348 --- [solarize-web-backend] [RMI TCP Connection(3)-192.168.15.7] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-10-31T18:34:30.978-03:00  INFO 5348 --- [solarize-web-backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-31T18:34:30.988-03:00  INFO 5348 --- [solarize-web-backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-31T18:34:30.995-03:00  INFO 5348 --- [solarize-web-backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T18:34:31.004-03:00  INFO 5348 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-31T18:34:31.008-03:00  INFO 5348 --- [solarize-web-backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-31T18:34:34.655-03:00  INFO 19436 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : Starting SolarizeWebBackendApplication using Java 24.0.2 with PID 19436 (C:\Users\bryan\workspace\solarize\springboot-web-backend\target\classes started by bryan in C:\Users\bryan\workspace\solarize\springboot-web-backend)
+2025-10-31T18:34:34.657-03:00  INFO 19436 --- [solarize-web-backend] [main] c.s.s.SolarizeWebBackendApplication      : The following 1 profile is active: "prod"
+2025-10-31T18:34:35.973-03:00  INFO 19436 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T18:34:36.062-03:00  INFO 19436 --- [solarize-web-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78 ms. Found 10 JPA repository interfaces.
+2025-10-31T18:34:36.543-03:00  WARN 19436 --- [solarize-web-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2025-10-31T18:34:36.555-03:00  INFO 19436 --- [solarize-web-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-31T18:34:36.568-03:00 ERROR 19436 --- [solarize-web-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.11.jar:6.2.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.6.jar:3.5.6]
+	at com.solarize.solarizeWebBackend.SolarizeWebBackendApplication.main(SolarizeWebBackendApplication.java:16) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to create tempDir. java.io.tmpdir is set to C:\WINDOWS\
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:221) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:201) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.6.jar:3.5.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 8 common frames omitted
+Caused by: java.nio.file.AccessDeniedException: C:\WINDOWS\tomcat.8080.12058157508810928849
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:89) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[na:na]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[na:na]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(WindowsFileSystemProvider.java:503) ~[na:na]
+	at java.base/java.nio.file.Files.createDirectory(Files.java:647) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.create(TempFileHelper.java:130) ~[na:na]
+	at java.base/java.nio.file.TempFileHelper.createTempDirectory(TempFileHelper.java:162) ~[na:na]
+	at java.base/java.nio.file.Files.createTempDirectory(Files.java:926) ~[na:na]
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.createTempDir(AbstractConfigurableWebServerFactory.java:215) ~[spring-boot-3.5.6.jar:3.5.6]
+	... 11 common frames omitted
+

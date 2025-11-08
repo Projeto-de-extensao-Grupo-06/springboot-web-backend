@@ -8,10 +8,10 @@ INSERT INTO permission_group (
                             ) VALUES (
                                       'ADMIN',
                                       'PROJECT_LIST',
-                                      0XF,
-                                      0XF,
-                                      0XF,
-                                      0XF
+                                      0xF,
+                                      0xF,
+                                      0xF,
+                                      0xF
                                      );
 
 INSERT INTO coworker (first_name, last_name, email, phone, password, fk_permission_group)

@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParameterCostId implements Serializable {
-    private Integer parameter;
-    private Integer option;
+    private Long parameter;
+    private Long option;
 }

@@ -1,15 +1,15 @@
-package com.solarize.solarizeWebBackend.shared.caffeine;
+package com.solarize.solarizeWebBackend.shared.cacheManager.caffeine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class CacheManager<K, V> {
+public abstract class CaffeineManager<K, V> {
     final int durationMinutes;
     private final Cache<K, V> cache;
 
-    public CacheManager(int durationMinutes) {
+    public CaffeineManager(int durationMinutes) {
         this.durationMinutes = durationMinutes;
 
         this.cache = Caffeine.newBuilder()
@@ -18,18 +18,15 @@ public abstract class CacheManager<K, V> {
                 .build();
     }
 
-
-
-
-    public void saveCache(K code, V userId) {
-        cache.put(code, userId);
+    public void saveCache(K key, V value) {
+        cache.put(key, value);
     }
 
-    public V getCache(K code) {
-        return cache.getIfPresent(code);
+    public V getCache(K key) {
+        return cache.getIfPresent(key);
     }
 
-    public void invalidateCache(K code) {
-        cache.invalidate(code);
+    public void invalidateCache(K key) {
+        cache.invalidate(key);
     }
 }
