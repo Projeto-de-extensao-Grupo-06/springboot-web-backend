@@ -1,0 +1,735 @@
+openapi: 3.0.3
+info:
+  title: API SOLARIZE
+  description: API para gerenciamento de CRM com autenticação, clientes, colegas de trabalho e permissões
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: bryangomesrocha@gmail.com
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  # ========== AUTH ENDPOINTS ==========
+  /api/auth/login:
+    post:
+      summary: Realiza login no sistema
+      description: Autentica um usuário com email e senha, retornando tokens de acesso
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "bryangomesrocha@gmail.com"
+                password:
+                  type: string
+                  example: "0624"
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: Cookies de autenticação e informações do usuário
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid Credentials"
+                status: "401"
+                typeError: "Unauthorized"
+                path: "/api/auth/login"
+                timestamp: "2025-10-27T08:22:45.7051751"
+
+  /api/auth/logout:
+    post:
+      summary: Realiza logout do sistema
+      description: Invalida os tokens de autenticação do usuário
+      tags: [Auth]
+      responses:
+        '204':
+          description: Logout realizado com sucesso
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: Cookies são limpos
+
+  /api/auth/forget-password:
+    post:
+      summary: Solicita recuperação de senha
+      description: Envia um código OTP para o email do usuário para redefinição de senha
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "bryangomesrocha@gmail.com"
+      responses:
+        '204':
+          description: Código de recuperação enviado com sucesso
+        '429':
+          description: Muitas tentativas em um curto período
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/confirm-otp:
+    post:
+      summary: Verifica código OTP
+      description: Valida o código de verificação enviado para recuperação de senha
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otp
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "bryangomesrocha@gmail.com"
+                otp:
+                  type: string
+                  example: "074844"
+      responses:
+        '204':
+          description: Código OTP válido
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: Token para redefinição de senha é definido
+        '401':
+          description: Código OTP inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/change-password/token:
+    patch:
+      summary: Altera senha usando token
+      description: Define uma nova senha usando o token de redefinição
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  example: "@Teste123"
+      responses:
+        '204':
+          description: Senha alterada com sucesso
+        '401':
+          description: Token inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ========== PERMISSIONS ENDPOINTS ==========
+  /api/permission-groups:
+    get:
+      summary: Lista todos os grupos de permissão
+      tags: [Permissions]
+      responses:
+        '200':
+          description: Lista de grupos de permissão recuperada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionGroup'
+
+    post:
+      summary: Cria um novo grupo de permissão
+      tags: [Permissions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionGroup'
+      responses:
+        '201':
+          description: Grupo de permissão criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionGroup'
+        '400':
+          description: Dados de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '409':
+          description: Conflito - grupo já existe
+
+  /api/permission-groups/{id}:
+    get:
+      summary: Busca grupo de permissão por ID
+      tags: [Permissions]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Grupo de permissão encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionGroup'
+        '404':
+          description: Grupo de permissão não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ========== CLIENTS ENDPOINTS ==========
+  /api/clients:
+    get:
+      summary: Lista todos os clientes
+      tags: [Clients]
+      responses:
+        '200':
+          description: Lista de clientes recuperada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientResponse'
+        '204':
+          description: Nenhum cliente encontrado
+
+    post:
+      summary: Cria um novo cliente
+      tags: [Clients]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClient'
+      responses:
+        '201':
+          description: Cliente criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '400':
+          description: Dados de entrada inválidos
+        '409':
+          description: Conflito - documento, email, telefone ou CNPJ já existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/clients/{id}:
+    get:
+      summary: Busca cliente por ID
+      tags: [Clients]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Atualiza um cliente existente
+      tags: [Clients]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClient'
+      responses:
+        '200':
+          description: Cliente atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '404':
+          description: Cliente não encontrado
+        '409':
+          description: Conflito de dados
+
+    delete:
+      summary: Exclui um cliente
+      tags: [Clients]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Cliente excluído com sucesso
+        '404':
+          description: Cliente não encontrado
+
+  # ========== COWORKERS ENDPOINTS ==========
+  /api/coworkers:
+    get:
+      summary: Lista todos os colegas de trabalho
+      tags: [Coworkers]
+      responses:
+        '200':
+          description: Lista de colegas recuperada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CoworkerResponse'
+
+    post:
+      summary: Cria um novo colega de trabalho
+      tags: [Coworkers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCoworker'
+      responses:
+        '201':
+          description: Colega criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoworkerResponse'
+        '400':
+          description: Dados de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /api/coworkers/{id}:
+    get:
+      summary: Busca colega de trabalho por ID
+      tags: [Coworkers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Colega encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoworkerResponse'
+        '404':
+          description: Colega não encontrado
+
+    put:
+      summary: Atualiza um colega de trabalho existente
+      tags: [Coworkers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCoworker'
+      responses:
+        '200':
+          description: Colega atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoworkerResponse'
+        '404':
+          description: Colega não encontrado
+
+    delete:
+      summary: Exclui um colega de trabalho
+      tags: [Coworkers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Colega excluído com sucesso
+        '404':
+          description: Colega não encontrado
+
+  # ========== MATERIALS ENDPOINTS ==========
+  /api/materials/{id}:
+    get:
+      summary: Busca material por ID
+      tags: [Materials]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Material encontrado
+        '404':
+          description: Material não encontrado
+
+components:
+  schemas:
+    # ========== ERROR SCHEMAS ==========
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro descritiva
+        status:
+          type: string
+          description: Código de status HTTP
+        typeError:
+          type: string
+          description: Tipo do erro
+        path:
+          type: string
+          description: Path da requisição que causou o erro
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp do erro
+
+    ValidationErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            validationErrors:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    description: Campo que falhou na validação
+                  message:
+                    type: string
+                    description: Mensagem de erro de validação
+
+    # ========== PERMISSION SCHEMAS ==========
+    Permission:
+      type: object
+      required:
+        - moduleName
+        - read
+        - write
+        - update
+        - delete
+      properties:
+        moduleName:
+          type: string
+          enum: [CLIENT, PROJECT, BUDGET, SCHEDULE]
+          example: "CLIENT"
+        read:
+          type: boolean
+          example: true
+        write:
+          type: boolean
+          example: true
+        update:
+          type: boolean
+          example: false
+        delete:
+          type: boolean
+          example: false
+
+    PermissionGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        role:
+          type: string
+          enum: [ADMIN, TECHNICAL]
+          example: "ADMIN"
+        mainModule:
+          type: string
+          example: "PROJECT_LIST"
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+
+    CreatePermissionGroup:
+      type: object
+      required:
+        - role
+        - mainModule
+        - permissions
+      properties:
+        role:
+          type: string
+          enum: [ADMIN, TECHNICAL]
+          example: "TECHNICAL"
+        mainModule:
+          type: string
+          example: "CLIENT"
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+
+    # ========== CLIENT SCHEMAS ==========
+    ClientResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        phone:
+          type: string
+          example: "+5511949902159"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        documentNumber:
+          type: string
+          example: "91280161060"
+        documentType:
+          type: string
+          enum: [CPF, CNPJ]
+          example: "CPF"
+        cnpj:
+          type: string
+          example: "59603348000116"
+        note:
+          type: string
+          example: "VIP client, handle with priority"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-10-27T08:41:29.833448"
+
+    CreateClient:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - phone
+        - email
+        - documentNumber
+        - documentType
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        phone:
+          type: string
+          example: "+5511949902159"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        documentNumber:
+          type: string
+          example: "91280161060"
+        documentType:
+          type: string
+          enum: [CPF, CNPJ]
+          example: "CPF"
+        cnpj:
+          type: string
+          example: "59603348000116"
+        note:
+          type: string
+          example: "VIP client, handle with priority"
+
+    # ========== COWORKER SCHEMAS ==========
+    CoworkerResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: "Bryan"
+        lastName:
+          type: string
+          example: "Rocha"
+        email:
+          type: string
+          format: email
+          example: "bryangomesrocha@gmail.com"
+        phone:
+          type: string
+          example: "11964275054"
+
+    CreateCoworker:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+        - password
+      properties:
+        firstName:
+          type: string
+          example: "Victor"
+        lastName:
+          type: string
+          example: "Santos"
+        email:
+          type: string
+          format: email
+          example: "email@gmail.com"
+        phone:
+          type: string
+          example: "11972795939"
+        password:
+          type: string
+          example: "password_b93dc1a57dd7A1@"
+
+    UpdateCoworker:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+      properties:
+        firstName:
+          type: string
+          example: "Victor"
+        lastName:
+          type: string
+          example: "Santos"
+        email:
+          type: string
+          format: email
+          example: "email@gmail.com"
+        phone:
+          type: string
+          example: "11972795939"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+tags:
+  - name: Auth
+    description: Endpoints de autenticação e autorização
+  - name: Permissions
+    description: Gerenciamento de grupos de permissão
+  - name: Clients
+    description: Gerenciamento de clientes
+  - name: Coworkers
+    description: Gerenciamento de colegas de trabalho
+  - name: Materials
+    description: Gerenciamento de materiais
+
+security:
+  - bearerAuth: []

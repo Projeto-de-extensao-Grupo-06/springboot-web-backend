@@ -27,4 +27,19 @@ public class ClientResponseDTO {
 
     @Schema(description = "Client e-mail address", example = "john.doe@example.com")
     private String email;
+
+    @Schema(description = "Client document number", example = "91280161060")
+    private String documentNumber;
+
+    @Schema(description = "Type of document (CPF, RG, CNPJ or PASSPORT)", example = "CPF")
+    private String documentType;
+
+    @Schema(description = "CNPJ of the client", example = "59603348000116")
+    private String cnpj;
+
+    @Schema(description = "Additional notes/description", example = "VIP client, handle with priority")
+    private String note;
+
+    @Schema(description = "Date and time when the client was created")
+    private LocalDateTime createdAt;
 }

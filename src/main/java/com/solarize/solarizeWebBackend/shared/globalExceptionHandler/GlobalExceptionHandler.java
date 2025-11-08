@@ -1,9 +1,6 @@
 package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 
-import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
-import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
-import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
-import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
+import com.solarize.solarizeWebBackend.shared.exceptions.*;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,14 +15,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.LocalDateTime;
-
-
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(HttpServletRequest request, BadCredentialsException ex){
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex){
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.UNAUTHORIZED);
     }
 
@@ -38,7 +32,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<FieldsResponseError> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -55,6 +48,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ErrorResponse> handleToManyRequestsException(TooManyRequestsException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.TOO_MANY_REQUESTS);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFoundException() {
         return new ResponseEntity<>(ExceptionsMapper.uriNotFound(), HttpStatus.NOT_FOUND);
@@ -62,6 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
+        log.error("Handled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -75,5 +74,4 @@ public class GlobalExceptionHandler {
         log.error("Unhandled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.internalServerError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

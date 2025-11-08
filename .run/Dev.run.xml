@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Dev" type="Application" factoryName="Application">
+    <envs>
+      <env name="EMAIL" value="projeto.solarize@gmail.com" />
+      <env name="PASSWORD_EMAIL" value="lssk anjm wxfo ylop" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.solarize.solarizeWebBackend.SolarizeWebBackendApplication" />
+    <module name="solarize-web-backend" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=dev" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

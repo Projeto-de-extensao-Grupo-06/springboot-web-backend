@@ -4,17 +4,13 @@ import lombok.*;
 
 @Getter
 @Setter
-public class PasswordRecoveryEmail extends BaseEmail {
+@Builder
+public class PasswordRecoveryEmail {
+    private String to;
+    private String subject;
     private String name;
     private String code;
     private String operatingSystem;
     private String browser;
-
-    public PasswordRecoveryEmail(String to, String subject, String template, String name, String code, String operatingSystem, String browser) {
-        super(to, subject, template);
-        this.name = name;
-        this.code = code;
-        this.operatingSystem = operatingSystem;
-        this.browser = browser;
-    }
+    private String ip;
 }
