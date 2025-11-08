@@ -7,6 +7,7 @@ import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.Validat
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -96,6 +97,17 @@ public class ExceptionsMapper {
                 .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
                 .typeError(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static ErrorResponse of(AuthorizationDeniedException ex) {
+        return ErrorResponse
+                .builder()
+                .message("You do not have permission to request this endpoint.")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.FORBIDDEN.value()))
                 .timestamp(LocalDateTime.now())
                 .build();
     }

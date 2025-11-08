@@ -14,13 +14,14 @@ import java.time.LocalTime;
 public class ScheduleResponseDTO {
 
     private Long id;
-    private LocalDateTime date;
-    private Boolean isActive;
-    private Long projectId;
-    private String type;
-    private Long coworkerId;
-    private String status;
     private String title;
     private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String type;
+    private String status;
+    private Boolean isActive;
+    private Long projectId;
+    private Long coworkerId;
 
 }

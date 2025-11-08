@@ -21,12 +21,14 @@ public class Schedule {
 
     private LocalTime notificationAlertTime;
 
-    private LocalDateTime date;
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_project", nullable = false)
+    @JoinColumn(name = "fk_project", nullable = true)
     private Project project;
 
     @Enumerated(EnumType.STRING)
