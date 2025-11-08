@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.schedule;
 
+import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 
@@ -11,7 +12,7 @@ public class ScheduleMapper {
     public static ScheduleResponseDTO toDto(Schedule schedule) {
         if (schedule == null) return null;
 
-            return ScheduleResponseDTO.builder()
+        return ScheduleResponseDTO.builder()
                     .id(schedule.getId())
                     .startDate(schedule.getStartDate())
                     .endDate(schedule.getEndDate())
@@ -37,6 +38,9 @@ public class ScheduleMapper {
     public static Schedule toEntity(CreateScheduleDTO dto){
         if (dto == null)return null;
 
+        Coworker coworker = new Coworker();
+        coworker.setId(dto.getCoworkerId());
+
         Schedule schedule = new Schedule();
         schedule.setTitle(dto.getTitle());
         schedule.setDescription(dto.getDescription());
@@ -45,6 +49,7 @@ public class ScheduleMapper {
         schedule.setType(dto.getType());
         schedule.setStatus(dto.getStatus());
         schedule.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
+        schedule.setCoworker(coworker);
         schedule.setNotificationAlertTime(dto.getNotificationAlertTime());
 
         return schedule;

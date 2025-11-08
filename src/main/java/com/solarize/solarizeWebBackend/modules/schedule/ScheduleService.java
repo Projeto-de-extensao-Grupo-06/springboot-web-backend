@@ -17,7 +17,6 @@ public class ScheduleService {
     private final CoworkerRepository coworkerRepository;
 
     public Schedule createSchedule(CreateScheduleDTO dto) {
-
         Schedule schedule = ScheduleMapper.toEntity(dto);
 
         Coworker coworker = coworkerRepository.findById(dto.getCoworkerId())
@@ -32,21 +31,18 @@ public class ScheduleService {
                 .orElseThrow(() -> new NotFoundException("Schedule not found "));
     }
 
-    public Schedule updateSchedule(Long id, CreateScheduleDTO dto){
+    public Schedule updateSchedule(Long id, Schedule schedule){
         Schedule existingSchedule = getScheduleById(id);
 
-        existingSchedule.setTitle(dto.getTitle());
-        existingSchedule.setDescription(dto.getDescription());
-        existingSchedule.setStartDate(dto.getStartDate());
-        existingSchedule.setEndDate(dto.getEndDate());
-        existingSchedule.setStatus(dto.getStatus());
-        existingSchedule.setType(dto.getType());
-        existingSchedule.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
+        existingSchedule.setTitle(schedule.getTitle());
+        existingSchedule.setDescription(schedule.getDescription());
+        existingSchedule.setStartDate(schedule.getStartDate());
+        existingSchedule.setEndDate(schedule.getEndDate());
+        existingSchedule.setStatus(schedule.getStatus());
+        existingSchedule.setType(schedule.getType());
+        existingSchedule.setIsActive(schedule.getIsActive() != null ? schedule.getIsActive() : true);
 
-        Coworker coworker = coworkerRepository.findById(dto.getCoworkerId())
-                .orElseThrow(() -> new NotFoundException("Colaborador com ID " + dto.getCoworkerId() + " não encontrado."));
-
-        existingSchedule.setCoworker(coworker);
+        existingSchedule.setCoworker(schedule.getCoworker());
         return repository.save(existingSchedule);
 
     }
