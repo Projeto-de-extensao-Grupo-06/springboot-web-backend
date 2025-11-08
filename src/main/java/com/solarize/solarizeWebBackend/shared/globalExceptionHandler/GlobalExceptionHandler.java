@@ -69,6 +69,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    @ExceptionHandler(InvalidDocumentException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDocumentException(InvalidDocumentException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.error("Unhandled exception", ex);

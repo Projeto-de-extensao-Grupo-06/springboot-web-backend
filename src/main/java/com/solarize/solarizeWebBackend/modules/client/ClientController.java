@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
+import com.solarize.solarizeWebBackend.modules.address.Address;
+import com.solarize.solarizeWebBackend.modules.address.AddressMapper;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,36 +31,47 @@ public class ClientController {
     public ResponseEntity<ClientResponseDTO> getClient(
             @PathVariable Long id
     ){
-        final ClientResponseDTO client = SERVICE.getClient(id);
-        return ResponseEntity.ok(client);
+        final Client client = SERVICE.getClient(id);
+        return ResponseEntity.ok(ClientMapper.of(client));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_READ')")
     @GetMapping()
     public ResponseEntity<List<ClientResponseDTO>> getClients(){
-        final List<ClientResponseDTO> clients = SERVICE.getClients();
-
-        if(clients.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(clients);
+        final List<Client> clients = SERVICE.getClients();
+        if (clients.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ClientMapper.of(clients));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_WRITE')")
     @PostMapping
     public ResponseEntity<ClientResponseDTO> postClient(
-            @Valid @RequestBody CreateClientDTO client
+            @Valid @RequestBody CreateClientDTO dto
     ){
-        final ClientResponseDTO createdClient = SERVICE.postClient(client);
-        return ResponseEntity.status(201).body(createdClient);
+        Address address = null;
+        if (dto.getMainAddress() != null) {
+            address = AddressMapper.toEntity(dto.getMainAddress());
+        }
+
+        Client client = ClientMapper.of(dto, address);
+        Client created = SERVICE.postClient(client);
+        return ResponseEntity.status(201).body(ClientMapper.of(created));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_UPDATE')")
     @PutMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> putClient(
             @PathVariable Long id,
-            @Valid @RequestBody CreateClientDTO client
+            @Valid @RequestBody CreateClientDTO dto
     ){
-        final ClientResponseDTO updated = SERVICE.putClient(id, client);
-        return ResponseEntity.ok(updated);
+        Address address = null;
+        if (dto.getMainAddress() != null) {
+            address = AddressMapper.toEntity(dto.getMainAddress());
+        }
+
+        Client client = ClientMapper.of(dto, address);
+        Client updated = SERVICE.putClient(id, client);
+        return ResponseEntity.ok(ClientMapper.of(updated));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_DELETE')")
