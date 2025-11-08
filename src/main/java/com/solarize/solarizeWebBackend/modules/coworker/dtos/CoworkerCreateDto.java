@@ -16,7 +16,6 @@ public class CoworkerCreateDto {
     @Pattern(
             regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
     )
-    @Schema(description = "Coworker first name", example = "John")
     private String firstName;
 
     @NotBlank(message = "Nickname or last name is obligatory.")
@@ -24,12 +23,10 @@ public class CoworkerCreateDto {
     @Pattern(
             regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
     )
-    @Schema(description = "Coworker nickname or last name", example = "Doe")
     private String lastName;
 
     @Email
     @NotBlank(message = "E-mail is obligatory.")
-    @Schema(description = "Coworker email", example = "john@doe.com")
     private String email;
 
     @NotBlank(message = "Phone is obligatory.")
@@ -37,7 +34,6 @@ public class CoworkerCreateDto {
             regexp = "^[1-9]{2}[9]?\\d{8}$",
             message = "Phone must be valid (10–15 digits, may include country code)"
     )
-    @Schema(description = "Phone must be valid (10–15 digits, may include country code)", example = "(11)960976085")
     private String phone;
 
     @NotBlank(message = "Password is obligatory.")
