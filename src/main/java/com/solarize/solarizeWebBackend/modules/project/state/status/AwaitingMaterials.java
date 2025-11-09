@@ -1,72 +1,71 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
-import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
-import com.solarize.solarizeWebBackend.modules.project.state.StatusContext;
 
 public class AwaitingMaterials implements Status {
     @Override
-    public void applyToNew(StatusContext context) {
-
+    public void applyToNew(Project project) {
+        Status.super.applyToNew(project);
     }
 
     @Override
-    public void applyToPreBudget(StatusContext context) {
-
+    public void applyToPreBudget(Project project) {
+        Status.super.applyToPreBudget(project);
     }
 
     @Override
-    public void applyToClientAwaitingContact(StatusContext context) {
-
+    public void applyToClientAwaitingContact(Project project) {
+        Status.super.applyToClientAwaitingContact(project);
     }
 
     @Override
-    public void applyToAwaitingRetry(StatusContext context) {
-
+    public void applyToAwaitingRetry(Project project) {
+        Status.super.applyToAwaitingRetry(project);
     }
 
     @Override
-    public void applyToRetrying(StatusContext context) {
-
+    public void applyToRetrying(Project project) {
+        Status.super.applyToRetrying(project);
     }
 
     @Override
-    public void applyToScheduledTechnicalVisit(StatusContext context) {
-
+    public void applyToScheduledTechnicalVisit(Project project) {
+        Status.super.applyToScheduledTechnicalVisit(project);
     }
 
     @Override
-    public void applyToTechnicalVisitCompleted(StatusContext context) {
-
+    public void applyToTechnicalVisitCompleted(Project project) {
+        Status.super.applyToTechnicalVisitCompleted(project);
     }
 
     @Override
-    public void applyToFinalBudget(StatusContext context) {
-
+    public void applyToFinalBudget(Project project) {
+        Status.super.applyToFinalBudget(project);
     }
 
     @Override
-    public void applyToAwaitingMaterials(StatusContext context) {
-
+    public void applyToAwaitingMaterials(Project project) {
+        Status.super.applyToAwaitingMaterials(project);
     }
 
     @Override
-    public void applyToScheduledInstallingVisit(StatusContext context) {
-
+    public void applyToScheduledInstallingVisit(Project project) {
+        Status.super.applyToScheduledInstallingVisit(project);
     }
 
     @Override
-    public void applyToInstalled(StatusContext context) {
-
+    public void applyToInstalled(Project project) {
+        Status.super.applyToInstalled(project);
     }
 
     @Override
-    public void applyToCompleted(StatusContext context) {
-
+    public void applyToCompleted(Project project) {
+        Status.super.applyToCompleted(project);
     }
 
     @Override
-    public void applyToNegociationFailed(StatusContext context) {
-
+    public void applyToNegociationFailed(Project project) {
+        Status.super.applyToNegociationFailed(project);
     }
 }

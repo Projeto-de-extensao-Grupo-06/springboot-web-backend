@@ -1,29 +1,59 @@
 package com.solarize.solarizeWebBackend.modules.project.state;
 
+import com.solarize.solarizeWebBackend.modules.project.Project;
+import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
+
 public interface Status {
-    void applyToNew(StatusContext context);
+    default void applyToNew(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEW");
+    }
 
-    void applyToPreBudget(StatusContext context);
+    default void applyToPreBudget(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> PRE_BUDGET");
+    }
 
-    void applyToClientAwaitingContact(StatusContext context);
+    default void applyToClientAwaitingContact(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> CLIENT_AWAITING_CONTACT");
+    }
 
-    void applyToAwaitingRetry(StatusContext context);
+    default void applyToAwaitingRetry(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> AWAITING_RETRY");
+    }
 
-    void applyToRetrying(StatusContext context);
+    default void applyToRetrying(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> RETRYING");
+    }
 
-    void applyToScheduledTechnicalVisit(StatusContext context);
+    default void applyToScheduledTechnicalVisit(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> SCHEDULED_TECHNICAL_VISIT");
+    }
 
-    void applyToTechnicalVisitCompleted(StatusContext context);
+    default void applyToTechnicalVisitCompleted(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> TECHNICAL_VISIT_COMPLETED");
+    }
 
-    void applyToFinalBudget(StatusContext context);
+    default void applyToFinalBudget(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> FINAL_BUDGET");
+    }
 
-    void applyToAwaitingMaterials(StatusContext context);
+    default void applyToAwaitingMaterials(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> AWAITING_MATERIALS");
+    }
 
-    void applyToScheduledInstallingVisit(StatusContext context);
+    default void applyToScheduledInstallingVisit(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> SCHEDULED_INSTALLING_VISIT");
+    }
 
-    void applyToInstalled(StatusContext context);
+    default void applyToInstalled(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> INSTALLED");
+    }
 
-    void applyToCompleted(StatusContext context);
+    default void applyToCompleted(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> COMPLETED");
+    }
 
-    void applyToNegociationFailed(StatusContext context);
+    default void applyToNegociationFailed(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOCIATION_FAILED");
+    }
+
 }
