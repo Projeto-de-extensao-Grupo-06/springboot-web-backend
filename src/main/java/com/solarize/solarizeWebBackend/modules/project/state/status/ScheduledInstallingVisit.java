@@ -1,71 +1,48 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
 import com.solarize.solarizeWebBackend.modules.project.Project;
+import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
+import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
+import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ScheduledInstallingVisit implements Status {
     @Override
-    public void applyToNew(Project project) {
-        Status.super.applyToNew(project);
-    }
-
-    @Override
-    public void applyToPreBudget(Project project) {
-        Status.super.applyToPreBudget(project);
-    }
-
-    @Override
-    public void applyToClientAwaitingContact(Project project) {
-        Status.super.applyToClientAwaitingContact(project);
-    }
-
-    @Override
-    public void applyToAwaitingRetry(Project project) {
-        Status.super.applyToAwaitingRetry(project);
-    }
-
-    @Override
     public void applyToRetrying(Project project) {
-        Status.super.applyToRetrying(project);
-    }
+        List<Schedule> schedules = project.getSchedules().stream().filter(
+                schedule ->
+                        schedule.getType() == ScheduleTypeEnum.INSTALL_VISIT &&
+                        schedule.getDate().isAfter(LocalDateTime.now()) &&
+                        schedule.getStatus() == ScheduleStatusEnum.MARKED &&
+                        schedule.getIsActive()
+        ).toList();
 
-    @Override
-    public void applyToScheduledTechnicalVisit(Project project) {
-        Status.super.applyToScheduledTechnicalVisit(project);
-    }
+        if(!schedules.isEmpty()) {
+            throw new InvalidStateTransitionException("Cancel the install visit before retry.");
+        }
 
-    @Override
-    public void applyToTechnicalVisitCompleted(Project project) {
-        Status.super.applyToTechnicalVisitCompleted(project);
-    }
-
-    @Override
-    public void applyToFinalBudget(Project project) {
-        Status.super.applyToFinalBudget(project);
-    }
-
-    @Override
-    public void applyToAwaitingMaterials(Project project) {
-        Status.super.applyToAwaitingMaterials(project);
-    }
-
-    @Override
-    public void applyToScheduledInstallingVisit(Project project) {
-        Status.super.applyToScheduledInstallingVisit(project);
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.RETRYING);
     }
 
     @Override
     public void applyToInstalled(Project project) {
-        Status.super.applyToInstalled(project);
-    }
+        List<Schedule> schedules = project.getSchedules().stream().filter(schedule ->
+                schedule.getType() == ScheduleTypeEnum.INSTALL_VISIT &&
+                        schedule.getDate().isBefore(LocalDateTime.now()) &&
+                        schedule.getStatus() == ScheduleStatusEnum.FINISHED
+        ).toList();
 
-    @Override
-    public void applyToCompleted(Project project) {
-        Status.super.applyToCompleted(project);
-    }
+        if(schedules.isEmpty()) {
+            throw new InvalidStateTransitionException("Project don't have a FINISHED INSTALL_VISIT schedule");
+        }
 
-    @Override
-    public void applyToNegociationFailed(Project project) {
-        Status.super.applyToNegociationFailed(project);
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.INSTALLED);
     }
 }
