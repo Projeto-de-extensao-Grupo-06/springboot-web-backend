@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.materialCatalog.dto.MaterialCatal
 import com.solarize.solarizeWebBackend.modules.materialCatalog.dto.MaterialCatalogResponseDTO;
 import com.solarize.solarizeWebBackend.modules.materialUrl.MaterialUrl;
 import com.solarize.solarizeWebBackend.modules.materialUrl.MaterialUrlRepository;
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class MaterialCatalogService {
 
     public MaterialCatalogResponseDTO getById(Long id) {
         MaterialCatalog material = materialCatalogRepository.findById(id).orElseThrow(() ->
-        new RuntimeException("Material não encontrado"));
+                new NotFoundException("Material não encontrado"));
         return MaterialCatalogMapper.toResponseDTO(material);
     }
 }

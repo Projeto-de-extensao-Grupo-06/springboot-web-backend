@@ -20,6 +20,9 @@ public class MaterialCatalogController {
     @GetMapping
     public ResponseEntity<List<MaterialCatalogResponseDTO>> listAll() {
         List<MaterialCatalogResponseDTO> materials = materialService.findAll();
+        if (materials.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(materials);
     }
 
