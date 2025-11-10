@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.coworker.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -10,36 +11,39 @@ import lombok.*;
 @Getter
 @Builder
 public class CoworkerCreateDto {
+    @NotBlank(message = "First Name is obligatory.")
     @Size(min = 3, max = 20)
-    @Schema(description = "Nome do usuário", example = "John")
+    @Pattern(
+            regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
+    )
     private String firstName;
 
+    @NotBlank(message = "Nickname or last name is obligatory.")
     @Size(min = 3, max = 20)
-    @Schema(description = "Sobrenome do usuário", example = "Doe")
+    @Pattern(
+            regexp = "^[a-zA-Z]+$", message = "This field only accepts letters."
+    )
     private String lastName;
 
     @Email
-    @Schema(description = "Email do usuário", example = "john@doe.com")
+    @NotBlank(message = "E-mail is obligatory.")
     private String email;
 
+    @NotBlank(message = "Phone is obligatory.")
     @Pattern(
             regexp = "^[1-9]{2}[9]?\\d{8}$",
-            message = "Telefone inválido. Apenas números, DDD + número."
+            message = "Phone must be valid (10–15 digits, may include country code)"
     )
-    @Schema(description = "Apenas números, DDD + número.", example = "(11)960976085")
     private String phone;
 
+    @NotBlank(message = "Password is obligatory.")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[\\S]{8,}$",
-            message = "Senha fraca. Deve ter mínimo 8 caracteres, ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+            message = "Weak password. Must contain at least 8 characters, one upper case letter, one lower case letter, one number and one special character."
     )
     @Schema(
-            description = "Senha do usuário. Deve ter mínimo 8 caracteres, ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.",
+            description = "Weak password. Must contain at least 8 characters, one upper case letter, one lower case letter, one number and one special character.",
             example = "@Hf38HJ23vvl*d"
     )
     private String password;
-
-
-
-
 }
