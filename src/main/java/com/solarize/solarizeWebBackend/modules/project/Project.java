@@ -48,5 +48,17 @@ public class Project {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    private Integer statusWeight;
+
+
+    @PrePersist
+    @PreUpdate
+    public void updateStatusWeight(){
+        if (status != null){
+            this.statusWeight = status.getWeight();
+        }
+    }
 }

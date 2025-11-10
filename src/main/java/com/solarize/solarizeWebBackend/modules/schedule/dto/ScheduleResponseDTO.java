@@ -4,12 +4,9 @@ package com.solarize.solarizeWebBackend.modules.schedule.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ScheduleResponseDTO {
 
