@@ -65,7 +65,7 @@ public class AuthService implements UserDetailsService {
         try {
             final Authentication authentication = this.authenticationManager.getAuthenticationManager().authenticate(credentials);
 
-            Coworker coworkerAuthenticated = coworkerRepository.findByEmailAndIsActiveTrue(coworker.getEmail()).orElseThrow(()-> new ResponseStatusException(404, "Email do usuário não cadastrado", null));
+            Coworker coworkerAuthenticated = coworkerRepository.findByEmailAndIsActiveTrue(coworker.getEmail()).orElseThrow(()-> new BadCredentialsException("Invalid Credentials"));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             final String token =  jwtTokenManager.generateToken(authentication, coworkerAuthenticated.getId());
