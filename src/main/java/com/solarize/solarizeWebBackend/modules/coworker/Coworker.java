@@ -25,6 +25,7 @@ public class Coworker {
     private String email;
     private String phone;
     private String password;
+    private Boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_permission_group")
