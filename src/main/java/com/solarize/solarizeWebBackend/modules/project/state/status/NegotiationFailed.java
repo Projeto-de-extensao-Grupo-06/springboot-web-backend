@@ -3,7 +3,7 @@ package com.solarize.solarizeWebBackend.modules.project.state.status;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
 
-public class NegociationFailed implements Status {
+public class NegotiationFailed implements Status {
     @Override
     public void applyToNew(Project project) {
         Status.super.applyToNew(project);
