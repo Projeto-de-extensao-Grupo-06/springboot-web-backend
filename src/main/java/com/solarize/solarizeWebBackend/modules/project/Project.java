@@ -64,6 +64,8 @@ public class Project {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectFile> files = new ArrayList<>();
 
+    private Integer retryAttemps;
+
     @PrePersist
     @PreUpdate
     public void updateStatusWeight() {
