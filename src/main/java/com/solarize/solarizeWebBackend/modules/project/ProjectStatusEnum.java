@@ -33,8 +33,8 @@ public enum ProjectStatusEnum {
         return weight;
     }
 
-    public String getValue(){
-        return value;
+    public Status getValue(){
+        return state;
     }
 
 }
