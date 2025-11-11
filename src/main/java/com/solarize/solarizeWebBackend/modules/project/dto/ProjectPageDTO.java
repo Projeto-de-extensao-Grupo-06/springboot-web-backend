@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectPageDTO {
 
-    private Long totalRecords;
+    private Integer totalRecords;
     private Integer totalPages;
     private Integer totalResults;
     private List<ProjectSummaryDTO> projects;
