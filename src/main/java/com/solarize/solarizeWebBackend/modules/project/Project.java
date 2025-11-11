@@ -3,11 +3,14 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.address.Address;
+import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +24,10 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private ProjectStatusEnum status;
+    private Integer statusWeight;
+
+    @Enumerated(EnumType.STRING)
+    private ProjectStatusEnum previewStatus;
 
     private Boolean isActive = true;
 
@@ -51,14 +58,14 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Integer statusWeight;
-
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<Schedule> schedules = new ArrayList<>();
 
     @PrePersist
     @PreUpdate
-    public void updateStatusWeight(){
-        if (status != null){
-            this.statusWeight = status.getWeight();
+    public void updateStatusWeight() {
+        if(this.status != null) {
+            this.statusWeight = this.status.getWeight();
         }
     }
 }

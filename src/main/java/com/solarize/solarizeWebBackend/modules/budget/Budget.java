@@ -17,4 +17,5 @@ public class Budget {
     private Double discount;
     private Double materialCost;
     private Double serviceCost;
+    private Boolean finalBudget;
 }
