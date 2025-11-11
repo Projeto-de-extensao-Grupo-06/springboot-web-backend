@@ -61,6 +61,9 @@ public class Project {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<Schedule> schedules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<ProjectFile> files = new ArrayList<>();
+
     @PrePersist
     @PreUpdate
     public void updateStatusWeight() {
