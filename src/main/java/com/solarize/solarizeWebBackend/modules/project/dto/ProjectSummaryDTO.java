@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.project.DTO;
+package com.solarize.solarizeWebBackend.modules.project.dto;
 
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
