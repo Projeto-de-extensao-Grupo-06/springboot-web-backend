@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
+import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -34,12 +35,12 @@ public class ClientResponseDTO {
     @Schema(description = "Type of document (CPF, RG, CNPJ or PASSPORT)", example = "CPF")
     private String documentType;
 
-    @Schema(description = "CNPJ of the client", example = "59603348000116")
-    private String cnpj;
-
     @Schema(description = "Additional notes/description", example = "VIP client, handle with priority")
     private String note;
 
     @Schema(description = "Date and time when the client was created")
     private LocalDateTime createdAt;
+
+    @Schema(description = "Client main address (may be null if not provided)")
+    private AddressDTO mainAddress;
 }

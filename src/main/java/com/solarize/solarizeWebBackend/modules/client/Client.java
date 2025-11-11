@@ -25,7 +25,6 @@ public class Client {
     private String documentType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String cnpj;
 
     private String note;
     private String phone;

@@ -55,6 +55,7 @@ public class Project {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)

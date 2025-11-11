@@ -28,4 +28,13 @@ public enum ProjectStatusEnum {
         this.weight = weight;
         this.state = state;
     }
+
+    public int getWeight(){
+        return weight;
+    }
+
+    public String getValue(){
+        return value;
+    }
+
 }

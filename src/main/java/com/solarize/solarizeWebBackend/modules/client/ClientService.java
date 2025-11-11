@@ -7,10 +7,12 @@ import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
+import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,87 +21,94 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientRepository REPOSITORY;
-//    private final CoworkerRepository coworkerRepository;
-//    private final AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
 
-
-    public ClientResponseDTO getClient(Long id){
-        Optional<Client> client = REPOSITORY.findById(id);
-        if(client.isEmpty()) throw new NotFoundException("Client not found.");
-        return ClientMapper.of(client.get());
+    public Client getClient(Long id) {
+        return REPOSITORY.findById(id)
+                .orElseThrow(() -> new NotFoundException("Client not found."));
     }
 
-    public List<ClientResponseDTO> getClients(){
-        List<Client> clients = REPOSITORY.findAll();
-        return ClientMapper.of(clients);
+    public List<Client> getClients() {
+        return REPOSITORY.findAll();
     }
 
-    public ClientResponseDTO postClient(CreateClientDTO dto){
-        validateConflict(dto);
-        Client client = ClientMapper.of(dto);
+    public Client postClient(Client client) {
+        validateConflict(client);
 
-
-//        if (dto.getCoworkerLastUpdateId() != null) {
-//            Coworker coworker = coworkerRepository.findById(dto.getCoworkerLastUpdateId())
-//                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
-//            client.setCoworkerLastUpdate(coworker);
-//        }
-//
-//        if (dto.getMainAddressId() != null) {
-//            Address address = addressRepository.findById(dto.getMainAddressId())
-//                    .orElseThrow(() -> new NotFoundException("Address not found."));
-//            client.setMainAddress(address);
-//        }
-
-        client = REPOSITORY.save(client);
-        return ClientMapper.of(client);
-    }
-
-    private void validateConflict(CreateClientDTO dto) {
-        if (REPOSITORY.existsByDocumentNumber(dto.getDocumentNumber())) throw new ConflictException("Document number already exists");
-
-        if (REPOSITORY.existsByEmail(dto.getEmail())) throw new ConflictException("Email already exists");
-
-        if (REPOSITORY.existsByPhone(dto.getPhone())) throw new ConflictException("Phone already exists");
-
-        if (dto.getCnpj() != null && !dto.getCnpj().isBlank()) {
-            if (REPOSITORY.existsByCnpj(dto.getCnpj())) throw new ConflictException("CNPJ already exists");
+        try {
+            DocumentTypeEnum type = DocumentTypeEnum.valueOf(client.getDocumentType().toUpperCase());
+            type.strategy.validate(client.getDocumentNumber());
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidDocumentException("Invalid document type: " + client.getDocumentType());
         }
-    }
 
-    public ClientResponseDTO putClient(Long id, CreateClientDTO dto) {
-        Optional<Client> optionalClient = REPOSITORY.findById(id);
-        if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
 
-        Client client = optionalClient.get();
-        validateConflictOnUpdate(dto, id);
-        ClientMapper.updateClientData(client, dto);
-        client.setUpdatedAt(java.time.LocalDateTime.now());
-
-        client = REPOSITORY.save(client);
-        return ClientMapper.of(client);
-    }
-
-    private void validateConflictOnUpdate(CreateClientDTO dto, Long id) {
-        if (REPOSITORY.existsByDocumentNumberAndIdNot(dto.getDocumentNumber(), id))
-            throw new ConflictException("Document number already exists");
-
-        if (REPOSITORY.existsByEmailAndIdNot(dto.getEmail(), id))
-            throw new ConflictException("Email already exists");
-
-        if (REPOSITORY.existsByPhoneAndIdNot(dto.getPhone(), id))
-            throw new ConflictException("Phone already exists");
-
-        if (dto.getCnpj() != null && !dto.getCnpj().isBlank()) {
-            if (REPOSITORY.existsByCnpjAndIdNot(dto.getCnpj(), id))
-                throw new ConflictException("CNPJ already exists");
+        if (client.getMainAddress() != null) {
+            Address savedAddress = addressRepository.save(client.getMainAddress());
+            client.setMainAddress(savedAddress);
         }
+
+        return REPOSITORY.save(client);
     }
+
+    public Client putClient(Long id, Client updatedClient) {
+        Client existingClient = REPOSITORY.findById(id)
+                .orElseThrow(() -> new NotFoundException("Client not found."));
+
+        validateConflictOnUpdate(updatedClient, id);
+
+
+        try {
+            DocumentTypeEnum type = DocumentTypeEnum.valueOf(updatedClient.getDocumentType().toUpperCase());
+            type.strategy.validate(updatedClient.getDocumentNumber());
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidDocumentException("Invalid document type: " + updatedClient.getDocumentType());
+        }
+
+
+        if (updatedClient.getMainAddress() != null) {
+            Address savedAddress = addressRepository.save(updatedClient.getMainAddress());
+            existingClient.setMainAddress(savedAddress);
+        }
+        existingClient.setFirstName(updatedClient.getFirstName());
+        existingClient.setLastName(updatedClient.getLastName());
+        existingClient.setDocumentNumber(updatedClient.getDocumentNumber());
+        existingClient.setDocumentType(updatedClient.getDocumentType());
+        existingClient.setEmail(updatedClient.getEmail());
+        existingClient.setPhone(updatedClient.getPhone());
+        existingClient.setUpdatedAt(LocalDateTime.now());
+
+        return REPOSITORY.save(existingClient);
+    }
+
 
     public void deleteClient(Long id) {
-        Optional<Client> optionalClient = REPOSITORY.findById(id);
-        if (optionalClient.isEmpty()) throw new NotFoundException("Client not found.");
-
+        if (!REPOSITORY.existsById(id)) {
+            throw new NotFoundException("Client not found.");
+        }
         REPOSITORY.deleteById(id);
     }
+
+    private void validateConflict(Client client) {
+        if (REPOSITORY.existsByDocumentNumber(client.getDocumentNumber()))
+            throw new ConflictException("Document number already exists");
+
+        if (REPOSITORY.existsByEmail(client.getEmail()))
+            throw new ConflictException("Email already exists");
+
+        if (REPOSITORY.existsByPhone(client.getPhone()))
+            throw new ConflictException("Phone already exists");
+    }
+
+    private void validateConflictOnUpdate(Client client, Long id) {
+        if (REPOSITORY.existsByDocumentNumberAndIdNot(client.getDocumentNumber(), id))
+            throw new ConflictException("Document number already exists");
+
+        if (REPOSITORY.existsByEmailAndIdNot(client.getEmail(), id))
+            throw new ConflictException("Email already exists");
+
+        if (REPOSITORY.existsByPhoneAndIdNot(client.getPhone(), id))
+            throw new ConflictException("Phone already exists");
+    }
+
 }
