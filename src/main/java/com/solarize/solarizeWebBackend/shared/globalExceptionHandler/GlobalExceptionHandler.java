@@ -14,18 +14,21 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex){
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(AuthorizationDeniedException ex){
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(AuthorizationDeniedException ex) {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.FORBIDDEN);
     }
 
@@ -67,12 +70,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleServerErrorException(ServerErrorException ex) {
         log.error("Handled exception", ex);
-        return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        return new ResponseEntity<>(ExceptionsMapper.of(ex),HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(InvalidDocumentException.class)
@@ -80,10 +83,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.error("Unhandled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.internalServerError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }
