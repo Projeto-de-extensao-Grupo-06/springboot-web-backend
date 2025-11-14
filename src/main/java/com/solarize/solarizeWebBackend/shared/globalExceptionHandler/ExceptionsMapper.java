@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ExceptionsMapper {
     }
 
     public static FieldsResponseError of(MethodArgumentNotValidException ex) {
-        List<ValidationError> validationsErros =  ex.getBindingResult()
+        List<ValidationError> validationsErros = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(e -> new ValidationError(e.getField(), e.getDefaultMessage()))
@@ -111,4 +112,16 @@ public class ExceptionsMapper {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    public static ErrorResponse of(MethodArgumentTypeMismatchException ex) {
+        return ErrorResponse
+                .builder()
+                .message("The provided parameter is invalid. Please ensure the value matches the expected type.")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
 }
