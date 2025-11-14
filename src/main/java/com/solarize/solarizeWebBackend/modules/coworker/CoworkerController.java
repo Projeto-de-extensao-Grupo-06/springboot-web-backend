@@ -38,7 +38,6 @@ public class CoworkerController {
     @PostMapping
     public ResponseEntity<CoworkerResponseDto> postCoworker(@Valid @RequestBody CoworkerCreateDto dto) {
         Coworker entity = CoworkerMapper.toEntity(dto);
-        SERVICE.validateConflict(entity);
         Coworker createdCoworker = SERVICE.createCoworker(entity);
         final CoworkerResponseDto responseDto = CoworkerMapper.toDto(createdCoworker);
         return ResponseEntity.status(201).body(responseDto);
