@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.coworker;
 
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.*;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +44,7 @@ public class CoworkerController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<CoworkerResponseDto> putCoworker(@PathVariable long id, @Valid @RequestBody CoworkerCreateDto dto) {
-
+    public ResponseEntity<CoworkerResponseDto> putCoworker(@PathVariable long id, @Valid @RequestBody CoworkerUpdateDto dto) {
         Coworker updatedData = CoworkerMapper.toEntity(dto);
         SERVICE.validateConflictUpdate(id,updatedData);
         Coworker updated = SERVICE.updateCoworker(id,updatedData);

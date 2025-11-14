@@ -43,7 +43,6 @@ public class CoworkerService {
     }
 
     public void deleteCoworker(long id) {
-
         String loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Coworker coworker = REPOSITORY.findByIdAndIsActiveTrue(id)

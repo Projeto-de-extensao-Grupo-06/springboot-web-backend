@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.coworker;
 
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCreateDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
+import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerUpdateDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,18 @@ public class CoworkerMapper {
         coworker.setPhone(dto.getPhone());
         coworker.setEmail(dto.getEmail());
         coworker.setPassword(dto.getPassword());
+
+        return coworker;
+    }
+
+    public static Coworker toEntity(CoworkerUpdateDto dto){
+        if(dto == null) return null;
+
+        Coworker coworker = new Coworker();
+        coworker.setFirstName(dto.getFirstName());
+        coworker.setLastName(dto.getLastName());
+        coworker.setPhone(dto.getPhone());
+        coworker.setEmail(dto.getEmail());
 
         return coworker;
     }
