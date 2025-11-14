@@ -5,12 +5,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Setter
+
 @Getter
+@Setter
 @Builder
-public class CoworkerCreateDto {
+public class CoworkerUpdateDto {
     @NotBlank(message = "First Name is obligatory.")
     @Size(min = 3, max = 20)
     @Pattern(
@@ -35,15 +38,4 @@ public class CoworkerCreateDto {
             message = "Phone must be valid (10–15 digits, may include country code)"
     )
     private String phone;
-
-    @NotBlank(message = "Password is obligatory.")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[\\S]{8,}$",
-            message = "Weak password. Must contain at least 8 characters, one upper case letter, one lower case letter, one number and one special character."
-    )
-    @Schema(
-            description = "Weak password. Must contain at least 8 characters, one upper case letter, one lower case letter, one number and one special character.",
-            example = "@Hf38HJ23vvl*d"
-    )
-    private String password;
 }

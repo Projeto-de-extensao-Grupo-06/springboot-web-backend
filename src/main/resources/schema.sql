@@ -14,14 +14,15 @@ INSERT INTO permission_group (
                                       0xF
                                      );
 
-INSERT INTO coworker (first_name, last_name, email, phone, password, fk_permission_group)
+INSERT INTO coworker (first_name, last_name, email, phone, password, fk_permission_group, is_active)
 VALUES (
         'Bryan',
         'Rocha',
         'bryangomesrocha@gmail.com',
         '11964275054',
         '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-        1
+        1,
+        TRUE
        );
 
 INSERT INTO material_catalog (name, metric, price)

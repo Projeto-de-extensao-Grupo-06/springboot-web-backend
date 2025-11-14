@@ -65,7 +65,7 @@ public class AuthService implements UserDetailsService {
         try {
             final Authentication authentication = this.authenticationManager.getAuthenticationManager().authenticate(credentials);
 
-            Coworker coworkerAuthenticated = coworkerRepository.findByEmail(coworker.getEmail()).orElseThrow(()-> new ResponseStatusException(404, "Email do usuário não cadastrado", null));
+            Coworker coworkerAuthenticated = coworkerRepository.findByEmailAndIsActiveTrue(coworker.getEmail()).orElseThrow(()-> new BadCredentialsException("Invalid Credentials"));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             final String token =  jwtTokenManager.generateToken(authentication, coworkerAuthenticated.getId());
@@ -84,7 +84,7 @@ public class AuthService implements UserDetailsService {
         }
 
 
-        Optional<Coworker> coworker = coworkerRepository.findByEmail(email);
+        Optional<Coworker> coworker = coworkerRepository.findByEmailAndIsActiveTrue(email);
 
         if(coworker.isPresent()) {
             String otpCode = String.format("%06d", secureRandom.nextInt(1_000_000));
@@ -136,7 +136,7 @@ public class AuthService implements UserDetailsService {
 
         String coworkerEmail = this.tokenCacheManager.getCache(token);
 
-        Coworker coworker = this.coworkerRepository.findByEmail(coworkerEmail)
+        Coworker coworker = this.coworkerRepository.findByEmailAndIsActiveTrue(coworkerEmail)
                 .orElseThrow(() -> new BadCredentialsException("Invalid Credential"));
 
         String passHash = bCryptPasswordEncoder.encode(password);
