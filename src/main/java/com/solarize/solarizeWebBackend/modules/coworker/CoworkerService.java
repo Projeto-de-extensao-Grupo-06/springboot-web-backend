@@ -16,8 +16,8 @@ public class CoworkerService {
     private final CoworkerRepository REPOSITORY;
 
     public Coworker createCoworker(Coworker coworker) {
-        coworker.setPassword(passwordEncoder.encode(coworker.getPassword()));
         validateConflict(coworker);
+        coworker.setPassword(passwordEncoder.encode(coworker.getPassword()));
         return REPOSITORY.save(coworker);
     }
 
