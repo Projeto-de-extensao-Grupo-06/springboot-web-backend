@@ -17,7 +17,7 @@ public class ScheduledInstallingVisit implements Status {
         List<Schedule> schedules = project.getSchedules().stream().filter(
                 schedule ->
                         schedule.getType() == ScheduleTypeEnum.INSTALL_VISIT &&
-                        schedule.getDate().isAfter(LocalDateTime.now()) &&
+                        schedule.getStartDate().isAfter(LocalDateTime.now()) &&
                         schedule.getStatus() == ScheduleStatusEnum.MARKED &&
                         schedule.getIsActive()
         ).toList();
@@ -34,7 +34,7 @@ public class ScheduledInstallingVisit implements Status {
     public void applyToInstalled(Project project) {
         List<Schedule> schedules = project.getSchedules().stream().filter(schedule ->
                 schedule.getType() == ScheduleTypeEnum.INSTALL_VISIT &&
-                        schedule.getDate().isBefore(LocalDateTime.now()) &&
+                        schedule.getStartDate().isBefore(LocalDateTime.now()) &&
                         schedule.getStatus() == ScheduleStatusEnum.FINISHED
         ).toList();
 

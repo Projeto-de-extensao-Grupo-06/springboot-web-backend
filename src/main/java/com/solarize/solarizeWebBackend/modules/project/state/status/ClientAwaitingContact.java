@@ -19,7 +19,7 @@ public class ClientAwaitingContact implements Status {
 
         List<Schedule> schedules = project.getSchedules()
                 .stream()
-                .filter(schedule -> schedule.getIsActive() && schedule.getDate().isAfter(LocalDateTime.now()))
+                .filter(schedule -> schedule.getIsActive() && schedule.getStartDate().isAfter(LocalDateTime.now()))
                 .toList();
 
         if(!schedules.isEmpty()) {
@@ -42,7 +42,7 @@ public class ClientAwaitingContact implements Status {
         List<Schedule> schedules = project.getSchedules()
                 .stream()
                 .filter(schedule -> schedule.getIsActive() &&
-                        schedule.getDate().isAfter(LocalDateTime.now()) &&
+                        schedule.getStartDate().isAfter(LocalDateTime.now()) &&
                         schedule.getType() == ScheduleTypeEnum.TECHNICAL_VISIT)
                 .toList();
 

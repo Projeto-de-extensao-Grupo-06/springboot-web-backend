@@ -20,7 +20,7 @@ public class ScheduledTechnicalVisit implements Status {
 
         List<Schedule> schedules = project.getSchedules()
                 .stream()
-                .filter(schedule -> schedule.getIsActive() && schedule.getDate().isAfter(LocalDateTime.now()))
+                .filter(schedule -> schedule.getIsActive() && schedule.getStartDate().isAfter(LocalDateTime.now()))
                 .toList();
 
         if(!schedules.isEmpty()) {
