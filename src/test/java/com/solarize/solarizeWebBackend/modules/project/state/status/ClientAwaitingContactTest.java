@@ -24,40 +24,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NewTest {
-//     static Stream<Arguments> invalidTransitionsProvider() {
-//        return Stream.of(
-//                Arguments.of("NEW -> NEW",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
-//                Arguments.of("NEW -> PRE_BUDGET",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
-//                Arguments.of("NEW -> CLIENT_AWAITING_CONTACT",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
-//                Arguments.of("NEW -> AWAITING_RETRY",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
-//                Arguments.of("NEW -> RETRYING",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
-//                Arguments.of("NEW -> SCHEDULED_TECHNICAL_VISIT",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
-//                Arguments.of("NEW -> TECHNICAL_VISIT_COMPLETED",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
-//                Arguments.of("NEW -> FINAL_BUDGET",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
-//                Arguments.of("NEW -> AWAITING_MATERIALS",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
-//                Arguments.of("NEW -> SCHEDULED_INSTALLING_VISIT",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
-//                Arguments.of("NEW -> INSTALLED",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
-//                Arguments.of("NEW -> COMPLETED",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-//                Arguments.of("NEW -> NEGOCIATION_FAILED",
-//                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
-//        );
-//    }
-
-
-
+class ClientAwaitingContactTest {
     @BeforeEach
     void setUp() {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -70,25 +37,48 @@ class NewTest {
     }
 
     @Test
-    void applyToScheduledTechnicalVisitSetStatusScheduledTechnicalVisitAndPreviewStatusNew() {
-        List<Schedule> schedule = List.of(
+    void applyToAwaitingRetrySetCorrectStatusAndPreviewStatus() {
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .build();
+
+        project.getStatus().getState().applyToAwaitingRetry(project);
+
+        assertEquals(ProjectStatusEnum.AWAITING_RETRY, project.getStatus());
+        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
+    }
+
+
+    @Test
+    void applyToScheduledTechnicalVisitSetCorrectStatusAndPreviewStatus() {
+        List<Schedule> schedules = List.of(
                 ScheduleBuilder.builder()
-                        .withStatus(ScheduleStatusEnum.MARKED)
                         .withFutureDate()
                         .withType(ScheduleTypeEnum.TECHNICAL_VISIT)
                         .build()
         );
 
-
         Project project = ProjectBuilder.builder()
-                .withSchedules(schedule)
-                .withStatus(ProjectStatusEnum.NEW)
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .withSchedules(schedules)
                 .build();
 
         project.getStatus().getState().applyToScheduledTechnicalVisit(project);
 
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getStatus());
-        assertEquals(ProjectStatusEnum.NEW, project.getPreviewStatus());
+        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
+    }
+
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("invalidTransitionsProvider")
+    void invalidTransitionsThrowsException(String description, Consumer<Project> transition) {
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .build();
+
+        assertThrows(InvalidStateTransitionException.class,
+                () -> transition.accept(project));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -103,26 +93,17 @@ class NewTest {
         );
     }
 
+
     @ParameterizedTest(name = "{0}")
-    @MethodSource("invalidTransitionsProvider")
-    void invalidTransitionsThrowsException(String description, Consumer<Project> transition) {
-        List<Schedule> schedule = List.of(
-                ScheduleBuilder.builder()
-                        .withStatus(ScheduleStatusEnum.MARKED)
-                        .withFutureDate()
-                        .withType(ScheduleTypeEnum.TECHNICAL_VISIT)
-                        .build()
+    @MethodSource("applyToAwaitingRetryThrowsExceptionWhenActiveScheduleInFutureExistsProvider")
+    void applyToAwaitingRetryThrowsExceptionWhenActiveScheduleInFutureExists (
+            String description,
+            Project project
+    ) {
+        assertThrows(
+                InvalidStateTransitionException.class,
+                () -> project.getStatus().getState().applyToAwaitingRetry(project)
         );
-
-
-        Project project = ProjectBuilder.builder()
-                .withSchedules(schedule)
-                .withStatus(ProjectStatusEnum.NEW)
-                .build();
-
-
-        assertThrows(InvalidStateTransitionException.class,
-                () -> transition.accept(project));
     }
 
     static Stream<Arguments> applyToScheduledTechnicalVisitThrowsExceptionWhenNoActiveFutureTechnicalVisitExistsProvider() {
@@ -138,7 +119,7 @@ class NewTest {
                                                 .withType(ScheduleTypeEnum.TECHNICAL_VISIT)
                                                 .build()
                                 ))
-                                .withStatus(ProjectStatusEnum.NEW)
+                                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
                                 .build()
                 ),
                 Arguments.of(
@@ -151,7 +132,7 @@ class NewTest {
                                                 .withType(ScheduleTypeEnum.TECHNICAL_VISIT)
                                                 .build()
                                 ))
-                                .withStatus(ProjectStatusEnum.NEW)
+                                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
                                 .build()
                 ),
                 Arguments.of(
@@ -164,49 +145,65 @@ class NewTest {
                                                 .withType(ScheduleTypeEnum.INSTALL_VISIT)
                                                 .build()
                                 ))
-                                .withStatus(ProjectStatusEnum.NEW)
+                                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
                                 .build()
                 )
         );
     }
 
 
+    static Stream<Arguments> applyToAwaitingRetryThrowsExceptionWhenActiveScheduleInFutureExistsProvider() {
+        return Stream.of(
+                Arguments.of(
+                        "Should throw when there is an active future schedule with status MARKED",
+                        ProjectBuilder.builder()
+                                .withSchedules(List.of(
+                                        ScheduleBuilder.builder()
+                                                .withFutureDate()
+                                                .withStatus(ScheduleStatusEnum.MARKED)
+                                                .build()
+                                ))
+                                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                                .build()
+                ),
+                Arguments.of(
+                        "Should throw when there is an active past schedule still IN_PROGRESS",
+                        ProjectBuilder.builder()
+                                .withSchedules(List.of(
+                                        ScheduleBuilder.builder()
+                                                .withFutureDate()
+                                                .withStatus(ScheduleStatusEnum.IN_PROGRESS)
+                                                .build()
+                                ))
+                                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                                .build()
+                )
+        );
+    }
+
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("NEW -> NEW",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
-
-                Arguments.of("NEW -> PRE_BUDGET",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> PRE_BUDGET",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
-
-                Arguments.of("NEW -> CLIENT_AWAITING_CONTACT",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> CLIENT_AWAITING_CONTACT",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
-
-                Arguments.of("NEW -> AWAITING_RETRY",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
-
-                Arguments.of("NEW -> RETRYING",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> RETRYING",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
-
-                Arguments.of("NEW -> TECHNICAL_VISIT_COMPLETED",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> TECHNICAL_VISIT_COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
-
-                Arguments.of("NEW -> FINAL_BUDGET",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> FINAL_BUDGET",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
-
-                Arguments.of("NEW -> AWAITING_MATERIALS",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> AWAITING_MATERIALS",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
-
-                Arguments.of("NEW -> SCHEDULED_INSTALLING_VISIT",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> SCHEDULED_INSTALLING_VISIT",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
-
-                Arguments.of("NEW -> INSTALLED",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> INSTALLED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
-
-                Arguments.of("NEW -> COMPLETED",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-
-                Arguments.of("NEW -> NEGOCIATION_FAILED",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> NEGOCIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
         );
     }

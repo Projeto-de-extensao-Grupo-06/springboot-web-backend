@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 
@@ -19,7 +20,7 @@ public class ClientAwaitingContact implements Status {
 
         List<Schedule> schedules = project.getSchedules()
                 .stream()
-                .filter(schedule -> schedule.getIsActive() && schedule.getStartDate().isAfter(LocalDateTime.now()))
+                .filter(schedule -> schedule.getIsActive() && schedule.getStartDate().isAfter(LocalDateTime.now()) && schedule.getStatus() != ScheduleStatusEnum.FINISHED)
                 .toList();
 
         if(!schedules.isEmpty()) {

@@ -9,10 +9,16 @@ import java.util.List;
 public class ProjectBuilder {
     private final LocalDateTime createdAt = LocalDateTime.now();
     private ProjectStatusEnum status = ProjectStatusEnum.NEW;
+    private ProjectStatusEnum previewStatus;
     private final List<Schedule> schedules = new ArrayList<>();
 
     public static ProjectBuilder builder () {
         return new ProjectBuilder();
+    }
+
+    public ProjectBuilder withPreviewStatus(ProjectStatusEnum status) {
+        this.previewStatus = status;
+        return this;
     }
 
     public ProjectBuilder withStatus(ProjectStatusEnum status) {
@@ -36,6 +42,7 @@ public class ProjectBuilder {
         project.setName(name);
         project.setIsActive(isActive);
         project.setStatus(this.status);
+        project.setPreviewStatus(this.previewStatus);
         project.setCreatedAt(this.createdAt);
         project.setSchedules(this.schedules);
 

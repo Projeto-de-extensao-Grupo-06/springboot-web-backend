@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
+
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PreBudgetTest {
+class AwaitingRetryTest {
     @BeforeEach
     void setUp() {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -32,26 +33,15 @@ class PreBudgetTest {
     }
 
     @Test
-    void applyToClientAwaitingContactSetCorrectStatusAndPreviewStatus() {
+    void applyToClientAwaitingContactSetCorrectStatusButCannotUpdatePreviewStatus() {
         Project project = ProjectBuilder.builder()
-                .withStatus(ProjectStatusEnum.PRE_BUDGET)
+                .withPreviewStatus(ProjectStatusEnum.PRE_BUDGET)
+                .withStatus(ProjectStatusEnum.AWAITING_RETRY)
                 .build();
 
-        project.getStatus().getState().applyToClientAwaitingContact(project);
+        project.getStatus().getState().applyToRetrying(project);
 
-        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getStatus());
-        assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getPreviewStatus());
-    }
-
-    @Test
-    void applyToAwaitingRetrySetCorrectStatusAndPreviewStatus() {
-        Project project = ProjectBuilder.builder()
-                .withStatus(ProjectStatusEnum.PRE_BUDGET)
-                .build();
-
-        project.getStatus().getState().applyToAwaitingRetry(project);
-
-        assertEquals(ProjectStatusEnum.AWAITING_RETRY, project.getStatus());
+        assertEquals(ProjectStatusEnum.RETRYING, project.getStatus());
         assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getPreviewStatus());
     }
 
@@ -59,7 +49,7 @@ class PreBudgetTest {
     @MethodSource("invalidTransitionsProvider")
     void invalidTransitionsThrowsException(String description, Consumer<Project> transition) {
         Project project = ProjectBuilder.builder()
-                .withStatus(ProjectStatusEnum.PRE_BUDGET)
+                .withStatus(ProjectStatusEnum.AWAITING_RETRY)
                 .build();
 
         assertThrows(InvalidStateTransitionException.class,
@@ -68,28 +58,32 @@ class PreBudgetTest {
 
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
-                Arguments.of("PRE_BUDGET -> NEW",
+                Arguments.of("AWAITING_RETRY -> NEW",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
-                Arguments.of("PRE_BUDGET -> PRE_BUDGET",
+                Arguments.of("AWAITING_RETRY -> PRE_BUDGET",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
-                Arguments.of("PRE_BUDGET -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
-                Arguments.of("PRE_BUDGET -> SCHEDULED_TECHNICAL_VISIT",
+                Arguments.of("AWAITING_RETRY -> CLIENT_AWAITING_CONTACT",
+                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                Arguments.of("AWAITING_RETRY -> AWAITING_RETRY",
+                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
+                Arguments.of("AWAITING_RETRY -> SCHEDULED_TECHNICAL_VISIT",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
-                Arguments.of("PRE_BUDGET -> TECHNICAL_VISIT_COMPLETED",
+                Arguments.of("AWAITING_RETRY -> TECHNICAL_VISIT_COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
-                Arguments.of("PRE_BUDGET -> FINAL_BUDGET",
+                Arguments.of("AWAITING_RETRY -> FINAL_BUDGET",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
-                Arguments.of("PRE_BUDGET -> AWAITING_MATERIALS",
+                Arguments.of("AWAITING_RETRY -> AWAITING_MATERIALS",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
-                Arguments.of("PRE_BUDGET -> SCHEDULED_INSTALLING_VISIT",
+                Arguments.of("AWAITING_RETRY -> SCHEDULED_INSTALLING_VISIT",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
-                Arguments.of("PRE_BUDGET -> INSTALLED",
+                Arguments.of("AWAITING_RETRY -> INSTALLED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
-                Arguments.of("PRE_BUDGET -> COMPLETED",
+                Arguments.of("AWAITING_RETRY -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("PRE_BUDGET -> NEGOCIATION_FAILED",
+                Arguments.of("AWAITING_RETRY -> NEGOCIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
         );
     }
+
+
 }
