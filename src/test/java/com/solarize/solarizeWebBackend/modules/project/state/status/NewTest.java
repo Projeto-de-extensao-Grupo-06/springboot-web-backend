@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -70,6 +71,7 @@ class NewTest {
     }
 
     @Test
+    @DisplayName("Should set status to SCHEDULED_TECHNICAL_VISIT and previewStatus to NEW when a valid future technical visit is scheduled")
     void applyToScheduledTechnicalVisitSetStatusScheduledTechnicalVisitAndPreviewStatusNew() {
         List<Schedule> schedule = List.of(
                 ScheduleBuilder.builder()

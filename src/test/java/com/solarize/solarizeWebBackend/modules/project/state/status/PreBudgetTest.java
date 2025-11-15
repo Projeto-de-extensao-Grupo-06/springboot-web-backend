@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -32,6 +33,7 @@ class PreBudgetTest {
     }
 
     @Test
+    @DisplayName("Should set status to CLIENT_AWAITING_CONTACT and preview to PRE_BUDGET")
     void applyToClientAwaitingContactSetCorrectStatusAndPreviewStatus() {
         Project project = ProjectBuilder.builder()
                 .withStatus(ProjectStatusEnum.PRE_BUDGET)
@@ -44,6 +46,7 @@ class PreBudgetTest {
     }
 
     @Test
+    @DisplayName("PRE_BUDGET → AWAITING_RETRY sets correct status and preserves previous status")
     void applyToAwaitingRetrySetCorrectStatusAndPreviewStatus() {
         Project project = ProjectBuilder.builder()
                 .withStatus(ProjectStatusEnum.PRE_BUDGET)

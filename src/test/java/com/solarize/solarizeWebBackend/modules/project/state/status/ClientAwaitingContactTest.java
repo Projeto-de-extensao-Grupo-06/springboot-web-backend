@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -37,6 +38,7 @@ class ClientAwaitingContactTest {
     }
 
     @Test
+    @DisplayName("Should set status to AWAITING_RETRY and preserve previous status when transitioning from CLIENT_AWAITING_CONTACT")
     void applyToAwaitingRetrySetCorrectStatusAndPreviewStatus() {
         Project project = ProjectBuilder.builder()
                 .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
@@ -50,6 +52,7 @@ class ClientAwaitingContactTest {
 
 
     @Test
+    @DisplayName("Should set status to SCHEDULED_TECHNICAL_VISIT and preview status to CLIENT_AWAITING_CONTACT when a valid future technical visit exists")
     void applyToScheduledTechnicalVisitSetCorrectStatusAndPreviewStatus() {
         List<Schedule> schedules = List.of(
                 ScheduleBuilder.builder()

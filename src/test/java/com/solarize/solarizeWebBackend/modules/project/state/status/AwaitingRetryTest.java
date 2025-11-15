@@ -7,6 +7,7 @@ import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,6 +34,7 @@ class AwaitingRetryTest {
     }
 
     @Test
+    @DisplayName("Should set status to RETRYING and preserve existing previewStatus when transitioning from AWAITING_RETRY")
     void applyToClientAwaitingContactSetCorrectStatusButCannotUpdatePreviewStatus() {
         Project project = ProjectBuilder.builder()
                 .withPreviewStatus(ProjectStatusEnum.PRE_BUDGET)
