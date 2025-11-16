@@ -26,7 +26,7 @@ public class ScheduledTechnicalVisit implements Status {
         if(!schedules.isEmpty()) {
             throw new InvalidStateTransitionException(
                     "Invalid state transition: " + this.getClass().getSimpleName() + " -> RETRYING. " +
-                            "The project have an active schedule. Please cancel it before updating the state."
+                            "The project has an active schedule. Please cancel it before updating the state."
             );
         }
 
