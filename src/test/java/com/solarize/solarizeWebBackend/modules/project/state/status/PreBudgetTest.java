@@ -115,7 +115,7 @@ class PreBudgetTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("PRE_BUDGET -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("PRE_BUDGET -> NEGOCIATION_FAILED",
+                Arguments.of("PRE_BUDGET -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }
