@@ -49,7 +49,7 @@ public class StateMachineHelper {
 
         if(schedules.isEmpty()) {
             throw new InvalidStateTransitionException(
-                    "Invalid state transition: " + context.getClass().getSimpleName() + " -> SCHEDULED_INSTALL_VISIT. " +
+                    "Invalid state transition: " + context.getClass().getSimpleName() + " -> SCHEDULED_INSTALLING_VISIT. " +
                             "The project does not have an active INSTALL_VISIT schedule. Please create it before updating the state."
             );
         }
