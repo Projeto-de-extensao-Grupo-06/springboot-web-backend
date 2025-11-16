@@ -94,7 +94,7 @@ class ScheduledTechnicalVisitTest {
     }
 
     @Test
-    @DisplayName("applyToTechnicalVisitCompleted should throws exception when a technical visit a technical visit FINISHED not exists")
+    @DisplayName("applyToTechnicalVisitCompleted should throw exception when a FINISHED technical visit does not exist")
     void applyToTechnicalVisitCompletedThrowsExceptionWhenTechnicalVisitFinishedNotExists() {
         List<Schedule> schedules = List.of(
                 ScheduleBuilder.builder()
