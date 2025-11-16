@@ -13,7 +13,7 @@ public class TechnicalVisitCompleted implements Status {
 
         if(budget == null) throw new InvalidStateTransitionException("Project don't have a budget.");
 
-        if(!budget.getFinalBudget()) throw new InvalidStateTransitionException("Buget is not a final budget.");
+        if(!budget.getFinalBudget()) throw new InvalidStateTransitionException("Budget is not a final budget.");
 
         project.setPreviewStatus(project.getStatus());
         project.setStatus(ProjectStatusEnum.FINAL_BUDGET);
