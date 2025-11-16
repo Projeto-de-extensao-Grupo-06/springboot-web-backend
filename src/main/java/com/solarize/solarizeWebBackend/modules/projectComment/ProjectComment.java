@@ -1,7 +1,8 @@
-package com.solarize.solarizeWebBackend.modules.project;
+package com.solarize.solarizeWebBackend.modules.projectComment;
 
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
