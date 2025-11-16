@@ -4,5 +4,5 @@ import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
 
 public class NegotiationFailed implements Status {
-    // Completed is the final state. No transitions in this status.
+    // NEGOTIATION_FAILED is the final state. No transitions in this status.
 }

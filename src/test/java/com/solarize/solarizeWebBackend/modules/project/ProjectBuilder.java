@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
+import com.solarize.solarizeWebBackend.modules.budget.Budget;
+import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFile;
 import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 
@@ -12,7 +14,9 @@ public class ProjectBuilder {
     private ProjectStatusEnum status = ProjectStatusEnum.NEW;
     private ProjectStatusEnum previewStatus;
     private final List<Schedule> schedules = new ArrayList<>();
-    private RetryQueue retry = null;
+    private RetryQueue retry;
+    private List<ProjectFile> files;
+    private Budget budget;
 
     public static ProjectBuilder builder () {
         return new ProjectBuilder();
@@ -38,6 +42,16 @@ public class ProjectBuilder {
         return this;
     }
 
+    public ProjectBuilder withFiles(List<ProjectFile> files) {
+        this.files = files;
+        return this;
+    }
+
+    public ProjectBuilder withBudget(Budget budget) {
+        this.budget = budget;
+        return this;
+    }
+
     public Project build() {
         Project project = new Project();
 
@@ -53,6 +67,8 @@ public class ProjectBuilder {
         project.setCreatedAt(this.createdAt);
         project.setSchedules(this.schedules);
         project.setRetry(this.retry);
+        project.setFiles(this.files);
+        project.setBudget(this.budget);
 
         return project;
     }
