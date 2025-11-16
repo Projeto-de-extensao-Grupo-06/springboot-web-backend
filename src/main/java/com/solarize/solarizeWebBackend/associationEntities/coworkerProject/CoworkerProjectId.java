@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.coworkerProject;
+package com.solarize.solarizeWebBackend.associationEntities.coworkerProject;
 
 
 import lombok.*;

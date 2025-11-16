@@ -3,6 +3,8 @@ package com.solarize.solarizeWebBackend.modules.project.state.status;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
+import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
+import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueueBuilder;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,14 +50,36 @@ class PreBudgetTest {
     @Test
     @DisplayName("PRE_BUDGET → AWAITING_RETRY sets correct status and preserves previous status")
     void applyToAwaitingRetrySetCorrectStatusAndPreviewStatus() {
+        RetryQueue retry = RetryQueueBuilder.builder()
+                .withFutureDate()
+                .build();
+
         Project project = ProjectBuilder.builder()
                 .withStatus(ProjectStatusEnum.PRE_BUDGET)
+                .withRetry(retry)
                 .build();
 
         project.getStatus().getState().applyToAwaitingRetry(project);
 
         assertEquals(ProjectStatusEnum.AWAITING_RETRY, project.getStatus());
         assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getPreviewStatus());
+    }
+
+    @Test
+    @DisplayName("Throws exception if retry date is in the past when moving to AWAITING_RETRY")
+    void projectThrowsExceptionIfRetryIsWithPastDateInApplyToAwaitingRetry() {
+        RetryQueue retry = RetryQueueBuilder.builder()
+                .withPastDate()
+                .build();
+
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.PRE_BUDGET)
+                .withRetry(retry)
+                .build();
+
+        assertThrows(InvalidStateTransitionException.class,
+                () -> project.getStatus().getState().applyToAwaitingRetry(project));
+
     }
 
     @ParameterizedTest(name = "{0}")
@@ -92,7 +116,7 @@ class PreBudgetTest {
                 Arguments.of("PRE_BUDGET -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
                 Arguments.of("PRE_BUDGET -> NEGOCIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }
 }

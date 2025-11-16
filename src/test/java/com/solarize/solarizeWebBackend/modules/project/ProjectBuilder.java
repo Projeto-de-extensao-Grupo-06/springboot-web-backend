@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
+import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public class ProjectBuilder {
     private ProjectStatusEnum status = ProjectStatusEnum.NEW;
     private ProjectStatusEnum previewStatus;
     private final List<Schedule> schedules = new ArrayList<>();
+    private RetryQueue retry = null;
 
     public static ProjectBuilder builder () {
         return new ProjectBuilder();
@@ -31,6 +33,11 @@ public class ProjectBuilder {
         return this;
     }
 
+    public ProjectBuilder withRetry(RetryQueue retry) {
+        this.retry = retry;
+        return this;
+    }
+
     public Project build() {
         Project project = new Project();
 
@@ -45,6 +52,7 @@ public class ProjectBuilder {
         project.setPreviewStatus(this.previewStatus);
         project.setCreatedAt(this.createdAt);
         project.setSchedules(this.schedules);
+        project.setRetry(this.retry);
 
         return project;
     }

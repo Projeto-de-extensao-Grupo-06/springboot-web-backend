@@ -3,6 +3,8 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.address.Address;
+import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFile;
+import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +18,6 @@ import java.util.List;
 @Setter
 @Entity
 public class Project {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_project")
@@ -64,7 +65,8 @@ public class Project {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectFile> files = new ArrayList<>();
 
-    private Integer retryAttemps;
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RetryQueue retry;
 
     @PrePersist
     @PreUpdate

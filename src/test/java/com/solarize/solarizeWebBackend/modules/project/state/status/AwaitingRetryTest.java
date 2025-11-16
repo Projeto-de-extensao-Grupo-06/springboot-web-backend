@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
-
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
@@ -83,9 +82,7 @@ class AwaitingRetryTest {
                 Arguments.of("AWAITING_RETRY -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
                 Arguments.of("AWAITING_RETRY -> NEGOCIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }
-
-
 }

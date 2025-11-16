@@ -52,7 +52,7 @@ public interface Status {
         throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> COMPLETED");
     }
 
-    default void applyToNegociationFailed(Project project) {
+    default void applyToNegotiationFailed(Project project) {
         throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOCIATION_FAILED");
     }
 

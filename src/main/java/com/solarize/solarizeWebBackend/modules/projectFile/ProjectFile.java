@@ -1,7 +1,8 @@
-package com.solarize.solarizeWebBackend.modules.project;
+package com.solarize.solarizeWebBackend.modules.projectFile;
 
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +20,10 @@ public class ProjectFile {
     private Long id;
 
     private String filename;
-
     private String originalFilename;
-
     private LocalDateTime createdAt;
-
     private Integer mbSize;
-
     private String checkSum;
-
     private Boolean homologationDoc;
 
     @ManyToOne(fetch = FetchType.LAZY)

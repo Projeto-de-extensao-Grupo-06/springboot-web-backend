@@ -1,6 +1,6 @@
-package com.solarize.solarizeWebBackend.modules.parameterCost;
+package com.solarize.solarizeWebBackend.associationEntities.parameterCost;
 
-import com.solarize.solarizeWebBackend.modules.budgetParameter.BudgetParameter;
+import com.solarize.solarizeWebBackend.associationEntities.budgetParameter.BudgetParameter;
 import com.solarize.solarizeWebBackend.modules.parameterOption.ParameterOption;
 import jakarta.persistence.*;
 import lombok.Getter;

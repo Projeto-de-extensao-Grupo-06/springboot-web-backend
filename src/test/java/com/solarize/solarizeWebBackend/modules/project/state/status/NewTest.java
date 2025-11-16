@@ -209,7 +209,7 @@ class NewTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
 
                 Arguments.of("NEW -> NEGOCIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegociationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }
 
