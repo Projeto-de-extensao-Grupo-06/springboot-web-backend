@@ -68,6 +68,6 @@ public class StateMachineHelper {
         RetryQueue retryQueue = project.getRetry();
         if(retryQueue == null) throw new InvalidStateTransitionException("The project needs to have a scheduled retry.");
         if(retryQueue.getRetrying()) throw new InvalidStateTransitionException("The project cannot be retrying.");
-        if(retryQueue.getScheduledDate().isBefore(LocalDateTime.now())) throw new InvalidStateTransitionException("The retry need to be scheduled in future datetime");
+        if(retryQueue.getScheduledDate().isBefore(LocalDateTime.now())) throw new InvalidStateTransitionException("The retry needs to be scheduled for a future datetime");
     }
 }
