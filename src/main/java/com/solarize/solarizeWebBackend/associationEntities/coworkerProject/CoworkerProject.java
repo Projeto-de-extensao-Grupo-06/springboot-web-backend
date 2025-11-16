@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.coworkerProject;
+package com.solarize.solarizeWebBackend.associationEntities.coworkerProject;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.project.Project;

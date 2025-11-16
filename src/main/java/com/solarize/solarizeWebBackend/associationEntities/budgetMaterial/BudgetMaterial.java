@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budgetMaterial;
+package com.solarize.solarizeWebBackend.associationEntities.budgetMaterial;
 
 import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import com.solarize.solarizeWebBackend.modules.materialCatalog.MaterialCatalog;

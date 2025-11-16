@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budgetParameter;
+package com.solarize.solarizeWebBackend.associationEntities.budgetParameter;
 
 import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import jakarta.persistence.*;

@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
-@TestPropertySource(properties = {"EMAIL=test@example.com"})
+@TestPropertySource(properties = {"spring.mail.username=test@example.com"})
 @ActiveProfiles("dev")
 class SolarizeWebBackendApplicationTests {
 

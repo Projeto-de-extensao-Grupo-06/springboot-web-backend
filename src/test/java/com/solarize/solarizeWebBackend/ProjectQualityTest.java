@@ -338,7 +338,7 @@ public class ProjectQualityTest {
 
 
     @Test
-    @DisplayName("Modulos devem estar dentro de modules ou shared.")
+    @DisplayName("Modulos devem estar dentro de modules, associationEntities ou shared.")
     void packageInModulesOrShared() {
         classes.forEach(c -> {
             String className = c.getName();
@@ -346,6 +346,7 @@ public class ProjectQualityTest {
             if(
                     !className.startsWith("com.solarize.solarizeWebBackend.modules.") &&
                             !className.startsWith("com.solarize.solarizeWebBackend.shared.") &&
+                            !className.startsWith("com.solarize.solarizeWebBackend.associationEntities.") &&
                             !className.endsWith("Test") &&
                             !className.endsWith("Tests")
             ) {
