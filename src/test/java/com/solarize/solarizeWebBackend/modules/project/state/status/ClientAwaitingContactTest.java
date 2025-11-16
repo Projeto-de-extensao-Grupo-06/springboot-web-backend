@@ -231,7 +231,7 @@ class ClientAwaitingContactTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("CLIENT_AWAITING_CONTACT -> NEGOCIATION_FAILED",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

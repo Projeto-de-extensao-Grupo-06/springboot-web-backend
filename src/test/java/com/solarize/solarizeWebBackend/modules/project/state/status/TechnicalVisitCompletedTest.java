@@ -121,7 +121,7 @@ class TechnicalVisitCompletedTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("NEW -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("NEW -> NEGOCIATION_FAILED",
+                Arguments.of("NEW -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

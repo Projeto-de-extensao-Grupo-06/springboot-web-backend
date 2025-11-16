@@ -53,7 +53,7 @@ public interface Status {
     }
 
     default void applyToNegotiationFailed(Project project) {
-        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOCIATION_FAILED");
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOTIATION_FAILED");
     }
 
 }

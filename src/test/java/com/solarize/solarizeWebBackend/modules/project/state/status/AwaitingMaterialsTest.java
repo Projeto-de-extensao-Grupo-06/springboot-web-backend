@@ -143,7 +143,7 @@ class AwaitingMaterialsTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("AWAITING_MATERIALS -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("AWAITING_MATERIALS -> NEGOCIATION_FAILED",
+                Arguments.of("AWAITING_MATERIALS -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

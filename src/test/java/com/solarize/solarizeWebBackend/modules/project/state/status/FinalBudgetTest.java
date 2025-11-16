@@ -121,7 +121,7 @@ class FinalBudgetTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("FINAL_BUDGET -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("FINAL_BUDGET -> NEGOCIATION_FAILED",
+                Arguments.of("FINAL_BUDGET -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

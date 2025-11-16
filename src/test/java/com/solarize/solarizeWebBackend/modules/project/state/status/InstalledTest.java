@@ -109,7 +109,7 @@ class InstalledTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
                 Arguments.of("INSTALLED -> INSTALLED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
-                Arguments.of("INSTALLED -> NEGOCIATION_FAILED",
+                Arguments.of("INSTALLED -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

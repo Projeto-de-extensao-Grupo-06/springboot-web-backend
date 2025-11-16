@@ -69,7 +69,7 @@ class NegotiationFailedTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
                 Arguments.of("NEGOTIATION_FAILED -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("NEGOTIATION_FAILED -> NEGOCIATION_FAILED",
+                Arguments.of("NEGOTIATION_FAILED -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }

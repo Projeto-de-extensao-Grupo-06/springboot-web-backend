@@ -178,7 +178,7 @@ class ScheduledInstallingVisitTest {
                         (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
                 Arguments.of("SCHEDULED_INSTALLING_VISIT -> COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
-                Arguments.of("SCHEDULED_INSTALLING_VISIT -> NEGOCIATION_FAILED",
+                Arguments.of("SCHEDULED_INSTALLING_VISIT -> NEGOTIATION_FAILED",
                         (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
         );
     }
