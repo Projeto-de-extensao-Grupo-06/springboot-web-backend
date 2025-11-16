@@ -25,6 +25,11 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private ProjectStatusEnum status;
+    /**
+     * Numeric weight representing the priority of the current status.
+     * Automatically updated from {@code status} via {@link #updateStatusWeight()}.
+     * Used for sorting or ordering projects by status priority.
+     */
     private Integer statusWeight;
 
     @Enumerated(EnumType.STRING)
