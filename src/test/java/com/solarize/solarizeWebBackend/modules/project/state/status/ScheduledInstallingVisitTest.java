@@ -26,9 +26,6 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScheduledInstallingVisitTest {
-    // applyToRetrying
-    // applyToInstalled
-
     @BeforeEach
     void setUp() {
         MockHttpServletRequest request = new MockHttpServletRequest();

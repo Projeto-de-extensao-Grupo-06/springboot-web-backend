@@ -4,10 +4,6 @@ import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
-import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleBuilder;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +16,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
