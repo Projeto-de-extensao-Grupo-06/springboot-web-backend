@@ -39,7 +39,7 @@ public class ScheduledInstallingVisit implements Status {
         ).toList();
 
         if(schedules.isEmpty()) {
-            throw new InvalidStateTransitionException("Project don't have a FINISHED INSTALL_VISIT schedule");
+            throw new InvalidStateTransitionException("Project doesn't have a FINISHED INSTALL_VISIT schedule");
         }
 
         project.setPreviewStatus(project.getStatus());
