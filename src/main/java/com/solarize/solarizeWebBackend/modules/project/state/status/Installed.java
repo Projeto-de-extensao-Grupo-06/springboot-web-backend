@@ -16,7 +16,7 @@ public class Installed implements Status {
         if(files.isEmpty()) {
             throw new InvalidStateTransitionException(
                     "Invalid state transition: " + this.getClass().getSimpleName() + " -> COMPLETED. " +
-                            "The project don't have a homologation doc."
+                            "The project doesn't have a homologation doc."
             );
         }
 
