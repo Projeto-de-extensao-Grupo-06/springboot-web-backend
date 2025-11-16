@@ -50,7 +50,7 @@ public class ScheduledTechnicalVisit implements Status {
         if(schedules.isEmpty()) {
             throw new InvalidStateTransitionException(
                     "Invalid state transition: " + this.getClass().getSimpleName() + " -> TECHNICAL_VISIT_COMPLETED. " +
-                            "The project does not have an TECHNICAL_VISIT finished."
+                            "The project does not have a finished TECHNICAL_VISIT."
             );
         }
 
