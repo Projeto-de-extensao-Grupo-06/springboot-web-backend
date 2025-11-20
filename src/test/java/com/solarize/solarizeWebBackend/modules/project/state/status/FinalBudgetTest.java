@@ -5,10 +5,6 @@ import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueueBuilder;
-import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleBuilder;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +46,7 @@ class FinalBudgetTest {
                 .withRetry(retry)
                 .build();
 
-        project.getStatus().getState().applyToAwaitingRetry(project);
+        project.getStatus().getStateHandler().applyToAwaitingRetry(project);
 
         assertEquals(ProjectStatusEnum.AWAITING_RETRY, project.getStatus());
         assertEquals(ProjectStatusEnum.FINAL_BUDGET, project.getPreviewStatus());
@@ -64,7 +60,7 @@ class FinalBudgetTest {
                 .build();
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToAwaitingRetry(project));
+                () -> project.getStatus().getStateHandler().applyToAwaitingRetry(project));
     }
 
     @Test
@@ -79,7 +75,7 @@ class FinalBudgetTest {
                 .withRetry(retry)
                 .build();
 
-        project.getStatus().getState().applyToAwaitingMaterials(project);
+        project.getStatus().getStateHandler().applyToAwaitingMaterials(project);
 
         assertEquals(ProjectStatusEnum.AWAITING_MATERIALS, project.getStatus());
         assertEquals(ProjectStatusEnum.FINAL_BUDGET, project.getPreviewStatus());
@@ -102,27 +98,27 @@ class FinalBudgetTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("FINAL_BUDGET -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("FINAL_BUDGET -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("FINAL_BUDGET -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("FINAL_BUDGET -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToRetrying(p)),
                 Arguments.of("FINAL_BUDGET -> SCHEDULED_TECHNICAL_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledTechnicalVisit(p)),
                 Arguments.of("FINAL_BUDGET -> TECHNICAL_VISIT_COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
                 Arguments.of("FINAL_BUDGET -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
                 Arguments.of("FINAL_BUDGET -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
                 Arguments.of("FINAL_BUDGET -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("FINAL_BUDGET -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
                 Arguments.of("FINAL_BUDGET -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 }
