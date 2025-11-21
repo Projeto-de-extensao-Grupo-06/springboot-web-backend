@@ -66,9 +66,9 @@ INSERT INTO project (
     description
 ) VALUES (
              1,
-             'PRE_BUDGET',
+             'AWAITING_RETRY',
              1,
-             NULL,
+             'PRE_BUDGET',
              TRUE,
              1,
              1,
