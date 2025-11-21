@@ -1,15 +1,20 @@
 package com.solarize.solarizeWebBackend.modules.project.dto;
 
+import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
+import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
-import lombok.Builder;
-import lombok.Getter;
+import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class ProjectSummaryDTO {
 
     private Long id;
@@ -20,5 +25,7 @@ public class ProjectSummaryDTO {
     private ClientResponseDTO client;
     private Long commentCount;
     private Long fileCount;
+
+
 
 }

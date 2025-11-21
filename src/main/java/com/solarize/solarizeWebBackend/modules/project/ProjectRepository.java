@@ -1,6 +1,64 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
+import com.solarize.solarizeWebBackend.modules.project.dto.ProjectSummaryDTO;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+
+    @Query("""
+        SELECT p FROM Project p
+        WHERE p.isActive = true
+          AND (:search IS NULL OR (
+              LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')) OR
+              LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%')) OR
+              LOWER(p.client.firstName) LIKE LOWER(CONCAT('%', :search, '%')) OR
+              LOWER(p.client.lastName) LIKE LOWER(CONCAT('%', :search, '%')) OR
+              LOWER(p.client.documentNumber) LIKE LOWER(CONCAT('%', :search, '%'))
+          ))
+          AND (:clientId IS NULL OR p.client.id = :clientId)
+          AND (:responsibleId IS NULL OR p.responsible.id = :responsibleId)
+          AND (
+              (:statusList IS NOT NULL AND p.status IN :statusList)
+              OR (:statusList IS NULL AND p.status NOT IN ('AWAITING_RETRY', 'NEGOTIATION_FAILED', 'COMPLETED'))
+          )
+        ORDER BY
+          CASE WHEN EXISTS (
+            SELECT 1 FROM Schedule s WHERE s.project = p AND s.isActive = true AND s.startDate >= CURRENT_TIMESTAMP
+          ) THEN 0 ELSE 1 END,
+          p.statusWeight ASC,
+          p.createdAt DESC
+    """)
+    Page<Project> findAllProjects(
+            @Param("search") String search,
+            @Param("statusList") List<ProjectStatusEnum> statusList,
+            @Param("responsibleId") Long responsibleId,
+            @Param("clientId") Long clientId,
+            Pageable pageable
+    );
+
+    @Query("""
+        SELECT MIN(s.startDate)
+        FROM Schedule s
+        WHERE s.project.id = :projectId
+          AND s.startDate >= CURRENT_TIMESTAMP
+          AND s.isActive = true
+    """)
+    LocalDateTime buscarProximoSchedule(@Param("projectId") Long projectId);
+
+    @Query("SELECT COUNT(c.id) FROM ProjectComment c WHERE c.project.id = :projectId")
+    Long contarComentarios(@Param("projectId") Long projectId);
+
+    @Query("SELECT COUNT(f.id) FROM ProjectFile f WHERE f.project.id = :projectId")
+    Long contarArquivos(@Param("projectId") Long projectId);
+
 }
+
