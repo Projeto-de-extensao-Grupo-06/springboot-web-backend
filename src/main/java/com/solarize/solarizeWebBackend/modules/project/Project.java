@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.budget.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.address.Address;
+import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFile;
 import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
@@ -40,6 +41,10 @@ public class Project {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_client", nullable = false)
     private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_responsible")
+    private Coworker responsible;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_budget")
