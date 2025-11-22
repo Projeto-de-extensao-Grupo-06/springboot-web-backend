@@ -1,7 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
-import com.solarize.solarizeWebBackend.modules.project.dto.ProjectSummaryDTO;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,20 +43,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             Pageable pageable
     );
 
-    @Query("""
-        SELECT MIN(s.startDate)
-        FROM Schedule s
-        WHERE s.project.id = :projectId
-          AND s.startDate >= CURRENT_TIMESTAMP
-          AND s.isActive = true
-    """)
-    LocalDateTime buscarProximoSchedule(@Param("projectId") Long projectId);
 
-    @Query("SELECT COUNT(c.id) FROM ProjectComment c WHERE c.project.id = :projectId")
-    Long contarComentarios(@Param("projectId") Long projectId);
-
-    @Query("SELECT COUNT(f.id) FROM ProjectFile f WHERE f.project.id = :projectId")
-    Long contarArquivos(@Param("projectId") Long projectId);
 
 }
 

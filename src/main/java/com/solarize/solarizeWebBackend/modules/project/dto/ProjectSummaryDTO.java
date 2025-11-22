@@ -16,16 +16,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ProjectSummaryDTO {
-
     private Long id;
     private String projectTitle;
     private String status;
     private LocalDateTime nextSchedule;
     private CoworkerResponseDto responsible;
     private ClientResponseDTO client;
-    private Long commentCount;
-    private Long fileCount;
-
-
-
+    private Integer commentCount;
+    private Integer fileCount;
 }

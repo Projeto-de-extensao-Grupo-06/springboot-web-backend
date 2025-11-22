@@ -22,7 +22,7 @@ import static io.micrometer.core.instrument.binder.grpc.GrpcObservationDocumenta
 public class ProjectController {
     private final ProjectService service;
     @PreAuthorize("hasAuthority('PROJECT_READ')")
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Page<ProjectSummaryDTO>> getProjects(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) List<ProjectStatusEnum> status,
