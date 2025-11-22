@@ -21,7 +21,7 @@ public class ProjectService {
 
     public Project createManualProject(CreateProjectRequestDTO requestDTO){
 
-        if (projectRepository.existsByProjectName(requestDTO.getName())){
+        if (projectRepository.existsByName(requestDTO.getName())){
             throw new ConflictException("Project name already exists");
         }
 
