@@ -1,6 +1,6 @@
-package com.solarize.solarizeWebBackend.associationEntities.budgetParameter;
+package com.solarize.solarizeWebBackend.modules.budget.budgetParameter;
 
-import com.solarize.solarizeWebBackend.modules.budget.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.core.Budget;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

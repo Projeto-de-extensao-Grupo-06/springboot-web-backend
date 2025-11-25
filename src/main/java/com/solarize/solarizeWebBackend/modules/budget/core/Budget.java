@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget;
+package com.solarize.solarizeWebBackend.modules.budget.core;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +15,6 @@ public class Budget {
 
     private Double totalCost;
     private Double discount;
-    private Double materialCost;
     private Double serviceCost;
     private Boolean finalBudget;
 }

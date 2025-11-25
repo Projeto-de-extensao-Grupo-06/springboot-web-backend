@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.associationEntities.parameterCost;
+package com.solarize.solarizeWebBackend.modules.budget.parameterCost;
 
 import lombok.*;
 

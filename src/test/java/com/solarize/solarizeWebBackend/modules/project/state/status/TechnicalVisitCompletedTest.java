@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
-import com.solarize.solarizeWebBackend.modules.budget.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.core.Budget;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
