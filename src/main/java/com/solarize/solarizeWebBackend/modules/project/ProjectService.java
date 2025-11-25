@@ -23,7 +23,7 @@ public class ProjectService {
  
     public void setProjectStatusToRetrying(Project project) {
         project.getStatus().getStateHandler().applyToRetrying(project);
-        repository.save(project);
+        projectRepository.save(project);
     }
 
     public Page<ProjectSummaryDTO> findAllProjectsSummary(String search,
