@@ -3,9 +3,9 @@
 --------------------------------------------
 INSERT INTO client (first_name, last_name, phone, email)
 VALUES
-('João', 'da Silva', '11999999999', 'joao@email.com'),
-('Maria', 'Souza', '11888888888', 'maria@email.com'),
-('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
+    ('João', 'da Silva', '11999999999', 'joao@email.com'),
+    ('Maria', 'Souza', '11888888888', 'maria@email.com'),
+    ('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
 
 --------------------------------------------
 -- PERMISSION GROUP
@@ -18,13 +18,13 @@ INSERT INTO permission_group (
     access_budget,
     access_schedule
 ) VALUES (
-    'ADMIN',
-    'PROJECT_LIST',
-    0xF,
-    0xF,
-    0xF,
-    0xF
-);
+             'ADMIN',
+             'PROJECT_LIST',
+             0xF,
+             0xF,
+             0xF,
+             0xF
+         );
 
 --------------------------------------------
 -- COWORKER (RESPONSÁVEL)
@@ -38,14 +38,14 @@ INSERT INTO coworker (
     fk_permission_group,
     is_active
 ) VALUES (
-    'Bryan',
-    'Rocha',
-    'bryangomesrocha@gmail.com',
-    '11964275054',
-    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-    1,
-    TRUE
-);
+             'Bryan',
+             'Rocha',
+             'bryangomesrocha@gmail.com',
+             '11964275054',
+             '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+             1,
+             TRUE
+         );
 
 --------------------------------------------
 -- BUDGET
@@ -57,22 +57,22 @@ INSERT INTO budget (
     service_cost,
     final_budget
 ) VALUES (
-    15000.00,
-    0.00,
-    7000.00,
-    8000.00,
-    TRUE
-);
+             15000.00,
+             0.00,
+             7000.00,
+             8000.00,
+             TRUE
+         );
 
 --------------------------------------------
 -- MATERIALS
 --------------------------------------------
 INSERT INTO material_catalog (name, metric, price)
 VALUES
-('Painel Solar 550W', 'unit', 900.0),
-('Inversor On-Grid 5kW', 'unit', 349.99),
-('Cabo Solar 6mm', 'meter', 100.0),
-('Bateria 5kWh', 'unit', 1500.0);
+    ('Painel Solar 550W', 'unit', 900.0),
+    ('Inversor On-Grid 5kW', 'unit', 349.99),
+    ('Cabo Solar 6mm', 'meter', 100.0),
+    ('Bateria 5kWh', 'unit', 1500.0);
 
 --------------------------------------------
 -- MATERIAL URL
@@ -84,23 +84,37 @@ VALUES
     ('Ficha técnica Cabo 6mm', 'https://solarcenter.com/fichas/cabo6mm.pdf', 3),
     ('Ficha técnica Bateria 5kWh', 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4);
 
+--------------------------------------------
+-- ADDRESS
+--------------------------------------------
+INSERT INTO address (
+    postal_code,
+    street_name,
+    number,
+    neighborhood,
+    city,
+    state,
+    type
+) VALUES (
+             '01001-000',
+             'Rua das Palmeiras',
+             '123',
+             'Centro',
+             'São Paulo',
+             'SP',
+             'RESIDENTIAL'
+         );
 
-INSERT INTO client (id_client, first_name, email, phone)
-VALUES (1, 'Cliente Teste', 'cliente@teste.com', '11999999999');
-
-INSERT INTO address (id_address, street_name, number, city, state, postal_code)
-VALUES (1, 'Rua Teste', '123', 'São Paulo', 'SP', '00000000');
-
-INSERT INTO budget (id_budget, total_cost)
-VALUES (1, 1000.00);
-
+--------------------------------------------
+-- PROJECTS
+--------------------------------------------
 INSERT INTO project (
-    id_project,
     status,
     status_weight,
     preview_status,
     is_active,
     fk_client,
+    fk_responsible,
     fk_budget,
     fk_address,
     created_at,
@@ -109,32 +123,7 @@ INSERT INTO project (
     project_from,
     name,
     description
-) VALUES (
-             1,
-             'AWAITING_RETRY',
-             1,
-             'PRE_BUDGET',
-             TRUE,
-             1,
-             1,
-             1,
-             NOW(),
-             NULL,
-             'OFF_GRID',       -- ajuste conforme seu enum
-             'BOT',      -- ajuste conforme seu enum
-             'Projeto Teste',
-             'Projeto criado para testar o Queue Processor'
-         );
-
-
-INSERT INTO retry_queue (
-    id,
-    scheduled_date,
-    retrying,
-    fk_project
-) VALUES (
-             1,
-             NOW(),      -- para disparar imediatamente
-             FALSE,
-             1           -- project id
-         );
+) VALUES
+      ('NEW', 3, NULL, TRUE, 1, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp'),
+      ('PRE_BUDGET', 4, NULL, TRUE, 2, 1, 1, 1, NOW(), DATEADD('DAY', 20, NOW()), 'OFF_GRID', 'SITE', 'Projeto Solar — Cliente Maria', 'Sistema híbrido 3kWp'),
+      ('COMPLETED', 13, NULL, TRUE, 3, 1, 1, 1, NOW(), DATEADD('DAY', 30, NOW()), 'ON_GRID', 'BOT', 'Projeto Solar — Cliente Carlos', 'Instalação residencial padrão');
