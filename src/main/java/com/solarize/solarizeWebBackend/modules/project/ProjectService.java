@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
+import lombok.RequiredArgsConstructor;
 import com.solarize.solarizeWebBackend.modules.project.dto.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.projectComment.ProjectCommentService;
 import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFileService;
@@ -18,6 +19,12 @@ public class ProjectService {
     private final ScheduleService scheduleService;
     private final ProjectCommentService projectCommentService;
     private final ProjectFileService projectFileService;
+  
+ 
+    public void setProjectStatusToRetrying(Project project) {
+        project.getStatus().getStateHandler().applyToRetrying(project);
+        projectRepository.save(project);
+    }
 
     public Page<ProjectSummaryDTO> findAllProjectsSummary(String search,
                                                           List<ProjectStatusEnum> statusList,

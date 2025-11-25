@@ -54,7 +54,7 @@ class NewTest {
                 .withStatus(ProjectStatusEnum.NEW)
                 .build();
 
-        project.getStatus().getState().applyToScheduledTechnicalVisit(project);
+        project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
 
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getStatus());
         assertEquals(ProjectStatusEnum.NEW, project.getPreviewStatus());
@@ -68,7 +68,7 @@ class NewTest {
     ) {
         assertThrows(
                 InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToScheduledTechnicalVisit(project)
+                () -> project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project)
         );
     }
 
@@ -143,40 +143,40 @@ class NewTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("NEW -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
 
                 Arguments.of("NEW -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
 
                 Arguments.of("NEW -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
 
                 Arguments.of("NEW -> AWAITING_RETRY",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingRetry(p)),
 
                 Arguments.of("NEW -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToRetrying(p)),
 
                 Arguments.of("NEW -> TECHNICAL_VISIT_COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
 
                 Arguments.of("NEW -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
 
                 Arguments.of("NEW -> AWAITING_MATERIALS",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),
 
                 Arguments.of("NEW -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
 
                 Arguments.of("NEW -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
 
                 Arguments.of("NEW -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
 
                 Arguments.of("NEW -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 
