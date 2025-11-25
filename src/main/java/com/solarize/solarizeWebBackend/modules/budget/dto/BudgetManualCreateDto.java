@@ -4,12 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
 public class BudgetManualCreateDto {
-    private List<Material>
+    private List<Long> materialUrlIds;
+    private List<BudgetParameterCreateDto> materialParameters;
 
     private Double serviceCost;
-    private Boolean finalBudget = false;
+    private Boolean finalBudget;
 }
