@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.TaxType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +14,11 @@ public class Budget {
     @Column(name = "id_budget")
     private Long id;
 
+    private Double subtotal;
     private Double totalCost;
     private Double discount;
+
     private Double serviceCost;
+    private Double materialCost;
     private Boolean finalBudget;
 }

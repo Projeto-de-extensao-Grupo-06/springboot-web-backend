@@ -4,24 +4,11 @@ import com.solarize.solarizeWebBackend.modules.budget.enumerated.TaxType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-@Builder
-public class BudgetParameterCreateDto {
-    @NotBlank
+public class BudgetParameterResponseDto {
+    private Long id;
     private String name;
-
-    @NotBlank
     private String description;
-
-    @NotBlank
     private TaxType taxType;
-
-    @Positive
-    @NotNull
     private Double additionTax;
 }

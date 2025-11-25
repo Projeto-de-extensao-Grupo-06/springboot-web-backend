@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget;
+package com.solarize.solarizeWebBackend.modules.budget.repository;
 
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import org.springframework.data.jpa.repository.JpaRepository;
