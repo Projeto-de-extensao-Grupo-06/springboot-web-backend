@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget.budgetMaterial;
+package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import lombok.*;
 

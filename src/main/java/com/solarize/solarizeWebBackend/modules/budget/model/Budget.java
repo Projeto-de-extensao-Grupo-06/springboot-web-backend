@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget.core;
+package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

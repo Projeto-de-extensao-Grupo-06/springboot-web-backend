@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
-import com.solarize.solarizeWebBackend.modules.budget.core.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;

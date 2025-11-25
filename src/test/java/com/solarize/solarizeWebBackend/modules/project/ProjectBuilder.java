@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
-import com.solarize.solarizeWebBackend.modules.budget.core.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFile;
 import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;

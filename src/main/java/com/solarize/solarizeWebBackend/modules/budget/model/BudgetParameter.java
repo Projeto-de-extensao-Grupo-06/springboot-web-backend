@@ -1,6 +1,6 @@
-package com.solarize.solarizeWebBackend.modules.budget.budgetParameter;
+package com.solarize.solarizeWebBackend.modules.budget.model;
 
-import com.solarize.solarizeWebBackend.modules.budget.core.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.TaxType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +17,10 @@ public class BudgetParameter {
     @ManyToOne
     @JoinColumn(name = "id_budget", nullable = false)
     private Budget budget;
+
     private String name;
-    private String description;
-    private String metric;
-    private Boolean isPreBudget;
-    private Double fixedValue;
+
+    @Enumerated(EnumType.STRING)
+    private TaxType taxType;
+    private Double additionTax;
 }

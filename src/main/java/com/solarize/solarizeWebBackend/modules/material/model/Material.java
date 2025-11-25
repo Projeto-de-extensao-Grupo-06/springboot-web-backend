@@ -1,5 +1,6 @@
-package com.solarize.solarizeWebBackend.modules.materialCatalog;
+package com.solarize.solarizeWebBackend.modules.material.model;
 
+import com.solarize.solarizeWebBackend.modules.material.MetricEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class MaterialCatalog {
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_material")
