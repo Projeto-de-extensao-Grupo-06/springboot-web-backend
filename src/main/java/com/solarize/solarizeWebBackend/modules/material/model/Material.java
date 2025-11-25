@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.material.model;
 
-import com.solarize.solarizeWebBackend.modules.material.MetricEnum;
+import com.solarize.solarizeWebBackend.modules.material.enumerated.MetricEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,9 @@ public class Material {
     private Long id;
 
     private String name;
-    private Double price;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private MetricEnum metric;

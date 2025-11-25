@@ -14,8 +14,9 @@ public class MaterialUrl {
     @Column(name = "id_material_url")
     private Long id;
 
-    private String description;
+    @Column(columnDefinition = "TEXT")
     private String url;
+    private Double price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_material")
