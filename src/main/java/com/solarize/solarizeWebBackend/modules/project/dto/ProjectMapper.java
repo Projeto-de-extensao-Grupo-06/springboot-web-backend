@@ -16,12 +16,26 @@ public class ProjectMapper {
                 .isActive(project.getIsActive())
                 .systemTypeEnum(project.getSystemType())
                 .projectSourceEnum(project.getProjectFrom())
-                .clientId(project.getClient().getId())
+                .clientId(project.getClient().getId() != null ? project.getClient().getId() : null)
                 .addressId(project.getAddress() != null ? project.getAddress().getId() : null)
                 .budgetId(project.getBudget() != null ? project.getBudget().getId() : null)
                 .createdAt(project.getCreatedAt())
                 .deadline(project.getDeadline())
                 .build();
+    }
+
+
+    public static Project toEntity(CreateProjectRequestDTO createProjectRequestDTO){
+
+        if (createProjectRequestDTO == null) return null;
+
+        Project project = new Project();
+        project.setName(createProjectRequestDTO.getName());
+        project.setDescription(createProjectRequestDTO.getDescription());
+        project.setSystemType(createProjectRequestDTO.getSystemTypeEnum());
+
+        return project;
+
     }
 
 }

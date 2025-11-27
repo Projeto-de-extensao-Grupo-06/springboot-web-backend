@@ -19,10 +19,15 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectResponseDTO>create(@RequestBody @Valid CreateProjectRequestDTO requestDTO){
-        Project newProject = projectService.createManualProject(requestDTO);
+    public ResponseEntity<ProjectResponseDTO>createProject(@RequestBody @Valid CreateProjectRequestDTO requestDTO){
+
+        Project project = ProjectMapper.toEntity(requestDTO);
+
+        Project newProject = projectService.createManualProject( project, requestDTO.getClientId(),requestDTO.getAddressId());
 
         return ResponseEntity.status(201).body(ProjectMapper.toDto(newProject));
     }
+
+
 
 }
