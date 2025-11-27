@@ -44,7 +44,7 @@ class ScheduledTechnicalVisitTest {
                 .withStatus(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT)
                 .build();
 
-        project.getStatus().getState().applyToRetrying(project);
+        project.getStatus().getStateHandler().applyToRetrying(project);
 
         assertEquals(ProjectStatusEnum.RETRYING, project.getStatus());
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getPreviewStatus());
@@ -68,7 +68,7 @@ class ScheduledTechnicalVisitTest {
 
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToRetrying(project));
+                () -> project.getStatus().getStateHandler().applyToRetrying(project));
     }
 
     @Test
@@ -87,7 +87,7 @@ class ScheduledTechnicalVisitTest {
                 .withSchedules(schedules)
                 .build();
 
-        project.getStatus().getState().applyToTechnicalVisitCompleted(project);
+        project.getStatus().getStateHandler().applyToTechnicalVisitCompleted(project);
 
         assertEquals(ProjectStatusEnum.TECHNICAL_VISIT_COMPLETED, project.getStatus());
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getPreviewStatus());
@@ -111,7 +111,7 @@ class ScheduledTechnicalVisitTest {
 
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToTechnicalVisitCompleted(project));
+                () -> project.getStatus().getStateHandler().applyToTechnicalVisitCompleted(project));
     }
 
 
@@ -140,27 +140,27 @@ class ScheduledTechnicalVisitTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> AWAITING_RETRY",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingRetry(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> SCHEDULED_TECHNICAL_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledTechnicalVisit(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> AWAITING_MATERIALS",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
                 Arguments.of("SCHEDULED_TECHNICAL_VISIT -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 

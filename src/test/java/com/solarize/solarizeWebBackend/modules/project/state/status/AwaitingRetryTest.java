@@ -40,7 +40,7 @@ class AwaitingRetryTest {
                 .withStatus(ProjectStatusEnum.AWAITING_RETRY)
                 .build();
 
-        project.getStatus().getState().applyToRetrying(project);
+        project.getStatus().getStateHandler().applyToRetrying(project);
 
         assertEquals(ProjectStatusEnum.RETRYING, project.getStatus());
         assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getPreviewStatus());
@@ -60,29 +60,29 @@ class AwaitingRetryTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("AWAITING_RETRY -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("AWAITING_RETRY -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("AWAITING_RETRY -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("AWAITING_RETRY -> AWAITING_RETRY",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingRetry(p)),
                 Arguments.of("AWAITING_RETRY -> SCHEDULED_TECHNICAL_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledTechnicalVisit(p)),
                 Arguments.of("AWAITING_RETRY -> TECHNICAL_VISIT_COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
                 Arguments.of("AWAITING_RETRY -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
                 Arguments.of("AWAITING_RETRY -> AWAITING_MATERIALS",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),
                 Arguments.of("AWAITING_RETRY -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
                 Arguments.of("AWAITING_RETRY -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("AWAITING_RETRY -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
                 Arguments.of("AWAITING_RETRY -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 }
