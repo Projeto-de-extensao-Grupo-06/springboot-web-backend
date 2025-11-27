@@ -105,25 +105,3 @@ INSERT INTO address (
              'RESIDENTIAL'
          );
 
---------------------------------------------
--- PROJECTS
---------------------------------------------
-INSERT INTO project (
-    status,
-    status_weight,
-    preview_status,
-    is_active,
-    fk_client,
-    fk_responsible,
-    fk_budget,
-    fk_address,
-    created_at,
-    deadline,
-    system_type,
-    project_from,
-    name,
-    description
-) VALUES
-      ('NEW', 3, NULL, TRUE, 1, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp'),
-      ('PRE_BUDGET', 4, NULL, TRUE, 2, 1, 1, 1, NOW(), DATEADD('DAY', 20, NOW()), 'OFF_GRID', 'SITE', 'Projeto Solar — Cliente Maria', 'Sistema híbrido 3kWp'),
-      ('COMPLETED', 13, NULL, TRUE, 3, 1, 1, 1, NOW(), DATEADD('DAY', 30, NOW()), 'ON_GRID', 'BOT', 'Projeto Solar — Cliente Carlos', 'Instalação residencial padrão');
