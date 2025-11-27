@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/projects")
+@RequestMapping("/projects")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -48,7 +48,7 @@ public class ProjectController {
             @PageableDefault(page = 0, size = 20) Pageable pageable
     ) {
         Page<ProjectSummaryDTO> result =
-                service.findAllProjectsSummary(search, status, responsibleId, clientId, pageable);
+                projectService.findAllProjectsSummary(search, status, responsibleId, clientId, pageable);
 
         return ResponseEntity.ok(result);
     }
