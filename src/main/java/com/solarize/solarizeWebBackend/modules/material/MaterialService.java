@@ -18,8 +18,4 @@ public class MaterialService {
         int qtdExists = materialUrlRepository.allExistsByIdIn(materialUrlIds);
         return qtdExists == materialUrlIds.size();
     }
-
-    public List<MaterialUrl> findMaterialByIdIn(List<Long> ids) {
-        return materialUrlRepository.findAllByIdIn(ids);
-    }
 }

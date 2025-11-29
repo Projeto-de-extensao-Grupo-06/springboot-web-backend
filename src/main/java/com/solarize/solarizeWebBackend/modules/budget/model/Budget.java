@@ -1,9 +1,12 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.TaxType;
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +21,17 @@ public class Budget {
     private Double totalCost;
     private Double discount;
 
-    private Double serviceCost;
-    private Double materialCost;
+    @Enumerated(value = EnumType.STRING)
+    private DiscountType discountType;
+
     private Boolean finalBudget;
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BudgetMaterial> materials = new ArrayList<>();
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FixedParameter> fixedParameters = new ArrayList<>();
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PersonalizedParameter> personalizedParameters = new ArrayList<>();
 }

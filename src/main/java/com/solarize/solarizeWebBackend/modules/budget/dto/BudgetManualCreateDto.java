@@ -1,34 +1,20 @@
 package com.solarize.solarizeWebBackend.modules.budget.dto;
 
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.TaxType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
 import jakarta.validation.constraints.Positive;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class BudgetManualCreateDto {
-    @NotNull
-    private List<BudgetMaterialDto> materialUrlIds;
-
-    @NotNull
-    @Valid
-    private List<BudgetParameterCreateDto> materialParameters;
-
     @Positive
-    private Double serviceCost;
+    private Double discount = 0.0;
 
-    @Enumerated(EnumType.STRING)
-    private TaxType discountType;
-    private Double discount;
+    private DiscountType discountType = DiscountType.PERCENT;
 
-
-    private Boolean finalBudget;
+    private List<BudgetMaterialCreateDto> material = new ArrayList<>();
+    private List<FixedParameterCreateDto> fixedParameters = new ArrayList<>();
+    private List<PersonalizedParameterDto> personalizedParameters = new ArrayList<>();
 }

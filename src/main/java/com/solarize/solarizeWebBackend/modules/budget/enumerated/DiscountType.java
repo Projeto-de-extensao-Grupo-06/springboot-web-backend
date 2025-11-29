@@ -1,5 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.enumerated;
 
-public enum TaxType {
-    PERCENT, AMOUNT
+public enum DiscountType {
+    AMOUNT,
+    PERCENT,
+    MOCK_TOTAL
 }

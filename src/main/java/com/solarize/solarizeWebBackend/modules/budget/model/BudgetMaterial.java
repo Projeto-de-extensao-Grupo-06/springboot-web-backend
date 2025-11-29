@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
-import com.solarize.solarizeWebBackend.modules.material.model.Material;
+import com.solarize.solarizeWebBackend.modules.budget.model.serializable.BudgetMaterialId;
+import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +18,10 @@ public class BudgetMaterial {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_material")
-    private Material material;
+    @JoinColumn(name = "fk_material_url")
+    private MaterialUrl materialUrl;
 
-    private Double quantity;
+    private Integer quantity;
 
     private Double price;
 }

@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget.model;
+package com.solarize.solarizeWebBackend.modules.budget.model.serializable;
 
 import lombok.*;
 
@@ -11,5 +11,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class BudgetMaterialId implements Serializable {
     private Long budget;
-    private Long material;
+    private Long materialUrl;
 }

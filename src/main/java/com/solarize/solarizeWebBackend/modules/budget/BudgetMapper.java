@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.BudgetManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 
 public class BudgetMapper {

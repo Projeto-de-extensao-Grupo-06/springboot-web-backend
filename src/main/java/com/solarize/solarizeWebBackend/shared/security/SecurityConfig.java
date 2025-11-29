@@ -47,7 +47,8 @@ public class SecurityConfig {
                         "/auth/login",
                         "/auth/forget-password",
                         "/auth/confirm-otp",
-                        "/auth/change-password/token"
+                        "/auth/change-password/token",
+                        "/h2-console/**"
                         )
                         .permitAll()
                         .anyRequest()
