@@ -3,12 +3,14 @@ package com.solarize.solarizeWebBackend.modules.budget.model;
 import com.solarize.solarizeWebBackend.modules.budget.model.serializable.BudgetMaterialId;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @IdClass(BudgetMaterialId.class)
 public class BudgetMaterial {
     @Id

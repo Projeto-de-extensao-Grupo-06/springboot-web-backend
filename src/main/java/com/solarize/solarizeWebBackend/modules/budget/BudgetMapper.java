@@ -1,19 +1,50 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.dto.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.model.*;
+import com.solarize.solarizeWebBackend.modules.material.model.Material;
+import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
+
+import java.util.List;
 
 public class BudgetMapper {
-    Budget toEntity(BudgetManualCreateDto dto) {
+    public static Budget toEntity(BudgetManualCreateDto dto) {
         if(dto == null) return null;
 
-        Budget budget = new Budget();
+        List<FixedParameter> fixedParameters = dto.getFixedParameters().stream().map(p ->
+           FixedParameter.builder()
+                   .parameterValue(p.getValue())
+                   .template(FixedParameterTemplate.builder().uniqueName(p.getParameterName()).build())
+                   .build()
+        ).toList();
 
-        budget.setServiceCost(dto.getServiceCost());
-        budget.setDiscount(dto.getDiscount());
-        budget.setFinalBudget(budget.getFinalBudget());
+        List<PersonalizedParameter> personalizedParameters = dto.getPersonalizedParameters().stream().map(p ->
+            PersonalizedParameter.builder()
+                    .name(p.getName())
+                    .parameterValue(p.getValue())
+                    .type(p.getType())
+                    .build()
+        ).toList();
 
-        return budget;
+        List<BudgetMaterial> budgetMaterials = dto.getMaterials().stream()
+                .map(m -> {
+                    MaterialUrl materialUrl = new MaterialUrl();
+                    materialUrl.setId(m.getMaterialId());
+
+                    return BudgetMaterial.builder()
+                            .materialUrl(materialUrl)
+                            .quantity(m.getQuantity())
+                            .build();
+                }
+        ).toList();
+
+        return Budget.builder()
+                .discount(dto.getDiscount())
+                .discountType(dto.getDiscountType())
+                .finalBudget(dto.getFinalBudget())
+                .fixedParameters(fixedParameters)
+                .personalizedParameters(personalizedParameters)
+                .materials(budgetMaterials)
+                .build();
     }
-
-
 }

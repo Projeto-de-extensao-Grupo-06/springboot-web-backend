@@ -2,8 +2,7 @@ package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
