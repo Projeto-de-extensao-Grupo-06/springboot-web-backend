@@ -3,8 +3,10 @@ package com.solarize.solarizeWebBackend.modules.budget.dto.request;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Data;
 
+@Data
 public class AddMaterialDto {
     @Valid
     @NotNull

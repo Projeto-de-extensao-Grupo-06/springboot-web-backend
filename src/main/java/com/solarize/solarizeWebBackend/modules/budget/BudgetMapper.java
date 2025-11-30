@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.AddMaterialDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetPatchDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
@@ -98,6 +99,16 @@ public class BudgetMapper {
                 .materials(materialsUrl)
                 .fixedParameters(fixedParameters)
                 .personalizedParameters(personalizedParameters)
+                .build();
+    }
+
+    public static BudgetMaterial toEntity(AddMaterialDto dto) {
+        MaterialUrl materialUrl = new MaterialUrl();
+        materialUrl.setId(dto.getMaterialId());
+
+        return BudgetMaterial.builder()
+                .quantity(dto.getQuantity())
+                .materialUrl(materialUrl)
                 .build();
     }
 }

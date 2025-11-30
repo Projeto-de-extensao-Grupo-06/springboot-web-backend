@@ -5,6 +5,7 @@ import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterN
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueType;
 import com.solarize.solarizeWebBackend.modules.budget.helper.BudgetCalcs;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
+import com.solarize.solarizeWebBackend.modules.budget.model.serializable.BudgetMaterialId;
 import com.solarize.solarizeWebBackend.modules.budget.repository.*;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import com.solarize.solarizeWebBackend.modules.material.repository.MaterialUrlRepository;
@@ -36,6 +37,7 @@ public class BudgetService {
     private final FixedParameterTemplateRepository fixedParameterTemplateRepository;
     private final MaterialUrlRepository materialUrlRepository;
     private final ProjectRepository projectRepository;
+    private final BudgetMaterialRepository budgetMaterialRepository;
 
     @PersistenceContext
     private final EntityManager em;
@@ -146,14 +148,13 @@ public class BudgetService {
         budget.getMaterials().forEach(m -> {
             MaterialUrl materialUrl = materialUrlRepository.getReferenceById(m.getMaterialUrl().getId());
 
-            try {
-                m.setMaterialUrl(materialUrl);
-                m.setPrice(materialUrl.getPrice());
-                m.setBudget(budget);
-            } catch (EntityNotFoundException e) {
-                log.error("Material id: {} does not exists in database.", m.getMaterialUrl().getId());
-                throw new BadRequestException(String.format("Material id: %d does not exists in database.", m.getMaterialUrl().getId()));
-            }
+           if(!materialUrlRepository.existsById(m.getMaterialUrl().getId())) {
+               throw new NotFoundException("MaterialUrl with id " + m.getMaterialUrl().getId() + " does not exists");
+           }
+
+            m.setMaterialUrl(materialUrl);
+            m.setPrice(materialUrl.getPrice());
+            m.setBudget(budget);
         });
 
         budget.getFixedParameters().forEach(p -> {
@@ -225,9 +226,36 @@ public class BudgetService {
                 .orElseThrow(() -> new NotFoundException("Project not found"));
 
 
-        Budget currentBudget = budgetRepository.findByProject(project)
+        Budget budget = budgetRepository.findByProject(project)
                 .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
 
-        return null;
+
+        MaterialUrl materialUrl = materialUrlRepository.findById(budgetMaterial.getMaterialUrl().getId())
+                .orElseThrow(() -> new NotFoundException("Material url does not exists."));
+
+
+        Optional<BudgetMaterial> budgetMaterialExists = budgetMaterialRepository.findById(new BudgetMaterialId(budget.getId(), materialUrl.getId()));
+
+        if(budgetMaterialExists.isPresent()) {
+            budgetMaterialExists.get().setQuantity(budgetMaterial.getQuantity());
+            int index = budget.getMaterials().indexOf(budgetMaterialExists.get());
+
+            budget.getMaterials().set(index, budgetMaterialExists.get());
+        } else {
+            budgetMaterial.setBudget(budget);
+            budgetMaterial.setPrice(materialUrl.getPrice());
+
+            if(!materialUrlRepository.existsById(budgetMaterial.getMaterialUrl().getId())) {
+                throw new NotFoundException("Material does not exists");
+            }
+
+            budget.getMaterials().add(budgetMaterial);
+        }
+
+        Map<String, Double> budgetCosts = BudgetCalcs.budgetTotalCost(budget);
+        budget.setSubtotal(budgetCosts.get("subtotal"));
+        budget.setTotalCost(budgetCosts.get("totalCost"));
+
+        return budgetRepository.save(budget);
     }
 }
