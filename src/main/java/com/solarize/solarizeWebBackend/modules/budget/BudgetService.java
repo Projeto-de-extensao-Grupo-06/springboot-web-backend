@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -221,7 +220,7 @@ public class BudgetService {
         return budgetRepository.save(currentBudget);
     }
 
-    public Budget addMaterial(BudgetMaterial budgetMaterial, Long projectId) {
+    public Budget updateMaterial(List<BudgetMaterial> budgetMaterials, Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project not found"));
 
@@ -230,27 +229,29 @@ public class BudgetService {
                 .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
 
 
-        MaterialUrl materialUrl = materialUrlRepository.findById(budgetMaterial.getMaterialUrl().getId())
-                .orElseThrow(() -> new NotFoundException("Material url does not exists."));
+        budgetMaterials.forEach(budgetMaterial -> {
+            MaterialUrl materialUrl = materialUrlRepository.findById(budgetMaterial.getMaterialUrl().getId())
+                    .orElseThrow(() -> new NotFoundException("Material url does not exists."));
 
 
-        Optional<BudgetMaterial> budgetMaterialExists = budgetMaterialRepository.findById(new BudgetMaterialId(budget.getId(), materialUrl.getId()));
+            Optional<BudgetMaterial> budgetMaterialExists = budgetMaterialRepository.findById(new BudgetMaterialId(budget.getId(), materialUrl.getId()));
 
-        if(budgetMaterialExists.isPresent()) {
-            budgetMaterialExists.get().setQuantity(budgetMaterial.getQuantity());
-            int index = budget.getMaterials().indexOf(budgetMaterialExists.get());
+            if(budgetMaterialExists.isPresent()) {
+                budgetMaterialExists.get().setQuantity(budgetMaterial.getQuantity());
+                int index = budget.getMaterials().indexOf(budgetMaterialExists.get());
 
-            budget.getMaterials().set(index, budgetMaterialExists.get());
-        } else {
-            budgetMaterial.setBudget(budget);
-            budgetMaterial.setPrice(materialUrl.getPrice());
+                budget.getMaterials().set(index, budgetMaterialExists.get());
+            } else {
+                budgetMaterial.setBudget(budget);
+                budgetMaterial.setPrice(materialUrl.getPrice());
 
-            if(!materialUrlRepository.existsById(budgetMaterial.getMaterialUrl().getId())) {
-                throw new NotFoundException("Material does not exists");
+                if(!materialUrlRepository.existsById(budgetMaterial.getMaterialUrl().getId())) {
+                    throw new NotFoundException("Material does not exists");
+                }
+
+                budget.getMaterials().add(budgetMaterial);
             }
-
-            budget.getMaterials().add(budgetMaterial);
-        }
+        });
 
         Map<String, Double> budgetCosts = BudgetCalcs.budgetTotalCost(budget);
         budget.setSubtotal(budgetCosts.get("subtotal"));
@@ -258,4 +259,8 @@ public class BudgetService {
 
         return budgetRepository.save(budget);
     }
+
+//    public Budget updateFixedParameter(Long projectId, ) {
+//
+//    }
 }

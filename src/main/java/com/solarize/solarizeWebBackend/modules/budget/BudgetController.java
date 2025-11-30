@@ -1,15 +1,16 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.AddMaterialDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.UpdateMaterialDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetPatchDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
-import com.solarize.solarizeWebBackend.modules.budget.model.BudgetMaterial;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,8 +39,8 @@ public class BudgetController {
     }
 
     @PatchMapping("/projects/{projectId}/budget/material")
-    public ResponseEntity<BudgetResponseDto> addMaterial(@PathVariable Long projectId, @RequestBody @Valid AddMaterialDto dto) {
-        Budget budget = budgetService.addMaterial(BudgetMapper.toEntity(dto), projectId);
+    public ResponseEntity<BudgetResponseDto> addMaterial(@PathVariable Long projectId, @RequestBody @Valid UpdateMaterialDto dto) {
+        Budget budget = budgetService.updateMaterial(BudgetMapper.toEntity(dto), projectId);
         return ResponseEntity.ok(BudgetMapper.toDto(budget));
     }
 }
