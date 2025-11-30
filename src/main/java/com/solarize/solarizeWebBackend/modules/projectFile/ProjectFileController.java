@@ -1,8 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.projectFile;
 
 import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDTO;
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileMapper;
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDto;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +22,7 @@ public class ProjectFileController {
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<ProjectFileResponseDto>> uploadProjectFiles(
+    public ResponseEntity<List<ProjectFileResponseDTO>> uploadProjectFiles(
             @PathVariable Long projectId,
             @RequestParam List<MultipartFile> files,
             @RequestParam boolean isHomologation
@@ -31,7 +30,7 @@ public class ProjectFileController {
 
         List<ProjectFile> saved = service.uploadFiles(projectId, files, isHomologation);
 
-        List<ProjectFileResponseDto> response = saved.stream()
+        List<ProjectFileResponseDTO> response = saved.stream()
                 .map(ProjectFileMapper::toDto)
                 .collect(Collectors.toList());
 
