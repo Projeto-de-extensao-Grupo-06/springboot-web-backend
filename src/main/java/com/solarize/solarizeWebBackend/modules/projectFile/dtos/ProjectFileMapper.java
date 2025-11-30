@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.projectFile.dto;
+package com.solarize.solarizeWebBackend.modules.projectFile.dtos;
 
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;

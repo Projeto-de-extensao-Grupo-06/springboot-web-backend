@@ -1,8 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.projectFile;
 
-import com.solarize.solarizeWebBackend.modules.projectFile.dto.ProjectFileGetResponseDTO;
-import com.solarize.solarizeWebBackend.modules.projectFile.dto.ProjectFileMapper;
-import com.solarize.solarizeWebBackend.modules.projectFile.dto.ProjectFileResponseDto;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDTO;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileMapper;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
