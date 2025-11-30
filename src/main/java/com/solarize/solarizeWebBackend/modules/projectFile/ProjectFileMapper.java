@@ -2,13 +2,13 @@ package com.solarize.solarizeWebBackend.modules.projectFile;
 
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDTO;
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDTO;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDto;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDto;
 
 public class ProjectFileMapper {
 
-    public static ProjectFileResponseDTO toDto(ProjectFile entity) {
-        return ProjectFileResponseDTO.builder()
+    public static ProjectFileResponseDto toDto(ProjectFile entity) {
+        return ProjectFileResponseDto.builder()
                 .id(entity.getId())
                 .originalFilename(entity.getOriginalFilename())
                 .contentType(entity.getContentType())
@@ -27,8 +27,8 @@ public class ProjectFileMapper {
                 .build();
     }
 
-    public static ProjectFileGetResponseDTO toGetDto(ProjectFile file) {
-        return ProjectFileGetResponseDTO.builder()
+    public static ProjectFileGetResponseDto toGetDto(ProjectFile file) {
+        return ProjectFileGetResponseDto.builder()
                 .id(file.getId())
                 .originalFilename(file.getOriginalFilename())
                 .mbSize(file.getMbSize())

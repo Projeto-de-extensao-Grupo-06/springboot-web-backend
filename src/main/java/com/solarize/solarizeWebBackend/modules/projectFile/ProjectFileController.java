@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.projectFile;
 
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDTO;
-import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDTO;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileGetResponseDto;
+import com.solarize.solarizeWebBackend.modules.projectFile.dtos.ProjectFileResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +22,7 @@ public class ProjectFileController {
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<ProjectFileResponseDTO>> uploadProjectFiles(
+    public ResponseEntity<List<ProjectFileResponseDto>> uploadProjectFiles(
             @PathVariable Long projectId,
             @RequestParam List<MultipartFile> files,
             @RequestParam boolean isHomologation
@@ -30,7 +30,7 @@ public class ProjectFileController {
 
         List<ProjectFile> saved = service.uploadFiles(projectId, files, isHomologation);
 
-        List<ProjectFileResponseDTO> response = saved.stream()
+        List<ProjectFileResponseDto> response = saved.stream()
                 .map(ProjectFileMapper::toDto)
                 .collect(Collectors.toList());
 
@@ -40,7 +40,7 @@ public class ProjectFileController {
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping
-    public ResponseEntity<List<ProjectFileGetResponseDTO>> listProjectFiles(@PathVariable Long projectId) {
+    public ResponseEntity<List<ProjectFileGetResponseDto>> listProjectFiles(@PathVariable Long projectId) {
 
         List<ProjectFile> files = service.listFiles(projectId);
 
@@ -48,7 +48,7 @@ public class ProjectFileController {
             return ResponseEntity.status(204).build();
         }
 
-        List<ProjectFileGetResponseDTO> response = files.stream()
+        List<ProjectFileGetResponseDto> response = files.stream()
                 .map(ProjectFileMapper::toGetDto)
                 .toList();
 

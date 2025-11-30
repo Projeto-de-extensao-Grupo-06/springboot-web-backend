@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ProjectFileGetResponseDTO {
+public class ProjectFileGetResponseDto {
     private Long id;
     private String originalFilename;
     private Integer mbSize;

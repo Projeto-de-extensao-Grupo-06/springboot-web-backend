@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-    public class ProjectFileResponseDTO {
+    public class ProjectFileResponseDto {
         private Long id;
         private String originalFilename;
         private String contentType;
