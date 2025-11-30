@@ -7,10 +7,10 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@IdClass(FixedParameterId.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(FixedParameterId.class)
 public class FixedParameter {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

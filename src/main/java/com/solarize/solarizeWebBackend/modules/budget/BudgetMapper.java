@@ -1,8 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.UpdateMaterialDto;
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetPatchDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
@@ -111,6 +109,32 @@ public class BudgetMapper {
                     .quantity(d.getQuantity())
                     .materialUrl(materialUrl)
                     .build();
+        }).toList();
+    }
+
+    public static List<FixedParameter> toEntity(UpdateFixedParametersDto dto) {
+        return dto.getFixedParameters().stream().map(d -> {
+            FixedParameterTemplate template = new FixedParameterTemplate();
+            FixedParameter fixedParameter = new FixedParameter();
+
+            template.setUniqueName(d.getParameterName());
+            fixedParameter.setTemplate(template);
+            fixedParameter.setParameterValue(d.getValue());
+
+            return fixedParameter;
+        }).toList();
+    }
+
+    public static List<PersonalizedParameter> toEntity(UpdatePersonalizedParametersDto dto) {
+        return dto.getPersonalizedParameters().stream().map(d -> {
+            PersonalizedParameter personalizedParameter = new PersonalizedParameter();
+
+            personalizedParameter.setId(d.getId());
+            personalizedParameter.setName(d.getName());
+            personalizedParameter.setParameterValue(d.getValue());
+            personalizedParameter.setType(d.getType());
+
+            return personalizedParameter;
         }).toList();
     }
 }

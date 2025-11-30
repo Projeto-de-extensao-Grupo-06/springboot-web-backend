@@ -10,18 +10,16 @@ import java.util.List;
 
 @Data
 public class UpdateMaterialDto {
-    @NotEmpty
+    @Valid
     @NotNull
-    private List<BudgetMaterialCreateDto> materials;
+    private List<BudgetMaterialDto> materials;
 
     @Data
-    public static class BudgetMaterialCreateDto {
-        @Valid
+    public static class BudgetMaterialDto {
         @NotNull
         @Positive
         private Long materialId;
 
-        @Valid
         @NotNull
         @Positive
         private Integer quantity;

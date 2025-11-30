@@ -1,8 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.UpdateMaterialDto;
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
-import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetPatchDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import jakarta.validation.Valid;
@@ -39,8 +37,20 @@ public class BudgetController {
     }
 
     @PatchMapping("/projects/{projectId}/budget/material")
-    public ResponseEntity<BudgetResponseDto> addMaterial(@PathVariable Long projectId, @RequestBody @Valid UpdateMaterialDto dto) {
+    public ResponseEntity<BudgetResponseDto> updateMaterial(@PathVariable Long projectId, @RequestBody @Valid UpdateMaterialDto dto) {
         Budget budget = budgetService.updateMaterial(BudgetMapper.toEntity(dto), projectId);
+        return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @PatchMapping("/projects/{projectId}/budget/parameters/fixed")
+    public ResponseEntity<BudgetResponseDto> updateFixedParameters(@PathVariable Long projectId, @RequestBody @Valid UpdateFixedParametersDto dto) {
+        Budget budget = budgetService.updateFixedParameter(projectId, BudgetMapper.toEntity(dto));
+        return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @PatchMapping("/projects/{projectId}/budget/parameters/personalized")
+    public ResponseEntity<BudgetResponseDto> updatePersonalizedParameters(@PathVariable Long projectId, @RequestBody @Valid UpdatePersonalizedParametersDto dto) {
+        Budget budget = budgetService.updatePersonalizedParameter(projectId, BudgetMapper.toEntity(dto));
         return ResponseEntity.ok(BudgetMapper.toDto(budget));
     }
 }

@@ -19,18 +19,21 @@ public class BudgetManualCreateDto {
     private DiscountType discountType = DiscountType.PERCENT;
     private Boolean finalBudget = false;
 
+    @Valid
     private List<BudgetMaterialCreateDto> materials = new ArrayList<>();
+
+    @Valid
     private List<FixedParameterCreateDto> fixedParameters = new ArrayList<>();
+
+    @Valid
     private List<PersonalizedParameterDto> personalizedParameters = new ArrayList<>();
 
     @Data
     public static class BudgetMaterialCreateDto {
-        @Valid
         @NotNull
         @Positive
         private Long materialId;
 
-        @Valid
         @NotNull
         @Positive
         private Integer quantity;
@@ -38,26 +41,21 @@ public class BudgetManualCreateDto {
 
     @Data
     public static class PersonalizedParameterDto {
-        @Valid
         @NotBlank
         private String name;
 
-        @Valid
-        @NotBlank
+        @NotNull
         private ParameterValueType type;
 
-        @Valid
         @PositiveOrZero
         private Double value;
     }
 
     @Data
     public static class FixedParameterCreateDto {
-        @Valid
         @NotNull
         private FixedParameterName parameterName;
 
-        @Valid
         @PositiveOrZero
         @NotNull
         private Double value;

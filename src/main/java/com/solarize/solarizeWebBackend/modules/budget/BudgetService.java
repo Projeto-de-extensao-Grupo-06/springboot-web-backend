@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueT
 import com.solarize.solarizeWebBackend.modules.budget.helper.BudgetCalcs;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
 import com.solarize.solarizeWebBackend.modules.budget.model.serializable.BudgetMaterialId;
+import com.solarize.solarizeWebBackend.modules.budget.model.serializable.FixedParameterId;
 import com.solarize.solarizeWebBackend.modules.budget.repository.*;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import com.solarize.solarizeWebBackend.modules.material.repository.MaterialUrlRepository;
@@ -37,6 +38,8 @@ public class BudgetService {
     private final MaterialUrlRepository materialUrlRepository;
     private final ProjectRepository projectRepository;
     private final BudgetMaterialRepository budgetMaterialRepository;
+    private final FixedParameterRepository fixedParameterRepository;
+    private final PersonalizedParameterRepository personalizedParameterRepository;
 
     @PersistenceContext
     private final EntityManager em;
@@ -129,7 +132,6 @@ public class BudgetService {
             }
         }
     }
-
 
     public Budget manualBudgetCreating
             (
@@ -260,7 +262,79 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
-//    public Budget updateFixedParameter(Long projectId, ) {
-//
-//    }
+    public Budget updateFixedParameter(Long projectId, List<FixedParameter> fixedParameters) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+
+        Budget budget = budgetRepository.findByProject(project)
+                .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
+
+        fixedParameters.forEach(p -> {
+            Optional<FixedParameterTemplate> template = fixedParameterTemplateRepository
+                    .findByUniqueName(p.getTemplate().getUniqueName());
+
+            if(template.isEmpty()) {
+                throw new NotFoundException("Fixed parameter does not exists.");
+            }
+
+            Optional<FixedParameter> savedFixedParameter = fixedParameterRepository
+                    .findById(new FixedParameterId(template.get().getId(), budget.getId()));
+
+            if(savedFixedParameter.isPresent()) {
+                savedFixedParameter.get().setParameterValue(p.getParameterValue());
+
+                int index = budget.getFixedParameters().indexOf(savedFixedParameter.get());
+                budget.getFixedParameters().set(index, savedFixedParameter.get());
+            } else {
+                p.setBudget(budget);
+                p.setTemplate(template.get());
+
+                budget.getFixedParameters().add(p);
+            }
+        });
+
+        Map<String, Double> budgetCosts = BudgetCalcs.budgetTotalCost(budget);
+        budget.setTotalCost(budgetCosts.get("totalCost"));
+        budget.setSubtotal(budgetCosts.get("subtotal"));
+
+        return budgetRepository.save(budget);
+    }
+
+    public Budget updatePersonalizedParameter(Long projectId, List<PersonalizedParameter> fixedParameters) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+
+        Budget budget = budgetRepository.findByProject(project)
+                .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
+
+        fixedParameters.forEach(p -> {
+            Optional<PersonalizedParameter> savedPersonalizedParameter = Optional.empty();
+
+            if(p.getId() != null) {
+                savedPersonalizedParameter = personalizedParameterRepository.findById(p.getId());
+            }
+
+            if(savedPersonalizedParameter.isPresent()) {
+                savedPersonalizedParameter.get().setParameterValue(p.getParameterValue());
+                savedPersonalizedParameter.get().setType(p.getType());
+                savedPersonalizedParameter.get().setName(p.getName());
+
+                int index = budget.getPersonalizedParameters().indexOf(savedPersonalizedParameter.get());
+                budget.getPersonalizedParameters().set(index, savedPersonalizedParameter.get());
+            } else {
+                p.setId(null);
+                p.setBudget(budget);
+
+                budget.getPersonalizedParameters().add(p);
+            }
+        });
+
+        Map<String, Double> budgetCosts = BudgetCalcs.budgetTotalCost(budget);
+        budget.setTotalCost(budgetCosts.get("totalCost"));
+        budget.setSubtotal(budgetCosts.get("subtotal"));
+
+        return budgetRepository.save(budget);
+    }
 }
