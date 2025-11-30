@@ -22,6 +22,5 @@ public class FixedParameter {
     @JoinColumn(name = "fk_template")
     private FixedParameterTemplate template;
 
-    @Column(unique = true)
     private Double parameterValue;
 }

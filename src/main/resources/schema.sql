@@ -50,15 +50,15 @@ INSERT INTO coworker (
 --------------------------------------------
 -- BUDGET
 --------------------------------------------
-INSERT INTO budget (
-    total_cost,
-    discount,
-    final_budget
-) VALUES (
-    15000.00,
-    0.00,
-    TRUE
-);
+-- INSERT INTO budget (
+--     total_cost,
+--     discount,
+--     final_budget
+-- ) VALUES (
+--     15000.00,
+--     0.00,
+--     TRUE
+-- );
 
 --------------------------------------------
 -- MATERIALS
@@ -111,7 +111,6 @@ INSERT INTO project (
     is_active,
     fk_client,
     fk_responsible,
-    fk_budget,
     fk_address,
     created_at,
     deadline,
@@ -120,6 +119,4 @@ INSERT INTO project (
     name,
     description
 ) VALUES
-('NEW', 3, NULL, TRUE, 1, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp'),
-('PRE_BUDGET', 4, NULL, TRUE, 2, 1, 1, 1, NOW(), DATEADD('DAY', 20, NOW()), 'OFF_GRID', 'SITE', 'Projeto Solar — Cliente Maria', 'Sistema híbrido 3kWp'),
-('COMPLETED', 13, NULL, TRUE, 3, 1, 1, 1, NOW(), DATEADD('DAY', 30, NOW()), 'ON_GRID', 'BOT', 'Projeto Solar — Cliente Carlos', 'Instalação residencial padrão');
+('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');

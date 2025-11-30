@@ -1,8 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
-import com.solarize.solarizeWebBackend.modules.material.model.Material;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 
 import java.util.List;
@@ -45,6 +45,51 @@ public class BudgetMapper {
                 .fixedParameters(fixedParameters)
                 .personalizedParameters(personalizedParameters)
                 .materials(budgetMaterials)
+                .build();
+    }
+
+
+    public static BudgetResponseDto toDto(Budget budget) {
+        List<BudgetResponseDto.FixedParameterResponseDto> fixedParameters = budget.getFixedParameters().stream()
+                .map(p ->
+                        BudgetResponseDto.FixedParameterResponseDto.builder()
+                                .parameterName(p.getTemplate().getUniqueName())
+                                .valueType(p.getTemplate().getType())
+                                .value(p.getParameterValue())
+                                .build()
+                ).toList();
+
+        List<BudgetResponseDto.PersonalizedParameterResponseDto> personalizedParameters = budget.getPersonalizedParameters().stream()
+                .map(p ->
+                        BudgetResponseDto.PersonalizedParameterResponseDto.builder()
+                                .id(p.getId())
+                                .name(p.getName())
+                                .type(p.getType())
+                                .value(p.getParameterValue())
+                                .build()
+                        ).toList();
+
+        List<BudgetResponseDto.BudgetMaterialResponseDto> materialsUrl = budget.getMaterials().stream()
+                .map(m ->
+                        BudgetResponseDto.BudgetMaterialResponseDto.builder()
+                                .materialUrlId(m.getMaterialUrl().getId())
+                                .name(m.getMaterialUrl().getMaterial().getName())
+                                .url(m.getMaterialUrl().getUrl())
+                                .unitPrice(m.getPrice())
+                                .quantity(m.getQuantity())
+                                .build()
+                ).toList();
+
+        return BudgetResponseDto.builder()
+                .id(budget.getId())
+                .totalCost(budget.getTotalCost())
+                .subtotal(budget.getSubtotal())
+                .discount(budget.getDiscount())
+                .discountType(budget.getDiscountType())
+                .finalBudget(budget.getFinalBudget())
+                .materials(materialsUrl)
+                .fixedParameters(fixedParameters)
+                .personalizedParameters(personalizedParameters)
                 .build();
     }
 }

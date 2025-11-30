@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface FixedParameterTemplateRepository extends JpaRepository<FixedParameterTemplate, Long> {
     Optional<FixedParameterTemplate> findByUniqueName(FixedParameterName uniqueName);
+
+    FixedParameterTemplate getReferenceByUniqueName(FixedParameterName uniqueName);
 }

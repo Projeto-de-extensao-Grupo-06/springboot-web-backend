@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.budget.dto;
+package com.solarize.solarizeWebBackend.modules.budget.dto.request;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 public class BudgetManualCreateDto {
-    @Positive
+    @PositiveOrZero
     private Double discount = 0.0;
     private DiscountType discountType = DiscountType.PERCENT;
     private Boolean finalBudget = false;

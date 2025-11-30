@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
-import com.solarize.solarizeWebBackend.modules.budget.dto.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @PostMapping("/projects/{projectId}/budget")
-    public ResponseEntity<Void> createBudget(@PathVariable Long projectId, @RequestBody @Valid BudgetManualCreateDto dto) {
+    public ResponseEntity<BudgetResponseDto> createBudget(@PathVariable Long projectId, @RequestBody @Valid BudgetManualCreateDto dto) {
         Budget budget = BudgetMapper.toEntity(dto);
         Budget budgetCreated = budgetService.manualBudgetCreating(budget, projectId);
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body(BudgetMapper.toDto(budgetCreated));
     }
 }

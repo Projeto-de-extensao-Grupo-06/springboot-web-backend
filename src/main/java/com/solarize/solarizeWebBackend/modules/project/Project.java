@@ -46,8 +46,7 @@ public class Project {
     @JoinColumn(name = "fk_responsible")
     private Coworker responsible;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_budget")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "project")
     private Budget budget;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +37,8 @@ public class Budget {
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PersonalizedParameter> personalizedParameters = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_project")
+    private Project project;
 }
