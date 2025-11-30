@@ -9,8 +9,10 @@ import com.solarize.solarizeWebBackend.modules.budget.repository.*;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import com.solarize.solarizeWebBackend.modules.material.repository.MaterialUrlRepository;
 import com.solarize.solarizeWebBackend.modules.project.Project;
+import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
+import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -33,6 +35,7 @@ public class BudgetService {
     private final ConfigParameterRepository configParameterRepository;
     private final FixedParameterTemplateRepository fixedParameterTemplateRepository;
     private final MaterialUrlRepository materialUrlRepository;
+    private final ProjectRepository projectRepository;
 
     @PersistenceContext
     private final EntityManager em;
@@ -133,9 +136,10 @@ public class BudgetService {
                     Long projectId
             )
     {
-        Project projectProxy = em.getReference(Project.class, projectId);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
 
-        if(budgetRepository.existsByProject(projectProxy)) {
+        if(budgetRepository.existsByProject(project)) {
             throw new ConflictException("The project already has a linked budget.");
         }
 
@@ -165,18 +169,23 @@ public class BudgetService {
             }
         });
 
+        budget.getPersonalizedParameters().forEach(p -> p.setBudget(budget));
+
         Map<String, Double> budgetCost = BudgetCalcs.budgetTotalCost(budget);
 
 
-        budget.setProject(projectProxy);
+        budget.setProject(project);
         budget.setSubtotal(budgetCost.get("subtotal"));
         budget.setTotalCost(budgetCost.get("totalCost"));
 
-
-        log.info(String.valueOf(budget.getSubtotal()));
-        log.info(String.valueOf(budget.getTotalCost()));
-
-
         return budgetRepository.save(budget);
+    }
+
+    public Budget getBudget(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+        return budgetRepository.findByProject(project)
+                .orElseThrow(() -> new NotFoundException("The project does not have a linked budget."));
     }
 }
