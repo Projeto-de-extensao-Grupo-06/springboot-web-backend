@@ -33,4 +33,6 @@ public class ProjectFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_coworker")
     private Coworker uploader;
+
+    private String contentType;
 }
