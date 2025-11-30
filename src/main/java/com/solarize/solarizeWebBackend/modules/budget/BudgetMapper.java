@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetPatchDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
 import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
@@ -48,6 +49,13 @@ public class BudgetMapper {
                 .build();
     }
 
+    public static Budget toEntity(BudgetPatchDto dto) {
+        return Budget.builder()
+                .discount(dto.getDiscount())
+                .discountType(dto.getDiscountType())
+                .finalBudget(dto.getFinalBudget())
+                .build();
+    }
 
     public static BudgetResponseDto toDto(Budget budget) {
         List<BudgetResponseDto.FixedParameterResponseDto> fixedParameters = budget.getFixedParameters().stream()

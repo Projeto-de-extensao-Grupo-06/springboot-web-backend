@@ -188,4 +188,46 @@ public class BudgetService {
         return budgetRepository.findByProject(project)
                 .orElseThrow(() -> new NotFoundException("The project does not have a linked budget."));
     }
+
+    public Budget updateBudget(Budget budget, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+
+        Budget currentBudget = budgetRepository.findByProject(project)
+                .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
+
+
+        currentBudget.setDiscount(
+                Optional.ofNullable(budget.getDiscount())
+                        .orElse(currentBudget.getDiscount())
+        );
+
+        currentBudget.setDiscountType(
+                Optional.ofNullable(budget.getDiscountType())
+                        .orElse(currentBudget.getDiscountType())
+        );
+
+        currentBudget.setFinalBudget(
+                Optional.ofNullable(budget.getFinalBudget())
+                        .orElse(currentBudget.getFinalBudget())
+        );
+
+        Map<String, Double> budgetCosts = BudgetCalcs.budgetTotalCost(currentBudget);
+        currentBudget.setTotalCost(budgetCosts.get("totalCost"));
+        currentBudget.setSubtotal(budgetCosts.get("subtotal"));
+
+        return budgetRepository.save(currentBudget);
+    }
+
+    public Budget addMaterial(BudgetMaterial budgetMaterial, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+
+        Budget currentBudget = budgetRepository.findByProject(project)
+                .orElseThrow(() -> new ConflictException("The project don't have a linked budget."));
+
+        return null;
+    }
 }
