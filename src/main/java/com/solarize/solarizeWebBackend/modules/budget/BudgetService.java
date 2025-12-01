@@ -41,9 +41,6 @@ public class BudgetService {
     private final FixedParameterRepository fixedParameterRepository;
     private final PersonalizedParameterRepository personalizedParameterRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
-
     @EventListener(ApplicationReadyEvent.class)
     public void creatingConfigParams() {
         List<ConfigParameter> parameters = List.of(
