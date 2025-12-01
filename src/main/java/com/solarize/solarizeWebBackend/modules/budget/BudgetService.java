@@ -334,4 +334,67 @@ public class BudgetService {
 
         return budgetRepository.save(budget);
     }
+
+    public Budget deleteMaterial(Long budgetId, Long materialUrlId) {
+        BudgetMaterialId budgetMaterialId = new BudgetMaterialId(budgetId, materialUrlId);
+
+        if(!budgetMaterialRepository.existsById(budgetMaterialId)) {
+            throw new NotFoundException("Material not found in budget");
+        }
+
+        budgetMaterialRepository.deleteById(budgetMaterialId);
+
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new NotFoundException("Budget not exists."));
+
+        Map<String, Double> totalCosts = BudgetCalcs.budgetTotalCost(budget);
+
+        budget.setSubtotal(totalCosts.get("subtotal"));
+        budget.setTotalCost(totalCosts.get("totalCost"));
+
+        return budgetRepository.save(budget);
+    }
+
+    public Budget deleteFixedParameter(Long budgetId, FixedParameterName parameterName) {
+        FixedParameterTemplate template = fixedParameterTemplateRepository.findByUniqueName(parameterName)
+                .orElseThrow(() -> new NotFoundException("Fixed parameter does not exists."));
+
+        FixedParameterId fixedParameterId = new FixedParameterId(template.getId(), budgetId);
+
+        if(!fixedParameterRepository.existsById(fixedParameterId)) {
+            throw new NotFoundException("Parameter not found in budget");
+        }
+
+        fixedParameterRepository.deleteById(fixedParameterId);
+
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new NotFoundException("Budget does not exists."));
+
+        Map<String, Double> totalCosts = BudgetCalcs.budgetTotalCost(budget);
+        budget.setSubtotal(totalCosts.get("subtotal"));
+        budget.setTotalCost(totalCosts.get("totalCost"));
+
+        return budgetRepository.save(budget);
+    }
+
+    public Budget deletePersonalizedParameter(Long budgetId, Long parameterId) {
+        if(!budgetRepository.existsById(budgetId)) {
+            throw new NotFoundException("Budget does not exists.");
+        }
+
+        if(!personalizedParameterRepository.existsById(parameterId)) {
+            throw new NotFoundException("Parameter not found in budget");
+        }
+
+        personalizedParameterRepository.deleteById(parameterId);
+
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new NotFoundException("Budget does not exists."));
+
+        Map<String, Double> totalCosts = BudgetCalcs.budgetTotalCost(budget);
+        budget.setSubtotal(totalCosts.get("subtotal"));
+        budget.setTotalCost(totalCosts.get("totalCost"));
+
+        return budgetRepository.save(budget);
+    }
 }

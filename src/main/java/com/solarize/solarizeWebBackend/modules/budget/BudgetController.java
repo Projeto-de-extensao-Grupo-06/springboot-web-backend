@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,24 @@ public class BudgetController {
     @PatchMapping("/projects/{projectId}/budget/parameters/personalized")
     public ResponseEntity<BudgetResponseDto> updatePersonalizedParameters(@PathVariable Long projectId, @RequestBody @Valid UpdatePersonalizedParametersDto dto) {
         Budget budget = budgetService.updatePersonalizedParameter(projectId, BudgetMapper.toEntity(dto));
+        return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @DeleteMapping("/budgets/{budgetId}/materials/{materialId}")
+    public ResponseEntity<BudgetResponseDto> deleteMaterials(@PathVariable Long budgetId, @PathVariable Long materialId) {
+        Budget budget = budgetService.deleteMaterial(budgetId, materialId);
+        return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @DeleteMapping("/budgets/{budgetId}/parameters/fixed/{parameterName}")
+    public ResponseEntity<BudgetResponseDto> deleteFixedParameter(@PathVariable Long budgetId, @PathVariable FixedParameterName parameterName) {
+        Budget budget = budgetService.deleteFixedParameter(budgetId, parameterName);
+        return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @DeleteMapping("/budgets/{budgetId}/parameters/personalized/{parameterId}")
+    public ResponseEntity<BudgetResponseDto> deleteFixedParameter(@PathVariable Long budgetId, @PathVariable Long parameterId) {
+        Budget budget = budgetService.deletePersonalizedParameter(budgetId, parameterId);
         return ResponseEntity.ok(BudgetMapper.toDto(budget));
     }
 }
