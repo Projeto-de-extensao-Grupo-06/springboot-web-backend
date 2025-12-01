@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.shared.email.model;
+package com.solarize.solarizeWebBackend.shared.communication.email.model;
 
 import lombok.*;
 

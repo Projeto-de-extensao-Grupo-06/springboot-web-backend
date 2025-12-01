@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.shared.exceptions.BaseException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationError;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,18 +19,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ExceptionsMapper {
+
     public static ErrorResponse of(BaseException ex) {
+         final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+         final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message(ex.getMessage())
                 .status(ex.getSTATUS())
                 .typeError(ex.getSTATUS_DESC())
-                .path(ex.getPATH())
+                .path(uri)
+                .method(method)
                 .timestamp(ex.getTIMESTAMP())
                 .build();
     }
 
     public static FieldsResponseError of(MethodArgumentNotValidException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         List<ValidationError> validationsErros = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -41,27 +50,36 @@ public class ExceptionsMapper {
                 .message("Fields Validation error")
                 .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .timestamp(LocalDateTime.now())
                 .validationErrors(validationsErros)
                 .build();
     }
 
     public static ErrorResponse internalServerError() {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return new ErrorResponse(
                 "Internal Server Error",
                 String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI(),
+                uri,
+                method,
                 LocalDateTime.now()
         );
     }
 
     public static ErrorResponse of(HttpMessageNotReadableException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message("The request body is malformed or contains invalid data. Please check your JSON payload and try again.")
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .timestamp(LocalDateTime.now())
@@ -69,10 +87,14 @@ public class ExceptionsMapper {
     }
 
     public static ErrorResponse uriNotFound() {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message("Endpoint not found.")
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.NOT_FOUND.value()))
                 .timestamp(LocalDateTime.now())
@@ -81,10 +103,14 @@ public class ExceptionsMapper {
 
 
     public static ErrorResponse of(BadCredentialsException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message(ex.getMessage())
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
                 .timestamp(LocalDateTime.now())
@@ -92,10 +118,14 @@ public class ExceptionsMapper {
     }
 
     public static ErrorResponse of(HttpRequestMethodNotSupportedException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message("Request method is not supported")
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()))
                 .timestamp(LocalDateTime.now())
@@ -103,10 +133,14 @@ public class ExceptionsMapper {
     }
 
     public static ErrorResponse of(AuthorizationDeniedException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message("You do not have permission to request this endpoint.")
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.FORBIDDEN.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.FORBIDDEN.value()))
                 .timestamp(LocalDateTime.now())
@@ -114,14 +148,17 @@ public class ExceptionsMapper {
     }
 
     public static ErrorResponse of(MethodArgumentTypeMismatchException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
         return ErrorResponse
                 .builder()
                 .message("The provided parameter is invalid. Please ensure the value matches the expected type.")
-                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .path(uri)
+                .method(method)
                 .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-
 }
