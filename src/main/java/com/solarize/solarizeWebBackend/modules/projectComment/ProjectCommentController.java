@@ -1,0 +1,53 @@
+package com.solarize.solarizeWebBackend.modules.projectComment;
+
+
+import com.solarize.solarizeWebBackend.modules.projectComment.DTO.CreateProjectCommentRequestDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.DTO.ProjectCommentResponseDTO;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/projectId/comments")
+public class ProjectCommentController {
+
+    private final ProjectCommentService projectCommentService;
+
+    @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
+    @PostMapping
+    public ResponseEntity<ProjectComment> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO dto){
+
+        ProjectComment responseDTO = projectCommentService.create(projectId, dto);
+
+        return ResponseEntity.status(201).body(responseDTO);
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
+    @GetMapping
+    public ResponseEntity<Page<ProjectCommentResponseDTO>> getCommentByProject(@PathVariable Long projectId, @PageableDefault (page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable){
+
+        return ResponseEntity.ok(projectCommentService.listCommentsByProject(projectId, pageable));
+
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id){
+
+        projectCommentService.deleteComment(id);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+
+}
