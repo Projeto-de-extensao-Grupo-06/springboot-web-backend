@@ -4,9 +4,9 @@ import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
-import com.solarize.solarizeWebBackend.modules.projectComment.DTO.CreateProjectCommentRequestDTO;
-import com.solarize.solarizeWebBackend.modules.projectComment.DTO.ProjectCommentMapper;
-import com.solarize.solarizeWebBackend.modules.projectComment.DTO.ProjectCommentResponseDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.CreateProjectCommentRequestDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentMapper;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentResponseDTO;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,13 +31,13 @@ public class ProjectCommentService {
         return repository.countByProjectId(projectId);
     }
 
-    public ProjectComment create(Long projectId, CreateProjectCommentRequestDTO dto) {
+    public ProjectCommentResponseDTO create(CreateProjectCommentRequestDTO dto) {
 
         Coworker author = coworkerRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new NotFoundException("Author not found with id: ".formatted(dto.getAuthorId())));
+                .orElseThrow(() -> new NotFoundException("Author not found"));
 
         Project project = projectRepository.findById(dto.getProjectId())
-                .orElseThrow(() -> new NotFoundException("Project not found with id: ".formatted(dto.getProjectId())));
+                .orElseThrow(() -> new NotFoundException("Project not found"));
 
         ProjectComment comment = new ProjectComment();
         comment.setAuthor(author);
@@ -45,7 +45,8 @@ public class ProjectCommentService {
         comment.setComment(dto.getComment());
         comment.setCreatedAt(LocalDateTime.now());
 
-        return repository.save(comment);
+        ProjectComment save = repository.save(comment);
+        return ProjectCommentMapper.toDto(save);
 
     }
 

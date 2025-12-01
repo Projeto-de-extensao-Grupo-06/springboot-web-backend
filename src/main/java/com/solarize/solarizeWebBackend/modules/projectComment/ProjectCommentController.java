@@ -1,8 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.projectComment;
 
 
-import com.solarize.solarizeWebBackend.modules.projectComment.DTO.CreateProjectCommentRequestDTO;
-import com.solarize.solarizeWebBackend.modules.projectComment.DTO.ProjectCommentResponseDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.CreateProjectCommentRequestDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/projectId/comments")
@@ -24,11 +22,11 @@ public class ProjectCommentController {
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PostMapping
-    public ResponseEntity<ProjectComment> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO dto){
+    public ResponseEntity<ProjectCommentResponseDTO> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO dto){
 
-        ProjectComment responseDTO = projectCommentService.create(projectId, dto);
+        ProjectCommentResponseDTO response = projectCommentService.create(dto);
 
-        return ResponseEntity.status(201).body(responseDTO);
+        return ResponseEntity.status(201).body(response);
     }
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")

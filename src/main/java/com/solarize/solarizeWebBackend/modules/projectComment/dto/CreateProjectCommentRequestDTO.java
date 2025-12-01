@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.projectComment.DTO;
+package com.solarize.solarizeWebBackend.modules.projectComment.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
