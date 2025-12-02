@@ -13,15 +13,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-
     private final ScheduleRepository repository;
     private final CoworkerRepository coworkerRepository;
 
-    public Schedule createSchedule(CreateScheduleDTO dto) {
-        Schedule schedule = ScheduleMapper.toEntity(dto);
-
-        Coworker coworker = coworkerRepository.findById(dto.getCoworkerId())
-                .orElseThrow(() -> new NotFoundException("Colaborador com ID " + dto.getCoworkerId() + " não encontrado."));
+    public Schedule createSchedule(Schedule schedule) {
+        Coworker coworker = coworkerRepository.findById(schedule.getCoworker().getId())
+                .orElseThrow(() -> new NotFoundException("Colaborador com ID " + schedule.getCoworker().getId() + " não encontrado."));
 
         schedule.setCoworker(coworker);
         return repository.save(schedule);

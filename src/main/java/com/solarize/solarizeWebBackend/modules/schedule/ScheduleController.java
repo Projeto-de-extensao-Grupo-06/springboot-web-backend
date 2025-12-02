@@ -20,7 +20,8 @@ public class ScheduleController {
     @PreAuthorize("hasAuthority('SCHEDULE_WRITE')")
     @PostMapping
     public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody @Valid CreateScheduleDTO scheduleDTO) {
-        Schedule createdSchedule = service.createSchedule(scheduleDTO);
+        Schedule schedule = ScheduleMapper.toEntity(scheduleDTO);
+        Schedule createdSchedule = service.createSchedule(schedule);
         ScheduleResponseDTO dto = ScheduleMapper.toDto(createdSchedule);
         return ResponseEntity.status(201).body(dto);
     }
