@@ -17,7 +17,7 @@ import java.util.List;
 public class BudgetController {
     private final BudgetService budgetService;
 
-    @PreAuthorize("hasAuthority('BUDGET_CREATE')")
+    @PreAuthorize("hasAuthority('BUDGET_WRITE')")
     @PostMapping("/projects/{projectId}/budget")
     public ResponseEntity<BudgetResponseDto> createBudget(@PathVariable Long projectId, @RequestBody @Valid BudgetManualCreateDto dto) {
         Budget budget = BudgetMapper.toEntity(dto);
