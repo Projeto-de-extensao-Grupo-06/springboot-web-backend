@@ -47,8 +47,6 @@ public class ScheduleMapper {
         schedule.setStartDate(dto.getStartDate());
         schedule.setEndDate(dto.getEndDate());
         schedule.setType(dto.getType());
-        schedule.setStatus(dto.getStatus());
-        schedule.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
         schedule.setCoworker(coworker);
         schedule.setNotificationAlertTime(dto.getNotificationAlertTime());
 
