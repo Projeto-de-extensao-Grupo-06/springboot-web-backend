@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -87,10 +88,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.error("Unhandled exception", ex);
         return new ResponseEntity<>(ExceptionsMapper.internalServerError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
 }

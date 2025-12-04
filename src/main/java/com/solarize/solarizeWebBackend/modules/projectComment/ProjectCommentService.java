@@ -31,36 +31,35 @@ public class ProjectCommentService {
         return repository.countByProjectId(projectId);
     }
 
-    public ProjectCommentResponseDTO create(CreateProjectCommentRequestDTO dto) {
+    public ProjectComment create(ProjectComment projectComment) {
 
-        Coworker author = coworkerRepository.findById(dto.getAuthorId())
+
+        Coworker author = coworkerRepository.findById(projectComment.getAuthor().getId())
                 .orElseThrow(() -> new NotFoundException("Author not found"));
 
-        Project project = projectRepository.findById(dto.getProjectId())
+        Project project = projectRepository.findById(projectComment.getProject().getId())
                 .orElseThrow(() -> new NotFoundException("Project not found"));
 
-        ProjectComment comment = new ProjectComment();
-        comment.setAuthor(author);
-        comment.setProject(project);
-        comment.setComment(dto.getComment());
-        comment.setCreatedAt(LocalDateTime.now());
+        projectComment.setAuthor(author);
+        projectComment.setProject(project);
+        projectComment.setComment(projectComment.getComment());
+        projectComment.setCreatedAt(LocalDateTime.now());
 
-        ProjectComment save = repository.save(comment);
-        return ProjectCommentMapper.toDto(save);
+        return repository.save(projectComment);
 
     }
 
-    public Page<ProjectCommentResponseDTO> listCommentsByProject(Long projectId, Pageable pageable){
+    public Page<ProjectComment> listCommentsByProject(Long projectId, Pageable pageable){
 
         if (!projectRepository.existsById(projectId)){
             throw new NotFoundException("Project not found");
         }
 
-        return repository.findAllByProject(projectId,pageable).map(ProjectCommentMapper::toDto);
+        return repository.findAllByProject(projectId,pageable);
 
     }
 
-    public void deleteComment(Long id) throws AccessDeniedException {
+    public void deleteComment(Long id) {
 
         ProjectComment comment = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Comments not found"));
@@ -74,6 +73,7 @@ public class ProjectCommentService {
 
         if (!isAdmin && !comment.getAuthor().getEmail().equals(currentUserEmail)){
             throw new AccessDeniedException("You are not allowed  to delete others users comments");
+           
         }
 
         repository.delete(comment);

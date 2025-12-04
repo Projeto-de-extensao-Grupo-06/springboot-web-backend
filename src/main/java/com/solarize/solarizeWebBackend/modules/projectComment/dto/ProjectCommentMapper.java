@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 
 public class ProjectCommentMapper {
 
-    public static ProjectCommentResponseDTO toDto (ProjectComment entity){
+    public static ProjectCommentResponseDTO toDto (ProjectComment project){
 
-        if (entity == null) return null;
+        if (project == null) return null;
 
         return ProjectCommentResponseDTO.builder()
-                .id(entity.getId())
-                .author(CoworkerMapper.toDto(entity.getAuthor()))
-                .comment(entity.getComment())
-                .createdAt(entity.getCreatedAt())
+                .id(project.getId())
+                .author(CoworkerMapper.toDto(project.getAuthor()))
+                .comment(project.getComment())
+                .createdAt(project.getCreatedAt())
                 .build();
 
     }
