@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -18,7 +17,7 @@ public class Schedule {
     @Column(name = "id_schedule")
     private Long id;
 
-    private LocalTime notificationAlertTime;
+    private LocalDateTime notificationAlertTime;
 
     private LocalDateTime startDate;
 

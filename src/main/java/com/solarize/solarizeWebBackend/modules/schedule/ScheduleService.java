@@ -1,16 +1,16 @@
 package com.solarize.solarizeWebBackend.modules.schedule;
 
-import com.solarize.solarizeWebBackend.modules.budget.repository.BudgetRepository;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
-import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
-import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
+import com.solarize.solarizeWebBackend.shared.event.ScheduleInProgress;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
+import com.solarize.solarizeWebBackend.shared.scheduler.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,8 @@ import java.util.List;
 public class ScheduleService {
     private final ScheduleRepository repository;
     private final CoworkerRepository coworkerRepository;
-    private ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SchedulerService schedulerService;
 
     public Schedule createSchedule(Schedule schedule, Boolean force) {
         Coworker coworker;
@@ -78,16 +79,32 @@ public class ScheduleService {
                     "Only NOTE type schedules can be created without an associated project.");
         }
 
+        if(schedule.getStartDate().isAfter(schedule.getEndDate())) {
+            throw new BadRequestException("Schedule cannot have a start date after en date");
+        }
+
         schedule.setStatus(ScheduleStatusEnum.MARKED);
+        schedule.setNotificationAlertTime(schedule.getStartDate().minusDays(1));
+        schedule.setIsActive(true);
 
         Schedule newSchedule = repository.save(schedule);
 
+        schedulerService.scheduleTask("visit-in-progress-" + schedule.getId(), () -> {
+            eventPublisher.publishEvent(new ScheduleInProgress(
+                    newSchedule.getId(),
+                    newSchedule.getStartDate(),
+                    newSchedule.getEndDate()
+            ));
+        }, schedule.getStartDate());
+
         eventPublisher.publishEvent(new ScheduleCreatedEvent(
+                newSchedule.getId(),
                 newSchedule.getStartDate(),
                 newSchedule.getEndDate(),
                 newSchedule.getStatus(),
                 newSchedule.getType(),
-                schedule.getProject().getId()
+                schedule.getProject().getId(),
+                schedule.getNotificationAlertTime()
         ));
 
         return newSchedule;
@@ -95,7 +112,7 @@ public class ScheduleService {
 
     public Schedule getScheduleById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Schedule not found "));
+                .orElseThrow(() -> new NotFoundException("Schedule not found."));
     }
 
     public Schedule updateSchedule(Long id, Schedule schedule){
@@ -114,8 +131,20 @@ public class ScheduleService {
 
     }
 
-    public List<Schedule> getAllSchedules() {
-        return repository.findAll();
+    public List<Schedule> listScheduleMonth(Integer year, Integer month) {
+        LocalDateTime start;
+        LocalDateTime end;
+
+        if(year == null || month == null) {
+            LocalDateTime now = LocalDateTime.now();
+            start = LocalDateTime.of(now.getYear(), now.getMonth(), 1, 0, 0);
+        } else {
+            start = LocalDateTime.of(year, month, 1, 0, 0);
+        }
+
+        end = start.plusMonths(1);
+
+        return repository.findAllByStartDateBetween(start, end);
     }
 
     public void deleteSchedule(Long id) {
@@ -130,4 +159,22 @@ public class ScheduleService {
         return repository.findNextScheduleByProjectId(projectId);
     }
 
+    @EventListener
+    public void visitInProgressUpdate(ScheduleInProgress event) {
+        Schedule schedule = repository.findById(event.scheduleId())
+                .orElseThrow(() -> new NotFoundException("Schedule does not exists"));
+
+        schedule.setStatus(ScheduleStatusEnum.IN_PROGRESS);
+
+        repository.save(schedule);
+    }
+
+    @EventListener
+    public void scheduleNotification(ScheduleCreatedEvent event) {
+        String taskName = "schedule-notification-" + event.scheduleId();
+
+        schedulerService.scheduleTask(taskName, () -> {
+            System.out.println("Notificação enviada.");
+        }, event.notificationDateTime());
+    }
 }

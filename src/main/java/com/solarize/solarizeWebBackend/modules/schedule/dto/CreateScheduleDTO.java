@@ -31,7 +31,4 @@ public class CreateScheduleDTO {
     private Long coworkerId;
 
     private Long projectId;
-    
-    private LocalTime notificationAlertTime;
-
 }

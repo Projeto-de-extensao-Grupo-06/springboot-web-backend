@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.schedule;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 
@@ -16,6 +17,7 @@ public class ScheduleMapper {
                     .id(schedule.getId())
                     .startDate(schedule.getStartDate())
                     .endDate(schedule.getEndDate())
+                .notificationDate(schedule.getNotificationAlertTime())
                     .isActive(schedule.getIsActive())
                     .projectId(schedule.getProject() != null ? schedule.getProject().getId() : null)
                     .type(schedule.getType().name())
@@ -41,6 +43,9 @@ public class ScheduleMapper {
         Coworker coworker = new Coworker();
         coworker.setId(dto.getCoworkerId());
 
+        Project project = new Project();
+        project.setId(dto.getProjectId());
+
         Schedule schedule = new Schedule();
         schedule.setTitle(dto.getTitle());
         schedule.setDescription(dto.getDescription());
@@ -48,7 +53,7 @@ public class ScheduleMapper {
         schedule.setEndDate(dto.getEndDate());
         schedule.setType(dto.getType());
         schedule.setCoworker(coworker);
-        schedule.setNotificationAlertTime(dto.getNotificationAlertTime());
+        schedule.setProject(project);
 
         return schedule;
 

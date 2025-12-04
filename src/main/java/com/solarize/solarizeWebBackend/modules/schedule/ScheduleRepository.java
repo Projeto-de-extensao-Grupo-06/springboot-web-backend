@@ -22,4 +22,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 
     List<Schedule> findScheduleByCoworkerAndIsActiveTrue(Coworker coworker);
+
+    List<Schedule> findAllByStartDateBetween(LocalDateTime startDateAfter, LocalDateTime startDateBefore);
 }

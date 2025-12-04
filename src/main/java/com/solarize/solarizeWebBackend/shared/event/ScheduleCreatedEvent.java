@@ -7,10 +7,12 @@ import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import java.time.LocalDateTime;
 
 public record ScheduleCreatedEvent(
+        Long scheduleId,
         LocalDateTime startDate,
         LocalDateTime endDate,
         ScheduleStatusEnum status,
         ScheduleTypeEnum type,
-        Long projectId
+        Long projectId,
+        LocalDateTime notificationDateTime
 ) {
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -19,9 +20,12 @@ public class ScheduleController {
 
     @PreAuthorize("hasAuthority('SCHEDULE_WRITE')")
     @PostMapping
-    public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody @Valid CreateScheduleDTO scheduleDTO) {
+    public ResponseEntity<ScheduleResponseDTO> createSchedule(
+            @RequestBody @Valid CreateScheduleDTO scheduleDTO,
+            @RequestParam(required = false, defaultValue = "false") Boolean force
+    ) {
         Schedule schedule = ScheduleMapper.toEntity(scheduleDTO);
-        Schedule createdSchedule = service.createSchedule(schedule);
+        Schedule createdSchedule = service.createSchedule(schedule, force);
         ScheduleResponseDTO dto = ScheduleMapper.toDto(createdSchedule);
         return ResponseEntity.status(201).body(dto);
     }
@@ -45,11 +49,16 @@ public class ScheduleController {
 
     @PreAuthorize("hasAuthority('SCHEDULE_READ')")
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDTO>> getAllSchedules() {
-        List<Schedule> schedules = service.getAllSchedules();
+    public ResponseEntity<List<ScheduleResponseDTO>> getAllSchedules(
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month
+    ) {
+        List<Schedule> schedules = service.listScheduleMonth(year, month);
+
         if (schedules.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         List<ScheduleResponseDTO> dtos = ScheduleMapper.toDtoList(schedules);
         return ResponseEntity.ok(dtos);
     }
