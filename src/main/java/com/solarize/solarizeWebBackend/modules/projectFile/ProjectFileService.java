@@ -87,9 +87,9 @@ public class ProjectFileService {
             entity.setUploader(getCurrentUser());
 
             var existingOpt = repository.findByCheckSum(savedInfo.sha256());
-            if (existingOpt.isPresent()) {
+            if (!existingOpt.isEmpty()) {
 
-                entity.setFilename(existingOpt.get().getFilename());
+                entity.setFilename(existingOpt.getFirst().getFilename());
             } else {
 
                 String uuidName = UUID.randomUUID().toString();
