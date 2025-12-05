@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.shared.email;
+package com.solarize.solarizeWebBackend.shared.communication.email;
 
 import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
 import jakarta.mail.MessagingException;

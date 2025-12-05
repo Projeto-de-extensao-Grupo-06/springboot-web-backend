@@ -44,7 +44,7 @@ class TechnicalVisitCompletedTest {
                 .withBudget(budget)
                 .build();
 
-        project.getStatus().getState().applyToFinalBudget(project);
+        project.getStatus().getStateHandler().applyToFinalBudget(project);
 
         assertEquals(ProjectStatusEnum.FINAL_BUDGET, project.getStatus());
         assertEquals(ProjectStatusEnum.TECHNICAL_VISIT_COMPLETED, project.getPreviewStatus());
@@ -58,7 +58,7 @@ class TechnicalVisitCompletedTest {
                 .build();
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToFinalBudget(project));
+                () -> project.getStatus().getStateHandler().applyToFinalBudget(project));
     }
 
     @Test
@@ -73,7 +73,7 @@ class TechnicalVisitCompletedTest {
                 .build();
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToFinalBudget(project));
+                () -> project.getStatus().getStateHandler().applyToFinalBudget(project));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -95,29 +95,29 @@ class TechnicalVisitCompletedTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("NEW -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("NEW -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("NEW -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("NEW -> AWAITING_RETRY",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingRetry(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingRetry(p)),
                 Arguments.of("NEW -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToRetrying(p)),
                 Arguments.of("NEW -> SCHEDULED_TECHNICAL_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledTechnicalVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledTechnicalVisit(p)),
                 Arguments.of("NEW -> TECHNICAL_VISIT_COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
                 Arguments.of("NEW -> AWAITING_MATERIALS",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),
                 Arguments.of("NEW -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
                 Arguments.of("NEW -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("NEW -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
                 Arguments.of("NEW -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 
