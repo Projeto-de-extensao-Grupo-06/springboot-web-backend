@@ -3,9 +3,9 @@
 --------------------------------------------
 INSERT INTO client (first_name, last_name, phone, email)
 VALUES
-    ('João', 'da Silva', '11999999999', 'joao@email.com'),
-    ('Maria', 'Souza', '11888888888', 'maria@email.com'),
-    ('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
+('João', 'da Silva', '11999999999', 'joao@email.com'),
+('Maria', 'Souza', '11888888888', 'maria@email.com'),
+('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
 
 --------------------------------------------
 -- PERMISSION GROUP
@@ -38,14 +38,14 @@ INSERT INTO coworker (
     fk_permission_group,
     is_active
 ) VALUES (
-             'Bryan',
-             'Rocha',
-             'bryangomesrocha@gmail.com',
-             '11964275054',
-             '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-             1,
-             TRUE
-         );
+    'Bryan',
+    'Rocha',
+    'bryangomesrocha@gmail.com',
+    '11964275054',
+    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+    1,
+    TRUE
+);
 
 --------------------------------------------
 -- BUDGET
@@ -57,51 +57,73 @@ INSERT INTO budget (
     service_cost,
     final_budget
 ) VALUES (
-             15000.00,
-             0.00,
-             7000.00,
-             8000.00,
-             TRUE
-         );
+    15000.00,
+    0.00,
+    7000.00,
+    8000.00,
+    TRUE
+);
 
 --------------------------------------------
 -- MATERIALS
 --------------------------------------------
 INSERT INTO material_catalog (name, metric, price)
 VALUES
-    ('Painel Solar 550W', 'unit', 900.0),
-    ('Inversor On-Grid 5kW', 'unit', 349.99),
-    ('Cabo Solar 6mm', 'meter', 100.0),
-    ('Bateria 5kWh', 'unit', 1500.0);
+   ('Painel Solar 550W', 'unit', 900.0),
+   ('Inversor On-Grid 5kW', 'unit', 349.99),
+   ('Cabo Solar 6mm', 'meter', 100.0),
+   ('Bateria 5kWh', 'unit', 1500.0);
 
 --------------------------------------------
 -- MATERIAL URL
 --------------------------------------------
 INSERT INTO material_url (description, url, fk_material)
 VALUES
-    ('Ficha técnica Painel 550W', 'https://solarcenter.com/fichas/painel550w.pdf', 1),
-    ('Manual Inversor 5kW', 'https://painelforte.com.br/manual/inversor5kw.pdf', 2),
-    ('Ficha técnica Cabo 6mm', 'https://solarcenter.com/fichas/cabo6mm.pdf', 3),
-    ('Ficha técnica Bateria 5kWh', 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4);
+   ('Ficha técnica Painel 550W', 'https://solarcenter.com/fichas/painel550w.pdf', 1),
+   ('Manual Inversor 5kW', 'https://painelforte.com.br/manual/inversor5kw.pdf', 2),
+   ('Ficha técnica Cabo 6mm', 'https://solarcenter.com/fichas/cabo6mm.pdf', 3),
+   ('Ficha técnica Bateria 5kWh', 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4);
 
---------------------------------------------
--- ADDRESS
---------------------------------------------
-INSERT INTO address (
-    postal_code,
-    street_name,
-    number,
-    neighborhood,
-    city,
-    state,
-    type
-) VALUES (
-             '01001-000',
-             'Rua das Palmeiras',
-             '123',
-             'Centro',
-             'São Paulo',
-             'SP',
-             'RESIDENTIAL'
-         );
+   --------------------------------------------
+   -- ADDRESS
+   --------------------------------------------
+   INSERT INTO address (
+       postal_code,
+       street_name,
+       number,
+       neighborhood,
+       city,
+       state,
+       type
+   ) VALUES (
+       '01001-000',
+       'Rua das Palmeiras',
+       '123',
+       'Centro',
+       'São Paulo',
+       'SP',
+       'RESIDENTIAL'
+   );
 
+   --------------------------------------------
+   -- PROJECTS
+   --------------------------------------------
+   INSERT INTO project (
+       status,
+       status_weight,
+       preview_status,
+       is_active,
+       fk_client,
+       fk_responsible,
+       fk_budget,
+       fk_address,
+       created_at,
+       deadline,
+       system_type,
+       project_from,
+       name,
+       description
+   ) VALUES
+   ('NEW', 3, NULL, TRUE, 1, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE_BUDGET_FORM', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp'),
+   ('PRE_BUDGET', 4, NULL, TRUE, 2, 1, 1, 1, NOW(), DATEADD('DAY', 20, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Projeto Solar — Cliente Maria', 'Sistema híbrido 3kWp'),
+   ('COMPLETED', 13, NULL, TRUE, 3, 1, 1, 1, NOW(), DATEADD('DAY', 30, NOW()), 'ON_GRID', 'SITE_BUDGET_FORM', 'Projeto Solar — Cliente Carlos', 'Instalação residencial padrão');
