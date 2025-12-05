@@ -50,39 +50,35 @@ INSERT INTO coworker (
 --------------------------------------------
 -- BUDGET
 --------------------------------------------
-INSERT INTO budget (
-    total_cost,
-    discount,
-    material_cost,
-    service_cost,
-    final_budget
-) VALUES (
-             15000.00,
-             0.00,
-             7000.00,
-             8000.00,
-             TRUE
-         );
+-- INSERT INTO budget (
+--     total_cost,
+--     discount,
+--     final_budget
+-- ) VALUES (
+--     15000.00,
+--     0.00,
+--     TRUE
+-- );
 
 --------------------------------------------
 -- MATERIALS
 --------------------------------------------
-INSERT INTO material_catalog (name, metric, price)
+INSERT INTO material(name, metric)
 VALUES
-    ('Painel Solar 550W', 'unit', 900.0),
-    ('Inversor On-Grid 5kW', 'unit', 349.99),
-    ('Cabo Solar 6mm', 'meter', 100.0),
-    ('Bateria 5kWh', 'unit', 1500.0);
+    ('Painel Solar 550W', 'unit'),
+    ('Inversor On-Grid 5kW', 'unit'),
+    ('Cabo Solar 6mm', 'meter'),
+    ('Bateria 5kWh', 'unit');
 
 --------------------------------------------
 -- MATERIAL URL
 --------------------------------------------
-INSERT INTO material_url (description, url, fk_material)
+INSERT INTO material_url (url, fk_material, price)
 VALUES
-    ('Ficha técnica Painel 550W', 'https://solarcenter.com/fichas/painel550w.pdf', 1),
-    ('Manual Inversor 5kW', 'https://painelforte.com.br/manual/inversor5kw.pdf', 2),
-    ('Ficha técnica Cabo 6mm', 'https://solarcenter.com/fichas/cabo6mm.pdf', 3),
-    ('Ficha técnica Bateria 5kWh', 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4);
+    ( 'https://solarcenter.com/fichas/painel550w.pdf', 1, 1500.0),
+    ( 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 2042.5),
+    ('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 500.),
+    ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 500.0);
 
 --------------------------------------------
 -- ADDRESS
@@ -105,3 +101,22 @@ INSERT INTO address (
              'RESIDENTIAL'
          );
 
+--------------------------------------------
+-- PROJECTS
+--------------------------------------------
+INSERT INTO project (
+    status,
+    status_weight,
+    preview_status,
+    is_active,
+    fk_client,
+    fk_responsible,
+    fk_address,
+    created_at,
+    deadline,
+    system_type,
+    project_from,
+    name,
+    description
+) VALUES
+    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE_BUDGET_FORM', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');

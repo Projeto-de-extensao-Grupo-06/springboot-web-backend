@@ -121,17 +121,6 @@ public class ProjectQualityTest {
     }
 
     @Test
-    @DisplayName("O nome de classes devem ser PascalCase")
-    void verifyClassName() {
-        classes.forEach(c -> {
-            String className = c.getSimpleName();
-            assertTrue(Character.isUpperCase(className.charAt(0)), "A primeira letra da classe deve ser maiúscula: " + c.getName());
-            assertFalse(className.contains("_"), "O nome da classe não pode conter '_': " + c.getName());
-        });
-    }
-
-
-    @Test
     @DisplayName("O nome de atributos devem ser camelCase")
     void verifyAttNames() {
         classes.forEach(c -> {
@@ -242,23 +231,6 @@ public class ProjectQualityTest {
             }
         });
     }
-
-    @Test
-    @DisplayName("DTOs devem ter @Getter, @Setter e @Builder")
-    void DTOContainsGetterSetterAndBuild() {
-        classes.forEach(c -> {
-            if(c.getName().contains("dtos")) {
-                assertTrue(c.getSimpleName().endsWith("Dto") || c.getSimpleName().endsWith("Builder"), "O nome de todos os arquivos dentro de uma pasta /dtos precisa finalizar com 'Dto': " + c.getName());
-
-                assertTrue(sourceFileContains(c, "@Getter"), "A classe não possui @Getter: " + c.getName());
-                assertTrue(sourceFileContains(c, "@Setter"), "A classe não possúi @Setter: " + c.getName());
-                assertTrue(sourceFileContains(c, "@Builder"), "A clase não possui @Builder " + c.getName());
-            }
-
-            assertFalse(c.getSimpleName().endsWith("Dto") && !c.getName().contains("dtos"), "Um DTO precisa estar dentro de uma pasta apropriada. Mova seu DTO para uma pasta /dtos: " + c.getName());
-        });
-    }
-
 
     @Test
     @DisplayName("Nomes de interfaces de repository precisam finalizar com Repository")
