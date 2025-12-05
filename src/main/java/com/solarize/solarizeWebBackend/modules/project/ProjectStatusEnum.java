@@ -22,11 +22,11 @@ public enum ProjectStatusEnum {
     NEGOTIATION_FAILED(12, new NegotiationFailed());
 
     private final Integer weight;
-    private final Status state;
+    private final Status stateHandler;
 
     ProjectStatusEnum(Integer weight, Status state) {
         this.weight = weight;
-        this.state = state;
+        this.stateHandler = state;
     }
 
     public int getWeight(){
@@ -34,7 +34,7 @@ public enum ProjectStatusEnum {
     }
 
     public Status getValue(){
-        return state;
+        return stateHandler;
     }
 
 }

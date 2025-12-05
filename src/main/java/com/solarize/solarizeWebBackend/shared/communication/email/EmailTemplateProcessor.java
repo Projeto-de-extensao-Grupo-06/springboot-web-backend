@@ -1,6 +1,7 @@
-package com.solarize.solarizeWebBackend.shared.email;
+package com.solarize.solarizeWebBackend.shared.communication.email;
 
-import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
+import com.solarize.solarizeWebBackend.shared.communication.email.model.PasswordRecoveryEmail;
+import com.solarize.solarizeWebBackend.shared.communication.email.model.VisitNotificationEmail;
 import com.solarize.solarizeWebBackend.shared.exceptions.ServerErrorException;
 
 import java.io.FileNotFoundException;
@@ -35,5 +36,17 @@ public class EmailTemplateProcessor {
                 .replace("${operating_system}", model.getOperatingSystem())
                 .replace("${browser_name}", model.getBrowser())
                 .replace("${ip}", model.getIp());
+    }
+
+
+    public static String buildTemplate(VisitNotificationEmail model) {
+        String template = readTemplate("visitNotificationTemplate.html");
+
+        return template
+                .replace("${client_name}", model.getClientName())
+                .replace("${date}", model.getDate())
+                .replace("${hour}", model.getHour())
+                .replace("${address}", model.getAddress())
+                .replace("${visit_type}", model.getVisitType());
     }
 }
