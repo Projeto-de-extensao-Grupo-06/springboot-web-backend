@@ -4,7 +4,6 @@ import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCreateDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerUpdateDto;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
