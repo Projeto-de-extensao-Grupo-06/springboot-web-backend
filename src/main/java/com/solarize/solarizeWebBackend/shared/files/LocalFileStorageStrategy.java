@@ -13,7 +13,9 @@ import java.nio.file.StandardOpenOption;
 @Profile("dev")
 public class LocalFileStorageStrategy implements FileStorageStrategy{
 
-    private final Path root = Paths.get("/tmp");
+
+    private final Path root = Paths.get(System.getProperty("java.io.tmpdir"), "uploads");
+
 
     @Override
     public void save(String fileName, byte[] content) {

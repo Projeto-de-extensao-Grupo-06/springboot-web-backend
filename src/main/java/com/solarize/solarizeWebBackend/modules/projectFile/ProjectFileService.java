@@ -87,9 +87,8 @@ public class ProjectFileService {
             entity.setUploader(getCurrentUser());
 
             var existingOpt = repository.findByCheckSum(savedInfo.sha256());
-            if (existingOpt.isPresent()) {
-
-                entity.setFilename(existingOpt.get().getFilename());
+            if (!existingOpt.isEmpty()) {
+                entity.setFilename(existingOpt.getFirst().getFilename());
             } else {
 
                 String uuidName = UUID.randomUUID().toString();
@@ -103,17 +102,17 @@ public class ProjectFileService {
                 }
 
                 storageStrategy.save(uuidName, content);
+            }
 
-                try {
+            ProjectFile saved = repository.save(entity);
+            savedFiles.add(saved);
+
+            try {
                     Files.deleteIfExists(savedInfo.path());
                 } catch (Exception e) {
                     System.err.println("Failed to delete temporary file: " + savedInfo.path());
                 }
             }
-
-            ProjectFile saved = repository.save(entity);
-            savedFiles.add(saved);
-        }
 
         return savedFiles;
     }

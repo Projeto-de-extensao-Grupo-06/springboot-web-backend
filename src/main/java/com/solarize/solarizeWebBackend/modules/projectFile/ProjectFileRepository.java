@@ -10,8 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ProjectFileRepository extends JpaRepository<ProjectFile, Long> {
     Integer countByProjectId(Long projectId);
-    Optional<ProjectFile> findByCheckSum(String checkSum);
-    boolean existsByCheckSum(String checkSum);
+    List<ProjectFile> findByCheckSum(String checkSum);
     List<ProjectFile> findAllByProject(Project project);
     List<ProjectFile> findAllByProjectId(Long projectId);
 

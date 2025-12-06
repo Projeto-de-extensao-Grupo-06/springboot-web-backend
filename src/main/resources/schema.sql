@@ -3,9 +3,9 @@
 --------------------------------------------
 INSERT INTO client (first_name, last_name, phone, email)
 VALUES
-    ('João', 'da Silva', '11999999999', 'joao@email.com'),
-    ('Maria', 'Souza', '11888888888', 'maria@email.com'),
-    ('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
+('João', 'da Silva', '11999999999', 'joao@email.com'),
+('Maria', 'Souza', '11888888888', 'maria@email.com'),
+('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
 
 --------------------------------------------
 -- PERMISSION GROUP
@@ -38,14 +38,14 @@ INSERT INTO coworker (
     fk_permission_group,
     is_active
 ) VALUES (
-             'Bryan',
-             'Rocha',
-             'bryangomesrocha@gmail.com',
-             '11964275054',
-             '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-             1,
-             TRUE
-         );
+    'Bryan',
+    'Rocha',
+    'bryangomesrocha@gmail.com',
+    '11964275054',
+    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+    1,
+    TRUE
+);
 
 --------------------------------------------
 -- BUDGET
@@ -80,26 +80,26 @@ VALUES
     ('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 500.),
     ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 500.0);
 
---------------------------------------------
--- ADDRESS
---------------------------------------------
-INSERT INTO address (
-    postal_code,
-    street_name,
-    number,
-    neighborhood,
-    city,
-    state,
-    type
-) VALUES (
-             '01001-000',
-             'Rua das Palmeiras',
-             '123',
-             'Centro',
-             'São Paulo',
-             'SP',
-             'RESIDENTIAL'
-         );
+   --------------------------------------------
+   -- ADDRESS
+   --------------------------------------------
+   INSERT INTO address (
+       postal_code,
+       street_name,
+       number,
+       neighborhood,
+       city,
+       state,
+       type
+   ) VALUES (
+       '01001-000',
+       'Rua das Palmeiras',
+       '123',
+       'Centro',
+       'São Paulo',
+       'SP',
+       'RESIDENTIAL'
+   );
 
 --------------------------------------------
 -- PROJECTS
