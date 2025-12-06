@@ -1,26 +1,35 @@
 package com.solarize.solarizeWebBackend.modules.project;
-import com.solarize.solarizeWebBackend.modules.project.dto.ProjectSummaryDTO;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-
-import static io.micrometer.core.instrument.binder.grpc.GrpcObservationDocumentation.LowCardinalityKeyNames.SERVICE;
 
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService service;
+
+    @PreAuthorize("hasAuthority('PROJECT_WRITE')")
+    @PostMapping("/manual")
+    public ResponseEntity<ProjectDto> manualProjectCreate(@RequestBody @Valid ProjectManualCreateDto dto) {
+        Project createdProject = service.projectManualCreate(ProjectMapper.toEntity(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProjectMapper.toDto(createdProject));
+    }
+
+
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping
     public ResponseEntity<Page<ProjectSummaryDTO>> getProjects(
@@ -34,5 +43,27 @@ public class ProjectController {
                 service.findAllProjectsSummary(search, status, responsibleId, clientId, pageable);
 
         return ResponseEntity.ok(result);
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable Long projectId) {
+        Project project = service.getProjectById(projectId);
+        return ResponseEntity.ok(ProjectMapper.toDto(project));
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateDto dto) {
+        Project project = service.projectUpdate(ProjectMapper.toEntity(dto), projectId);
+        return ResponseEntity.ok(ProjectMapper.toDto(project));
+    }
+
+
+    @PreAuthorize("hasAuthority('PROJECT_DELETE')")
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<Void> deleteProjectById(@PathVariable Long projectId) {
+        service.softDeleteProject(projectId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

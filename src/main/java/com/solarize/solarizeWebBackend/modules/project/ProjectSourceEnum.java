@@ -1,12 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
 public enum ProjectSourceEnum {
-    SITE("site"),
-    BOT("bot");
-
-    public String value;
-
-    ProjectSourceEnum(String value) {
-        this.value = value;
-    }
+    SITE_BUDGET_FORM,
+    WHATSAPP_BOT,
+    INTERNAL_MANUAL_ENTRY
 }

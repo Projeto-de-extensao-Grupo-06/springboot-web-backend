@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
-import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -59,6 +59,6 @@ public class CreateClientDTO {
 
     @Schema(description = "Client main address (optional)")
     @Valid
-    private AddressDTO mainAddress;
+    private CreateAddressDto mainAddress;
 
 }

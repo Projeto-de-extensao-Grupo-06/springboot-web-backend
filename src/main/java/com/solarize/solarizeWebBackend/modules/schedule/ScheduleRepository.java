@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.schedule;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
@@ -23,6 +25,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findScheduleByCoworkerAndIsActiveTrue(Coworker coworker);
 
     List<Schedule> findByCoworkerAndIsActiveTrueAndIdNot(Coworker coworker, Long id);
+    List<Schedule> findAllByStartDateBetweenAndIsActiveTrue(LocalDateTime startDateAfter, LocalDateTime startDateBefore);
 
-    List<Schedule> findAllByStartDateBetween(LocalDateTime startDateAfter, LocalDateTime startDateBefore);
+    Optional<Schedule> findByIdAndIsActiveTrue(Long id);
+
+    List<Schedule> findAllByProject(Project project);
 }

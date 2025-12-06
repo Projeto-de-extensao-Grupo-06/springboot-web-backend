@@ -119,4 +119,4 @@ INSERT INTO project (
     name,
     description
 ) VALUES
-('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');
+('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');

@@ -2,8 +2,10 @@ package com.solarize.solarizeWebBackend.modules.schedule;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
+import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
 import com.solarize.solarizeWebBackend.modules.schedule.helper.ScheduleValidationsHelper;
+import com.solarize.solarizeWebBackend.shared.event.ProjectDeletedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleInProgress;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleUpdatedEvent;
@@ -12,15 +14,20 @@ import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import com.solarize.solarizeWebBackend.shared.scheduler.SchedulerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -160,11 +167,11 @@ public class ScheduleService {
 
         end = start.plusMonths(1);
 
-        return repository.findAllByStartDateBetween(start, end);
+        return repository.findAllByStartDateBetweenAndIsActiveTrue(start, end);
     }
 
     public Schedule findById(Long id) {
-        return repository.findById(id)
+        return repository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new NotFoundException("Schedule does not exists."));
     }
 
@@ -224,5 +231,19 @@ public class ScheduleService {
         schedule.setStatus(ScheduleStatusEnum.IN_PROGRESS);
 
         repository.save(schedule);
+    }
+
+    @EventListener
+    public void deleteSchedulesOnProjectDelete(ProjectDeletedEvent event) {
+        Project project = event.project();
+
+        List<Schedule> schedules = repository.findAllByProject(project);
+
+        schedules.forEach(s -> {
+            schedulerService.cancelTask("visit-in-progress-" + s.getId());
+            schedulerService.cancelTask("schedule-notification-" + s.getId());
+        });
+
+        repository.deleteAll(schedules);
     }
 }
