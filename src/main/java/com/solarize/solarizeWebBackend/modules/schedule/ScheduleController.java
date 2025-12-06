@@ -31,9 +31,9 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasAuthority('SCHEDULE_UPDATE')")
-    @PutMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDTO> updateSchedule(@PathVariable Long id, @Valid @RequestBody CreateScheduleDTO scheduleDTO){
-        Schedule updatedSchedule = service.updateSchedule(id, ScheduleMapper.toEntity(scheduleDTO));
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDTO> updateSchedule(@PathVariable Long id, @Valid @RequestBody CreateScheduleDTO scheduleDTO, @RequestParam(required = false, defaultValue = "false") Boolean force){
+        Schedule updatedSchedule = service.updateSchedule(id, ScheduleMapper.toEntity(scheduleDTO), force);
 
         ScheduleResponseDTO dto = ScheduleMapper.toDto(updatedSchedule);
         return ResponseEntity.ok(dto);
@@ -42,7 +42,7 @@ public class ScheduleController {
     @PreAuthorize("hasAuthority('SCHEDULE_READ')")
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDTO> getScheduleById(@PathVariable Long id) {
-        Schedule schedule = service.getScheduleById(id);
+        Schedule schedule = service.findById(id);
         ScheduleResponseDTO dto = ScheduleMapper.toDto(schedule);
         return ResponseEntity.ok(dto);
     }

@@ -2,8 +2,11 @@ package com.solarize.solarizeWebBackend.modules.schedule;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
+import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
+import com.solarize.solarizeWebBackend.modules.schedule.helper.ScheduleValidationsHelper;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleInProgress;
+import com.solarize.solarizeWebBackend.shared.event.ScheduleUpdatedEvent;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,56 +27,11 @@ public class ScheduleService {
     private final ScheduleRepository repository;
     private final CoworkerRepository coworkerRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final ProjectRepository projectRepository;
     private final SchedulerService schedulerService;
 
     public Schedule createSchedule(Schedule schedule, Boolean force) {
         Coworker coworker;
-
-        if(schedule.getCoworker().getId() == null) {
-            coworker = coworkerRepository
-                    .findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
-                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
-        } else {
-            coworker = coworkerRepository.findById(schedule.getCoworker().getId())
-                    .orElseThrow(() -> new NotFoundException("Coworker not found"));
-        }
-
-        schedule.setCoworker(coworker);
-
-        if(!force) {
-            List<Schedule> currentSchedules = repository.findScheduleByCoworkerAndIsActiveTrue(schedule.getCoworker());
-
-            boolean technicalVisit = currentSchedules.stream()
-                    .anyMatch(s -> s.getType() == ScheduleTypeEnum.TECHNICAL_VISIT);
-
-            boolean installVisit = currentSchedules.stream()
-                    .anyMatch(s -> s.getType() == ScheduleTypeEnum.INSTALL_VISIT);
-
-            boolean hasOverlap = currentSchedules.stream().anyMatch(
-                    existingSchedule -> {
-                        LocalDateTime start1 = existingSchedule.getStartDate();
-                        LocalDateTime end1 = existingSchedule.getEndDate();
-                        LocalDateTime start2 = schedule.getStartDate();
-                        LocalDateTime end2 = schedule.getEndDate();
-
-                        return start1.isBefore(end2) && end1.isAfter(start2);
-                    });
-
-            if (hasOverlap) {
-                throw new ConflictException("The selected date and time range overlaps with an existing schedule for this coworker. " +
-                        "Use force to do this.");
-            }
-
-            if(schedule.getType() == ScheduleTypeEnum.TECHNICAL_VISIT && installVisit) {
-                throw new ConflictException("A past or future installation visit already exists for this project. " +
-                        "This operation does not make sense. Resubmit the request with the force flag if you really want to perform this operation.");
-            }
-
-            if(schedule.getType() == ScheduleTypeEnum.INSTALL_VISIT && !technicalVisit) {
-                throw new ConflictException("An installation visit is being created without a technical visit ever having been created. " +
-                        "This operation does not make sense. If you really want to do this, use the force flag.");
-            }
-        }
 
         if(schedule.getProject().getId() == null && schedule.getType() != ScheduleTypeEnum.NOTE) {
             throw new BadRequestException("A project ID must be provided for this schedule type. " +
@@ -83,19 +42,34 @@ public class ScheduleService {
             throw new BadRequestException("Schedule cannot have a start date after en date");
         }
 
+        if(schedule.getProject().getId() != null && !projectRepository.existsById(schedule.getProject().getId())) {
+            throw new NotFoundException("Project does not exists.");
+        }
+
+        if(schedule.getCoworker().getId() == null) {
+            coworker = coworkerRepository
+                    .findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
+                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
+        } else {
+            coworker = coworkerRepository.findById(schedule.getCoworker().getId())
+                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
+        }
+
+
+        schedule.setCoworker(coworker);
+
+        if(!force) {
+            List<Schedule> currentSchedules = repository.findScheduleByCoworkerAndIsActiveTrue(schedule.getCoworker());
+
+            ScheduleValidationsHelper.scheduleValidation(currentSchedules, schedule)
+                    .ifPresent(e -> {throw e;});
+        }
+
         schedule.setStatus(ScheduleStatusEnum.MARKED);
         schedule.setNotificationAlertTime(schedule.getStartDate().minusDays(1));
         schedule.setIsActive(true);
 
         Schedule newSchedule = repository.save(schedule);
-
-        schedulerService.scheduleTask("visit-in-progress-" + schedule.getId(), () -> {
-            eventPublisher.publishEvent(new ScheduleInProgress(
-                    newSchedule.getId(),
-                    newSchedule.getStartDate(),
-                    newSchedule.getEndDate()
-            ));
-        }, schedule.getStartDate());
 
         eventPublisher.publishEvent(new ScheduleCreatedEvent(
                 newSchedule.getId(),
@@ -103,32 +77,74 @@ public class ScheduleService {
                 newSchedule.getEndDate(),
                 newSchedule.getStatus(),
                 newSchedule.getType(),
-                schedule.getProject().getId(),
-                schedule.getNotificationAlertTime()
+                newSchedule.getProject().getId(),
+                newSchedule.getNotificationAlertTime()
         ));
 
         return newSchedule;
     }
 
-    public Schedule getScheduleById(Long id) {
-        return repository.findById(id)
+
+    public Schedule updateSchedule(Long id, Schedule schedule, Boolean force){
+        Schedule existingSchedule = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Schedule not found."));
-    }
 
-    public Schedule updateSchedule(Long id, Schedule schedule){
-        Schedule existingSchedule = getScheduleById(id);
+        if(!force) {
+            List<Schedule> currentSchedules = repository.findByCoworkerAndIsActiveTrueAndIdNot(existingSchedule.getCoworker(), id);
 
-        existingSchedule.setTitle(schedule.getTitle());
-        existingSchedule.setDescription(schedule.getDescription());
-        existingSchedule.setStartDate(schedule.getStartDate());
-        existingSchedule.setEndDate(schedule.getEndDate());
-        existingSchedule.setStatus(schedule.getStatus());
-        existingSchedule.setType(schedule.getType());
-        existingSchedule.setIsActive(schedule.getIsActive() != null ? schedule.getIsActive() : true);
+            if(existingSchedule.getStatus() == ScheduleStatusEnum.FINISHED) {
+                throw new BadRequestException("Cannot update a finished schedule.");
+            }
 
-        existingSchedule.setCoworker(schedule.getCoworker());
+            ScheduleValidationsHelper.scheduleValidation(currentSchedules, schedule)
+                    .ifPresent(e -> {throw e;});
+
+        }
+
+
+        existingSchedule.setTitle(
+                Optional.ofNullable(schedule.getTitle())
+                .orElse(existingSchedule.getTitle())
+        );
+
+        existingSchedule.setDescription(
+                Optional.ofNullable(schedule.getDescription())
+                        .orElse(existingSchedule.getDescription())
+        );
+
+        existingSchedule.setStartDate(
+                Optional.ofNullable(schedule.getStartDate())
+                        .orElse(existingSchedule.getStartDate())
+        );
+
+        existingSchedule.setEndDate(
+                Optional.ofNullable(schedule.getEndDate())
+                        .orElse(existingSchedule.getEndDate())
+        );
+
+        existingSchedule.setType(
+                Optional.ofNullable(schedule.getType())
+                        .orElse(existingSchedule.getType())
+        );
+
+
+        if(existingSchedule.getStartDate().isAfter(LocalDateTime.now())) {
+            existingSchedule.setStatus(ScheduleStatusEnum.MARKED);
+        }
+
+        existingSchedule.setNotificationAlertTime(schedule.getStartDate().minusDays(1));
+
+        eventPublisher.publishEvent(new ScheduleCreatedEvent(
+                existingSchedule.getId(),
+                existingSchedule.getStartDate(),
+                existingSchedule.getEndDate(),
+                existingSchedule.getStatus(),
+                existingSchedule.getType(),
+                existingSchedule.getProject().getId(),
+                existingSchedule.getNotificationAlertTime()
+        ));
+
         return repository.save(existingSchedule);
-
     }
 
     public List<Schedule> listScheduleMonth(Integer year, Integer month) {
@@ -147,16 +163,57 @@ public class ScheduleService {
         return repository.findAllByStartDateBetween(start, end);
     }
 
+    public Schedule findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Schedule does not exists."));
+    }
+
     public void deleteSchedule(Long id) {
         if (!repository.existsById(id)) {
             throw new NotFoundException("Schedule not found");
         }
+
         repository.deleteById(id);
     }
 
 
     public LocalDateTime findNextScheduleDateByProjectId(Long projectId) {
         return repository.findNextScheduleByProjectId(projectId);
+    }
+
+    @EventListener
+    public void scheduleCreatedNotification(ScheduleCreatedEvent event) {
+        schedulerService.scheduleTask("schedule-notification-" + event.scheduleId(), () -> {
+            System.out.println("Notification not implemented");
+        }, event.notificationDateTime());
+
+
+        schedulerService.scheduleTask("visit-in-progress-" + event.scheduleId(), () -> {
+            eventPublisher.publishEvent(new ScheduleInProgress(
+                    event.scheduleId(),
+                    event.startDate(),
+                    event.endDate()
+            ));
+        }, event.startDate());
+    }
+
+    @EventListener
+    public void scheduleUpdatedNotification(ScheduleUpdatedEvent event) {
+        schedulerService.cancelTask("schedule-notification-" + event.scheduleId());
+        schedulerService.cancelTask("visit-in-progress-" + event.scheduleId());
+
+
+        schedulerService.scheduleTask("schedule-notification-" + event.scheduleId(), () -> {
+            System.out.println("Notification not implemented");
+        }, event.notificationDateTime());
+
+        schedulerService.scheduleTask("visit-in-progress-" + event.scheduleId(), () -> {
+            eventPublisher.publishEvent(new ScheduleInProgress(
+                    event.scheduleId(),
+                    event.startDate(),
+                    event.endDate()
+            ));
+        }, event.startDate());
     }
 
     @EventListener
@@ -167,14 +224,5 @@ public class ScheduleService {
         schedule.setStatus(ScheduleStatusEnum.IN_PROGRESS);
 
         repository.save(schedule);
-    }
-
-    @EventListener
-    public void scheduleNotification(ScheduleCreatedEvent event) {
-        String taskName = "schedule-notification-" + event.scheduleId();
-
-        schedulerService.scheduleTask(taskName, () -> {
-            System.out.println("Notificação enviada.");
-        }, event.notificationDateTime());
     }
 }
