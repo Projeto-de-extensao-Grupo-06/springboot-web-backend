@@ -1,0 +1,44 @@
+package com.solarize.solarizeWebBackend.modules.budget.model;
+
+import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
+import com.solarize.solarizeWebBackend.modules.project.Project;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Budget {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_budget")
+    private Long id;
+
+    private Double subtotal;
+    private Double totalCost;
+    private Double discount;
+
+    @Enumerated(value = EnumType.STRING)
+    private DiscountType discountType;
+
+    private Boolean finalBudget;
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BudgetMaterial> materials = new ArrayList<>();
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<FixedParameter> fixedParameters = new ArrayList<>();
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PersonalizedParameter> personalizedParameters = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_project")
+    private Project project;
+}
