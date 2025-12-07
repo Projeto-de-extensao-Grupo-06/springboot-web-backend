@@ -23,4 +23,6 @@ public class MaterialUrl {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_material")
     private Material material;
+
+    private Boolean hidden = false;
 }

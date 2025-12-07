@@ -22,4 +22,5 @@ public class Material {
     @Enumerated(EnumType.STRING)
     private MetricEnum metric;
 
+    private Boolean hidden = false;
 }

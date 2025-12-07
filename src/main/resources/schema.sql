@@ -63,22 +63,22 @@ INSERT INTO coworker (
 --------------------------------------------
 -- MATERIALS
 --------------------------------------------
-INSERT INTO material(name, metric)
+INSERT INTO material(name, metric, hidden)
 VALUES
-    ('Painel Solar 550W', 'unit'),
-    ('Inversor On-Grid 5kW', 'unit'),
-    ('Cabo Solar 6mm', 'meter'),
-    ('Bateria 5kWh', 'unit');
+    ('Painel Solar 550W', 'unit', false),
+    ('Inversor On-Grid 5kW', 'unit', false),
+    ('Cabo Solar 6mm', 'meter', false),
+    ('Bateria 5kWh', 'unit', false);
 
 --------------------------------------------
 -- MATERIAL URL
 --------------------------------------------
-INSERT INTO material_url (url, fk_material, price)
+INSERT INTO material_url (url, fk_material, price, hidden)
 VALUES
-    ( 'https://solarcenter.com/fichas/painel550w.pdf', 1, 1500.0),
-    ( 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 2042.5),
-    ('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 500.),
-    ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 500.0);
+    ( 'https://solarcenter.com/fichas/painel550w.pdf', 1, 1500.0, false),
+    ( 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 2042.5, false),
+    ('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 500.0, false),
+    ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 500.0, false);
 
 --------------------------------------------
 -- ADDRESS
