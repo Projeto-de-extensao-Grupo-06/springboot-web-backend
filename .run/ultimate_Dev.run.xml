@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Dev" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
+    <option name="SCHEDULED_DEBUGGER" value="true" />
     <envs>
       <env name="EMAIL" value="projeto.solarize@gmail.com" />
       <env name="PASSWORD_EMAIL" value="lssk anjm wxfo ylop" />

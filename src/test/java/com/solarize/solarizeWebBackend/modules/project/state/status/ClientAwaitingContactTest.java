@@ -51,7 +51,7 @@ class ClientAwaitingContactTest {
                 .withRetry(retry)
                 .build();
 
-        project.getStatus().getState().applyToAwaitingRetry(project);
+        project.getStatus().getStateHandler().applyToAwaitingRetry(project);
 
         assertEquals(ProjectStatusEnum.AWAITING_RETRY, project.getStatus());
         assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
@@ -71,7 +71,7 @@ class ClientAwaitingContactTest {
                 .build();
 
         assertThrows(InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToAwaitingRetry(project));
+                () -> project.getStatus().getStateHandler().applyToAwaitingRetry(project));
 
     }
 
@@ -91,7 +91,7 @@ class ClientAwaitingContactTest {
                 .withSchedules(schedules)
                 .build();
 
-        project.getStatus().getState().applyToScheduledTechnicalVisit(project);
+        project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
 
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getStatus());
         assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
@@ -117,7 +117,7 @@ class ClientAwaitingContactTest {
     ) {
         assertThrows(
                 InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToScheduledTechnicalVisit(project)
+                () -> project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project)
         );
     }
 
@@ -130,7 +130,7 @@ class ClientAwaitingContactTest {
     ) {
         assertThrows(
                 InvalidStateTransitionException.class,
-                () -> project.getStatus().getState().applyToAwaitingRetry(project)
+                () -> project.getStatus().getStateHandler().applyToAwaitingRetry(project)
         );
     }
 
@@ -212,27 +212,27 @@ class ClientAwaitingContactTest {
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
                 Arguments.of("NEW -> NEW",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNew(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToPreBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> CLIENT_AWAITING_CONTACT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToClientAwaitingContact(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToRetrying(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToRetrying(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> TECHNICAL_VISIT_COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToTechnicalVisitCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToFinalBudget(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> AWAITING_MATERIALS",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToAwaitingMaterials(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> SCHEDULED_INSTALLING_VISIT",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToScheduledInstallingVisit(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToScheduledInstallingVisit(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> INSTALLED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToInstalled(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToCompleted(p)),
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getState().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
         );
     }
 

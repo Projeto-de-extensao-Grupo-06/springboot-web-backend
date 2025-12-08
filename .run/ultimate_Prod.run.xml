@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Prod" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="prod" />
+    <option name="SCHEDULED_DEBUGGER" value="true" />
     <envs>
       <env name="EMAIL" value="projeto.solarize@gmail.com" />
       <env name="MYSQL_PASSWORD" value="06241234" />

@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import com.solarize.solarizeWebBackend.modules.budget.model.serializable.BudgetMaterialId;
-import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
+import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
 import jakarta.persistence.*;
 import lombok.*;
 

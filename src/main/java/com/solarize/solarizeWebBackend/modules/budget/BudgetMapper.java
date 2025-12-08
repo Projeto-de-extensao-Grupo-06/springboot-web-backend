@@ -3,7 +3,7 @@ package com.solarize.solarizeWebBackend.modules.budget;
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
-import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
+import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
 
 import java.util.List;
 

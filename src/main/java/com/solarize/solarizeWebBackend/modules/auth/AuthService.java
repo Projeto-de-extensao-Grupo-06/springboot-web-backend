@@ -7,9 +7,9 @@ import com.solarize.solarizeWebBackend.modules.auth.dtos.AuthResponseDto;
 import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.OTPCache;
 import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryAttemptCache;
 import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryPasswordTokenCache;
-import com.solarize.solarizeWebBackend.shared.email.EmailService;
-import com.solarize.solarizeWebBackend.shared.email.EmailTemplateProcessor;
-import com.solarize.solarizeWebBackend.shared.email.model.PasswordRecoveryEmail;
+import com.solarize.solarizeWebBackend.shared.communication.email.EmailService;
+import com.solarize.solarizeWebBackend.shared.communication.email.EmailTemplateProcessor;
+import com.solarize.solarizeWebBackend.shared.communication.email.model.PasswordRecoveryEmail;
 import com.solarize.solarizeWebBackend.shared.exceptions.TooManyRequestsException;
 import com.solarize.solarizeWebBackend.shared.security.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 import java.security.SecureRandom;

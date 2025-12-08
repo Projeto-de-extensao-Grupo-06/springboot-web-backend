@@ -11,7 +11,6 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-@Builder
 public class CreateScheduleDTO {
     @NotBlank(message = "The title is obligatory")
     private String title;
