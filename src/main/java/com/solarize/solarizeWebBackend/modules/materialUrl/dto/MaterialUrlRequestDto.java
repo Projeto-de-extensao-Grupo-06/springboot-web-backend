@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.material.dto;
+package com.solarize.solarizeWebBackend.modules.materialUrl.dto;
 
 import lombok.Getter;
 import lombok.Setter;

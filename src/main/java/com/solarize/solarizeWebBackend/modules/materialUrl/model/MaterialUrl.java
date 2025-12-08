@@ -1,5 +1,6 @@
-package com.solarize.solarizeWebBackend.modules.material.model;
+package com.solarize.solarizeWebBackend.modules.materialUrl.model;
 
+import com.solarize.solarizeWebBackend.modules.material.model.Material;
 import jakarta.persistence.*;
 import lombok.*;
 

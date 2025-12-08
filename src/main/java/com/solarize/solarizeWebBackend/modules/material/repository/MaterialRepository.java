@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findAllByHiddenFalse();
     Optional<Material> findByIdAndHiddenFalse(Long id);
+    boolean existsByName(String name);
 
 }

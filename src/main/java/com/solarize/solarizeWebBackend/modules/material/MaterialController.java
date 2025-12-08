@@ -2,10 +2,7 @@ package com.solarize.solarizeWebBackend.modules.material;
 
 import com.solarize.solarizeWebBackend.modules.material.dto.MaterialRequestDto;
 import com.solarize.solarizeWebBackend.modules.material.dto.MaterialResponseDto;
-import com.solarize.solarizeWebBackend.modules.material.dto.MaterialUrlRequestDto;
-import com.solarize.solarizeWebBackend.modules.material.dto.MaterialUrlResponseDto;
 import com.solarize.solarizeWebBackend.modules.material.model.Material;
-import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,52 +63,6 @@ public class MaterialController {
             return ResponseEntity.noContent().build();
         }
 
-
-
-
-    @PreAuthorize("hasAuthority('BUDGET_READ')")
-    @GetMapping("/materialUrl/{id}")
-    public ResponseEntity<MaterialUrlResponseDto> getByIdMaterialUrl(@PathVariable Long id) {
-        MaterialUrl url = service.getMaterialUrl(id);
-        return ResponseEntity.ok(MaterialMapper.toResponse(url));
-    }
-
-    @PreAuthorize("hasAuthority('BUDGET_READ')")
-    @GetMapping("/material/materialUrl/{materialId}")
-    public ResponseEntity<List<MaterialUrlResponseDto>> listVisibleMaterialUrl(@PathVariable Long materialId) {
-        List<MaterialUrl> urls = service.listMaterialUrlByMaterial(materialId);
-        if (urls.isEmpty()) return ResponseEntity.noContent().build();
-
-        List<MaterialUrlResponseDto> urlDtos = urls.stream()
-                .map(MaterialMapper::toResponse)
-                .toList();
-        return ResponseEntity.ok(urlDtos);
-    }
-
-    @PreAuthorize("hasAuthority('BUDGET_WRITE')")
-    @PostMapping("/materialUrl")
-    public ResponseEntity<MaterialUrlResponseDto> createMaterialUrl(@Valid @RequestBody MaterialUrlRequestDto dto) {
-        MaterialUrl url = service.createMaterialUrl(dto.getMaterialId(), dto.getUrl(), dto.getPrice());
-        return ResponseEntity.status(201).body(MaterialMapper.toResponse(url));
-    }
-
-    @PreAuthorize("hasAuthority('BUDGET_UPDATE')")
-    @PutMapping("/materialUrl/{id}")
-    public ResponseEntity<MaterialUrlResponseDto> updateMaterialUrl(
-            @PathVariable Long id,
-            @Valid @RequestBody MaterialUrlRequestDto dto
-    ) {
-        MaterialUrl updated = MaterialMapper.toEntity(dto, service.getMaterial(dto.getMaterialId()));
-        MaterialUrl url = service.updateMaterialUrl(id, updated);
-        return ResponseEntity.ok(MaterialMapper.toResponse(url));
-    }
-
-    @PreAuthorize("hasAuthority('BUDGET_DELETE')")
-    @DeleteMapping("/materialUrl/{id}")
-    public ResponseEntity<Void> deleteMaterialUrl(@PathVariable Long id) {
-        service.deleteMaterialUrl(id);
-        return ResponseEntity.noContent().build();
-    }
 
 }
 

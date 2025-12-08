@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.material.dto;
+package com.solarize.solarizeWebBackend.modules.materialUrl.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,5 +11,4 @@ public class MaterialUrlResponseDto {
     private Long id;
     private String url;
     private Double price;
-//    private Boolean hidden;
 }

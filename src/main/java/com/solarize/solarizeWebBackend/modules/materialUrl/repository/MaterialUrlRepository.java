@@ -1,6 +1,6 @@
-package com.solarize.solarizeWebBackend.modules.material.repository;
+package com.solarize.solarizeWebBackend.modules.materialUrl.repository;
 
-import com.solarize.solarizeWebBackend.modules.material.model.MaterialUrl;
+import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +16,7 @@ public interface MaterialUrlRepository extends JpaRepository<MaterialUrl, Long> 
     List<MaterialUrl> findAllByMaterialId(Long materialId);
     Optional<MaterialUrl> findByIdAndHiddenFalse(Long id);
     List<MaterialUrl> findAllByMaterialIdAndHiddenFalse(Long materialId);
+    boolean existsByUrl(String url);
 
     boolean existsByIdAndHiddenFalse(Long id);
 
