@@ -24,12 +24,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/projects")
 public class ProjectController {
-    private final ProjectService service;
+    private final ProjectService projectService;
 
     @PreAuthorize("hasAuthority('PROJECT_WRITE')")
     @PostMapping("/manual")
     public ResponseEntity<ProjectDto> manualProjectCreate(@RequestBody @Valid ProjectManualCreateDto dto) {
-        Project createdProject = service.projectManualCreate(ProjectMapper.toEntity(dto));
+        Project createdProject = projectService.projectManualCreate(ProjectMapper.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(ProjectMapper.toDto(createdProject));
     }
 
@@ -52,14 +52,14 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable Long projectId) {
-        Project project = service.getProjectById(projectId);
+        Project project = projectService.getProjectById(projectId);
         return ResponseEntity.ok(ProjectMapper.toDto(project));
     }
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PatchMapping("/{projectId}")
     public ResponseEntity<ProjectDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateDto dto) {
-        Project project = service.projectUpdate(ProjectMapper.toEntity(dto), projectId);
+        Project project = projectService.projectUpdate(ProjectMapper.toEntity(dto), projectId);
         return ResponseEntity.ok(ProjectMapper.toDto(project));
     }
 
@@ -67,7 +67,7 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('PROJECT_DELETE')")
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Void> deleteProjectById(@PathVariable Long projectId) {
-        service.softDeleteProject(projectId);
+        projectService.softDeleteProject(projectId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
 
+import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.AddressRepository;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
@@ -12,10 +13,11 @@ import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
 import com.solarize.solarizeWebBackend.modules.projectComment.ProjectCommentService;
 import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFileService;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleService;
-import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
+import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,8 +43,6 @@ public class ProjectService {
     private final ScheduleService scheduleService;
     private final ProjectCommentService projectCommentService;
     private final ProjectFileService projectFileService;
-    private final AddressRepository addressRepository;
-    private final ClientRepository clientRepository;
     private final CoworkerRepository coworkerRepository;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -176,11 +176,11 @@ public class ProjectService {
             Project project = projectRepository.findById(event.projectId()).orElseThrow();
 
             if(event.type() == ScheduleTypeEnum.TECHNICAL_VISIT) {
-                project.getStatus().getState().applyToScheduledTechnicalVisit(project);
+                project.getStatus().getValue().applyToScheduledTechnicalVisit(project);
             }
 
             else if(event.type() == ScheduleTypeEnum.INSTALL_VISIT) {
-                project.getStatus().getState().applyToScheduledInstallingVisit(project);
+                project.getStatus().getValue().applyToScheduledInstallingVisit(project);
             }
 
             projectRepository.save(project);
