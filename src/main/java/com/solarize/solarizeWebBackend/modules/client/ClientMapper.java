@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
-import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 
@@ -81,11 +81,10 @@ public class ClientMapper {
         client.setUpdatedAt(LocalDateTime.now());
     }
 
-    private static AddressDTO of(Address address){
+    private static CreateAddressDto of(Address address){
         if (address == null) return null;
 
-        return AddressDTO.builder()
-                .id(address.getId())
+        return CreateAddressDto.builder()
                 .postalCode(address.getPostalCode())
                 .streetName(address.getStreetName())
                 .number(address.getNumber())

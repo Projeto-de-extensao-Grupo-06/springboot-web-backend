@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.address;
+package com.solarize.solarizeWebBackend.modules.address.enumerated;
 
 public enum TypeEnum {
     RESIDENTIAL("residential"),
