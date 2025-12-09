@@ -15,6 +15,7 @@ public class ScheduleResponseDTO {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime notificationDate;
     private String type;
     private String status;
     private Boolean isActive;

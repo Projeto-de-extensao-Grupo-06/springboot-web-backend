@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
-import com.solarize.solarizeWebBackend.modules.address.AddressDTO;
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -42,5 +42,5 @@ public class ClientResponseDTO {
     private LocalDateTime createdAt;
 
     @Schema(description = "Client main address (may be null if not provided)")
-    private AddressDTO mainAddress;
+    private CreateAddressDto mainAddress;
 }

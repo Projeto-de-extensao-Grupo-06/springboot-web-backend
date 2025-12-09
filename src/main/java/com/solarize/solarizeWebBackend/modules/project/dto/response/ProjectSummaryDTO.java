@@ -1,10 +1,7 @@
-package com.solarize.solarizeWebBackend.modules.project.dto;
+package com.solarize.solarizeWebBackend.modules.project.dto.response;
 
-import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
-import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
-import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import lombok.*;
 
 import java.time.LocalDateTime;
