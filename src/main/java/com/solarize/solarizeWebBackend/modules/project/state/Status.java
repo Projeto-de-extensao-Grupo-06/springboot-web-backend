@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.project.state;
 
 import com.solarize.solarizeWebBackend.modules.project.Project;
+import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidStateTransitionException;
 
 public interface Status {
@@ -54,6 +55,11 @@ public interface Status {
 
     default void applyToNegotiationFailed(Project project) {
         throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOTIATION_FAILED");
+    }
+
+    default void forceStatus(Project project, ProjectStatusEnum status) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(status);
     }
 
 }

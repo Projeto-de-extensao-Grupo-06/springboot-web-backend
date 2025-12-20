@@ -23,7 +23,6 @@ public class ProjectCommentMapper {
 
     }
 
-
     public static ProjectComment toEntity(CreateProjectCommentRequestDTO dto, Coworker author, Project project){
 
         if (dto == null) return null;

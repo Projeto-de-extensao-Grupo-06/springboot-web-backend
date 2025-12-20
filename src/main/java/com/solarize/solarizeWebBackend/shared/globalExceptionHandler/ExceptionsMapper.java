@@ -15,6 +15,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -144,6 +146,29 @@ public class ExceptionsMapper {
                 .method(method)
                 .typeError(HttpStatus.FORBIDDEN.getReasonPhrase())
                 .status(String.valueOf(HttpStatus.FORBIDDEN.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+
+    public static ErrorResponse of(MaxUploadSizeExceededException ex) {
+        return ErrorResponse
+                .builder()
+                .message("File exceeds the maximum allowed size for upload.")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.PAYLOAD_TOO_LARGE.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.PAYLOAD_TOO_LARGE.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static ErrorResponse of(MultipartException ex) {
+        return ErrorResponse
+                .builder()
+                .message("Failed to process multipart upload. Please verify the total request size and the format of the submitted data.")
+                .path(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI())
+                .typeError(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .timestamp(LocalDateTime.now())
                 .build();
     }

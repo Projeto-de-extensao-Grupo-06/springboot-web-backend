@@ -15,59 +15,48 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/projectId/comments")
+@RequestMapping("/projects/comments")
 public class ProjectCommentController {
 
     private final ProjectCommentService projectCommentService;
-    private final ProjectRepository projectRepository;
-    private final CoworkerRepository coworkerRepository;
-
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PostMapping
-    public ResponseEntity<ProjectCommentResponseDTO> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO requestDTO){
+    public ResponseEntity<ProjectCommentResponseDTO> create(@Valid @RequestBody CreateProjectCommentRequestDTO requestDTO){
+        ProjectCommentResponseDTO newProjectComment = ProjectCommentMapper.toDto(
+                projectCommentService.create(
+                        requestDTO.getAuthorId(),
+                        requestDTO.getProjectId(),
+                        requestDTO.getComment()
+                )
+        );
 
-        Coworker author = coworkerRepository.findById(requestDTO.getAuthorId())
-                .orElseThrow(() -> new NotFoundException("Author not found"));
-
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("Project not found"));
-
-        ProjectComment projectComment = ProjectCommentMapper.toEntity(requestDTO, author,project);
-
-        ProjectComment newProjectComment = projectCommentService.create(projectComment);
-
-        return ResponseEntity.status(201).body(ProjectCommentMapper.toDto(newProjectComment));
-
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(newProjectComment);
     }
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping
     public ResponseEntity<Page<ProjectCommentResponseDTO>> getCommentByProject(@PathVariable Long projectId, @PageableDefault (page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable){
-
         Page<ProjectComment> comments = projectCommentService.listCommentsByProject(projectId,pageable);
         Page<ProjectCommentResponseDTO> dtoPage = comments.map(ProjectCommentMapper::toDto);
 
         return ResponseEntity.ok(dtoPage);
-        
-
     }
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id){
-
         projectCommentService.deleteComment(id);
-
         return ResponseEntity.noContent().build();
-
     }
-
-
 }

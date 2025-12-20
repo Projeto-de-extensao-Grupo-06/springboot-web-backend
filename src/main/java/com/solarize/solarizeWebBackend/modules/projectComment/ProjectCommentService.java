@@ -26,41 +26,34 @@ public class ProjectCommentService {
     private final ProjectRepository projectRepository;
     private final CoworkerRepository coworkerRepository;
 
-
     public Integer countCommentsByProjectId(Long projectId) {
         return repository.countByProjectId(projectId);
     }
 
-    public ProjectComment create(ProjectComment projectComment) {
-
-
-        Coworker author = coworkerRepository.findById(projectComment.getAuthor().getId())
+    public ProjectComment create(Long authorId, Long projectId, String comment) {
+        Coworker author = coworkerRepository.findById(authorId)
                 .orElseThrow(() -> new NotFoundException("Author not found"));
 
-        Project project = projectRepository.findById(projectComment.getProject().getId())
+        Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project not found"));
 
-        projectComment.setAuthor(author);
-        projectComment.setProject(project);
-        projectComment.setComment(projectComment.getComment());
-        projectComment.setCreatedAt(LocalDateTime.now());
-
-        return repository.save(projectComment);
-
+        return repository.save(
+                ProjectComment.builder()
+                        .author(author)
+                        .project(project)
+                        .comment(comment)
+                        .build()
+        );
     }
 
     public Page<ProjectComment> listCommentsByProject(Long projectId, Pageable pageable){
-
         if (!projectRepository.existsById(projectId)){
             throw new NotFoundException("Project not found");
         }
-
         return repository.findAllByProject(projectId,pageable);
-
     }
 
     public void deleteComment(Long id) {
-
         ProjectComment comment = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Comments not found"));
 
@@ -75,9 +68,6 @@ public class ProjectCommentService {
             throw new AccessDeniedException("You are not allowed  to delete others users comments");
            
         }
-
         repository.delete(comment);
-
     }
-
 }

@@ -1,39 +1,73 @@
 package com.solarize.solarizeWebBackend.modules.materialUrl;
 
-import com.solarize.solarizeWebBackend.modules.client.ClientMapper;
-import com.solarize.solarizeWebBackend.modules.materialUrl.dto.MaterialUrlResponseDTO;
-import com.solarize.solarizeWebBackend.modules.materialUrl.dto.MaterialWithUrlsResponseDTO;
+import com.solarize.solarizeWebBackend.modules.budget.repository.BudgetMaterialRepository;
+import com.solarize.solarizeWebBackend.modules.material.model.Material;
+import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
+import com.solarize.solarizeWebBackend.modules.material.repository.MaterialRepository;
+import com.solarize.solarizeWebBackend.modules.materialUrl.repository.MaterialUrlRepository;
+import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
-
 
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MaterialUrlService {
+    private final MaterialRepository materialRepository;
+    private final MaterialUrlRepository materialUrlRepository;
+    private final BudgetMaterialRepository budgetMaterialRepository;
 
-    private final MaterialUrlRepository repository;
+    public Boolean allMaterialsUrlExists(List<Long> materialUrlIds) {
+        int qtdExists = materialUrlRepository.allExistsByIdIn(materialUrlIds);
+        return qtdExists == materialUrlIds.size();
+    }
 
-    public MaterialWithUrlsResponseDTO getMaterialWithUrls(Long materialId) {
-        List<MaterialUrl> urls = repository.findByMaterial_Id(materialId);
+    public MaterialUrl createMaterialUrl(Long materialId, String url, Double price) {
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new NotFoundException("Material not found"));
 
-        if (urls.isEmpty()) {
-            throw new NotFoundException("Material not found.");
+        if (materialUrlRepository.existsByUrl(url)) {
+            throw new ConflictException("This URL is already registered.");
         }
+        MaterialUrl materialUrl = new MaterialUrl();
+        materialUrl.setMaterial(material);
+        materialUrl.setUrl(url);
+        materialUrl.setPrice(price);
 
-        return MaterialWithUrlsResponseDTO.builder()
-                .id(urls.get(0).getMaterial().getId())
-                .name(urls.get(0).getMaterial().getName())
-                .links(urls.stream()
-                        .map(u -> MaterialUrlResponseDTO.builder()
-                                .description(u.getDescription())
-                                .url(u.getUrl())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+        return materialUrlRepository.save(materialUrl);
+    }
+
+    public MaterialUrl getMaterialUrl(Long id) {
+        return materialUrlRepository.findByIdAndHiddenFalse(id)
+                .orElseThrow(() -> new NotFoundException("MaterialUrl not found or hidden"));
+    }
+
+    public List<MaterialUrl> listMaterialUrlByMaterial(Long materialId) {
+        return materialUrlRepository.findAllByMaterialIdAndHiddenFalse(materialId);
+    }
+
+    public MaterialUrl updateMaterialUrl(Long id, MaterialUrl updated) {
+        MaterialUrl existing = materialUrlRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("MaterialUrl not found"));
+
+        existing.setUrl(updated.getUrl());
+        existing.setPrice(updated.getPrice());
+
+        return materialUrlRepository.save(existing);
+    }
+
+    public void deleteMaterialUrl(Long id) {
+        MaterialUrl url = materialUrlRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("MaterialUrl not found"));
+
+        boolean budget = budgetMaterialRepository.existsByMaterialUrl_Id(id);
+
+        if (budget) {
+            url.setHidden(true);
+            materialUrlRepository.save(url);
+        } else {
+            materialUrlRepository.delete(url);
+        }
     }
 }
-

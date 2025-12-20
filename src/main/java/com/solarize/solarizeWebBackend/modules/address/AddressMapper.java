@@ -1,7 +1,11 @@
 package com.solarize.solarizeWebBackend.modules.address;
 
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.dto.UpdateAddressDto;
+
 public class AddressMapper {
-    public static Address toEntity(AddressDTO dto) {
+    public static Address toEntity(CreateAddressDto dto) {
         if (dto == null) return null;
 
         Address address = new Address();
@@ -12,20 +16,42 @@ public class AddressMapper {
         address.setCity(dto.getCity());
         address.setState(dto.getState());
         address.setType(dto.getType());
+        address.setApartment(dto.getApartment());
+
         return address;
     }
 
-    public static AddressDTO toDTO(Address address) {
+
+    public static Address toEntity(UpdateAddressDto dto) {
+        if (dto == null) return null;
+
+        Address address = new Address();
+        address.setPostalCode(dto.getPostalCode());
+        address.setStreetName(dto.getStreetName());
+        address.setNumber(dto.getNumber());
+        address.setNeighborhood(dto.getNeighborhood());
+        address.setCity(dto.getCity());
+        address.setState(dto.getState());
+        address.setType(dto.getType());
+        address.setApartment(dto.getApartment());
+
+        return address;
+    }
+
+    public static ResponseAddressDto toDTO(Address address) {
         if (address == null) return null;
 
-        AddressDTO dto = new AddressDTO();
-        dto.setPostalCode(address.getPostalCode());
-        dto.setStreetName(address.getStreetName());
-        dto.setNumber(address.getNumber());
-        dto.setNeighborhood(address.getNeighborhood());
-        dto.setCity(address.getCity());
-        dto.setState(address.getState());
-        dto.setType(address.getType());
-        return dto;
+        return ResponseAddressDto.builder()
+                .id(address.getId())
+                .streetName(address.getStreetName())
+                .number(address.getNumber())
+                .postalCode(address.getPostalCode())
+                .neighborhood(address.getNeighborhood())
+                .city(address.getCity())
+                .uf(address.getState())
+                .stateName(address.getState().getFullName())
+                .type(address.getType())
+                .apartment(address.getApartment())
+                .build();
     }
 }
