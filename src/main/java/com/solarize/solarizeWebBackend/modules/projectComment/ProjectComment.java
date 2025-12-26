@@ -4,14 +4,17 @@ package com.solarize.solarizeWebBackend.modules.projectComment;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectComment {
 
     @Id
@@ -26,6 +29,7 @@ public class ProjectComment {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

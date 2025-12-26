@@ -7,6 +7,7 @@ import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.Validat
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -186,4 +187,20 @@ public class ExceptionsMapper {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    public static ErrorResponse of(AccessDeniedException ex) {
+        final String uri = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
+        final String method = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
+
+        return ErrorResponse
+                .builder()
+                .message("You do not have permission to perform this action.")
+                .path(uri)
+                .method(method)
+                .typeError(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .status(String.valueOf(HttpStatus.FORBIDDEN.value()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
 }
