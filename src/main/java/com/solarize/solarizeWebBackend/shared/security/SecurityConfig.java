@@ -94,9 +94,9 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuracao =  new CorsConfiguration();
-        configuracao.applyPermitDefaultValues();
-        configuracao.setAllowedMethods(
+        CorsConfiguration config =  new CorsConfiguration();
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowedMethods(
                 Arrays.asList(
                         HttpMethod.GET.name(),
                         HttpMethod.POST.name(),
@@ -106,10 +106,12 @@ public class SecurityConfig {
                 )
         );
 
-        configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "x-auth-token"));
+        config.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource origem = new UrlBasedCorsConfigurationSource();
-        origem.registerCorsConfiguration("/**", configuracao);
+        origem.registerCorsConfiguration("/**", config);
 
         return origem;
 
