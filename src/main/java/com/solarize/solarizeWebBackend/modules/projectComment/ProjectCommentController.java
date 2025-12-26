@@ -24,18 +24,18 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/projects/comments")
+@RequestMapping("/projects/{projectId}/comments")
 public class ProjectCommentController {
 
     private final ProjectCommentService projectCommentService;
 
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PostMapping
-    public ResponseEntity<ProjectCommentResponseDTO> create(@Valid @RequestBody CreateProjectCommentRequestDTO requestDTO){
+    public ResponseEntity<ProjectCommentResponseDTO> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO requestDTO){
         ProjectCommentResponseDTO newProjectComment = ProjectCommentMapper.toDto(
                 projectCommentService.create(
                         requestDTO.getAuthorId(),
-                        requestDTO.getProjectId(),
+                        projectId,
                         requestDTO.getComment()
                 )
         );
