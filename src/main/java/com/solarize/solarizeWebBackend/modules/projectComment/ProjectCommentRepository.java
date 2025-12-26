@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 public interface ProjectCommentRepository extends JpaRepository<ProjectComment, Long> {
     Integer countByProjectId(@Param("projectId") Long projectId);
 
-    Page<ProjectComment> findAllByProject(Long projectId, Pageable pageable);
+    Page<ProjectComment> findAllByProjectId(Long projectId, Pageable pageable);
 
 }

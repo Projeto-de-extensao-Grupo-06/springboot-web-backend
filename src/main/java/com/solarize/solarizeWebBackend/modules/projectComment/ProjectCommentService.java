@@ -50,7 +50,7 @@ public class ProjectCommentService {
         if (!projectRepository.existsById(projectId)){
             throw new NotFoundException("Project not found");
         }
-        return repository.findAllByProject(projectId,pageable);
+        return repository.findAllByProjectId(projectId,pageable);
     }
 
     public void deleteComment(Long id) {
