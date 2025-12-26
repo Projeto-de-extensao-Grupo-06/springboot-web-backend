@@ -110,10 +110,10 @@ public class SecurityConfig {
         config.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource origem = new UrlBasedCorsConfigurationSource();
-        origem.registerCorsConfiguration("/**", config);
+        UrlBasedCorsConfigurationSource origin = new UrlBasedCorsConfigurationSource();
+        origin.registerCorsConfiguration("/**", config);
 
-        return origem;
+        return origin;
 
     }
 }
