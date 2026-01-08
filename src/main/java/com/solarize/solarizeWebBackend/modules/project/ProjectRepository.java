@@ -49,5 +49,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 
     Optional<Project> findByIdAndIsActiveTrue(Long projectId);
+    List<Project> findByClientIdAndIsActiveTrue(Long clientId);
 }
 

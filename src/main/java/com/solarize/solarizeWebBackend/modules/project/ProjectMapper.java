@@ -14,6 +14,9 @@ import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdate
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ProjectMapper {
     public static ProjectSummaryDTO toSummary(Project entity) {
         if (entity == null) return null;
@@ -80,5 +83,13 @@ public class ProjectMapper {
                 .clientId(entity.getClient().getId())
                 .addressId(entity.getAddress().getId())
                 .build();
+    }
+
+    public static List<ProjectSummaryDTO> toSummary(List<Project> entities){
+        if (entities == null) return null;
+
+        return entities.stream()
+                .map(ProjectMapper::toSummary)
+                .collect(Collectors.toList());
     }
 }
