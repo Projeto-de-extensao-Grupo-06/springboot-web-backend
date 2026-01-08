@@ -72,8 +72,8 @@ public class ProjectController {
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<ProjectSummaryDTO>> getProjectByClientId(@PathVariable Long clientId) {
-        List<Project> projects = projectService.getProjectByClientId(clientId);
+    public ResponseEntity<List<ProjectSummaryDTO>> getProjectsByClientId(@PathVariable Long clientId) {
+        List<Project> projects = projectService.getProjectsByClientId(clientId);
         if(projects.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(ProjectMapper.toSummary(projects));
     }

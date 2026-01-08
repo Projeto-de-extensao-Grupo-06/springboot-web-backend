@@ -81,12 +81,12 @@ public class ClientService {
         return REPOSITORY.save(existingClient);
     }
 
-
     public void deleteClient(Long id) {
-        if (!REPOSITORY.existsById(id)) {
-            throw new NotFoundException("Client not found.");
-        }
-        REPOSITORY.deleteById(id);
+        Client client = REPOSITORY.findById(id)
+                .orElseThrow(() -> new NotFoundException("Client not found."));
+
+        client.setActive(false);
+        REPOSITORY.save(client);
     }
 
     private void validateConflict(Client client) {
@@ -109,6 +109,13 @@ public class ClientService {
 
         if (REPOSITORY.existsByPhoneAndIdNot(client.getPhone(), id))
             throw new ConflictException("Phone already exists");
+    }
+
+    public List<Client> getClients(Boolean active) {
+        if (active != null) {
+            return REPOSITORY.findAllByActive(active);
+        }
+        return REPOSITORY.findAll();
     }
 
 }

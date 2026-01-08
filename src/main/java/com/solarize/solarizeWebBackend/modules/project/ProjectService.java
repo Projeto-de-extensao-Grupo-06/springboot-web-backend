@@ -189,7 +189,7 @@ public class ProjectService {
         }
     }
 
-    public List<Project> getProjectByClientId(Long clientId){
+    public List<Project> getProjectsByClientId(Long clientId){
         if(!clientRepository.existsById(clientId))
             throw new NotFoundException("Client does not exists on database");
 
