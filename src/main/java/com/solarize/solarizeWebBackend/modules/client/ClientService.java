@@ -87,7 +87,7 @@ public class ClientService {
         Client client = REPOSITORY.findById(id)
                 .orElseThrow(() -> new NotFoundException("Client not found."));
 
-        client.setActive(ClientStatusEnum.INACTIVE);
+        client.setStatus(ClientStatusEnum.INACTIVE);
         REPOSITORY.save(client);
     }
 
