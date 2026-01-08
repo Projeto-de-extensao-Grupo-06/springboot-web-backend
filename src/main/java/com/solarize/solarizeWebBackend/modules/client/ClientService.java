@@ -10,6 +10,8 @@ import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,8 +30,8 @@ public class ClientService {
                 .orElseThrow(() -> new NotFoundException("Client not found."));
     }
 
-    public List<Client> getClients() {
-        return REPOSITORY.findAll();
+    public Page<Client> getClients(String search, ClientStatusEnum status, Pageable pageable) {
+        return REPOSITORY.findAllClients(search, status, pageable);
     }
 
     public Client postClient(Client client) {

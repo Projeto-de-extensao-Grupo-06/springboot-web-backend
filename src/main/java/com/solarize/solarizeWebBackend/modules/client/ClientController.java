@@ -12,6 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,10 +40,13 @@ public class ClientController {
 
     @PreAuthorize("hasAuthority('CLIENT_READ')")
     @GetMapping()
-    public ResponseEntity<List<ClientResponseDTO>> getClients(){
-        final List<Client> clients = SERVICE.getClients();
-        if (clients.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(ClientMapper.of(clients));
+    public ResponseEntity<Page<ClientResponseDTO>> getClients(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) ClientStatusEnum status,
+            @PageableDefault(page = 0, size = 20) Pageable pageable
+    ){
+        final Page<Client> clients = SERVICE.getClients(search, status, pageable);
+        return ResponseEntity.ok(clients.map(ClientMapper::of));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_WRITE')")
