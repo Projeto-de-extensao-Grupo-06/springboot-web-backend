@@ -17,7 +17,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     boolean existsByDocumentNumberAndIdNot(String documentNumber, Long id);
     boolean existsByEmailAndIdNot(String email, Long id);
     boolean existsByPhoneAndIdNot(String phone, Long id);
-    List<Client> findAllByActive(Boolean active);
 
     @Query("""
         SELECT c FROM Client c

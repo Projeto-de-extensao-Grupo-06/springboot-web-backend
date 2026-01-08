@@ -113,11 +113,4 @@ public class ClientService {
             throw new ConflictException("Phone already exists");
     }
 
-    public List<Client> getClients(Boolean active) {
-        if (active != null) {
-            return REPOSITORY.findAllByActive(active);
-        }
-        return REPOSITORY.findAll();
-    }
-
 }
