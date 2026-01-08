@@ -1,11 +1,11 @@
 --------------------------------------------
 -- CLIENTS
 --------------------------------------------
-INSERT INTO client (first_name, last_name, phone, email)
+INSERT INTO client (first_name, last_name, phone, email, status, document_number, document_type, created_at, updated_at)
 VALUES
-('João', 'da Silva', '11999999999', 'joao@email.com'),
-('Maria', 'Souza', '11888888888', 'maria@email.com'),
-('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
+('João', 'da Silva', '11999999999', 'joao@email.com', 'ACTIVE', '12345678900', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Maria', 'Souza', '11888888888', 'maria@email.com', 'ACTIVE', '98765432100', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Carlos', 'Pereira', '11777777777', 'carlos@email.com', 'INACTIVE', '11122233344', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --------------------------------------------
 -- PERMISSION GROUP
