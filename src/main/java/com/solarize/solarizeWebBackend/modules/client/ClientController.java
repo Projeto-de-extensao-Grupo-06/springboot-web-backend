@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -43,9 +44,13 @@ public class ClientController {
     public ResponseEntity<Page<ClientResponseDTO>> getClients(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) ClientStatusEnum status,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
             @PageableDefault(page = 0, size = 20) Pageable pageable
     ){
-        final Page<Client> clients = SERVICE.getClients(search, status, pageable);
+        final Page<Client> clients = SERVICE.getClients(search, status, city, state, startDate, endDate, pageable);
         return ResponseEntity.ok(clients.map(ClientMapper::of));
     }
 

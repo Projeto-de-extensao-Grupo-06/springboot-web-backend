@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +32,19 @@ public class ClientService {
                 .orElseThrow(() -> new NotFoundException("Client not found."));
     }
 
-    public Page<Client> getClients(String search, ClientStatusEnum status, Pageable pageable) {
-        return REPOSITORY.findAllClients(search, status, pageable);
+    public Page<Client> getClients(
+            String search,
+            ClientStatusEnum status,
+            String city,
+            String state,
+            LocalDate startDate,
+            LocalDate endDate,
+            Pageable pageable
+    ) {
+        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(LocalTime.MAX) : null;
+
+        return REPOSITORY.findAllClients(search, status, city, state, startDateTime, endDateTime, pageable);
     }
 
     public Client postClient(Client client) {

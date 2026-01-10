@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -20,17 +21,26 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("""
         SELECT c FROM Client c
-        WHERE (:search IS NULL OR (
-            LOWER(c.firstName) LIKE LOWER(CONCAT('%', :search, '%')) OR
-            LOWER(c.lastName) LIKE LOWER(CONCAT('%', :search, '%')) OR
-            LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%')) OR
-            LOWER(c.documentNumber) LIKE LOWER(CONCAT('%', :search, '%'))
-        ))
-        AND (:status IS NULL OR c.status = :status)
+        LEFT JOIN c.mainAddress a
+        WHERE (:status IS NULL OR c.status = :status)
+          AND (:city IS NULL OR LOWER(a.city) LIKE LOWER(CONCAT('%', :city, '%')))
+          AND (:state IS NULL OR LOWER(a.state) = LOWER(:state))
+          AND (cast(:startDate as timestamp) IS NULL OR c.createdAt >= :startDate)
+          AND (cast(:endDate as timestamp) IS NULL OR c.createdAt <= :endDate)
+          AND (:search IS NULL OR :search = '' OR (
+              LOWER(CONCAT(c.firstName, ' ', c.lastName)) LIKE LOWER(CONCAT('%', :search, '%')) OR
+              c.email LIKE CONCAT('%', :search, '%') OR
+              c.phone LIKE CONCAT('%', :search, '%') OR
+              c.documentNumber LIKE CONCAT('%', :search, '%')
+          ))
     """)
     Page<Client> findAllClients(
             @Param("search") String search,
             @Param("status") ClientStatusEnum status,
+            @Param("city") String city,
+            @Param("state") String state,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
 }
