@@ -42,20 +42,17 @@ public class AuthController {
         Cookie tokenCookie = new Cookie("Authorization", authResponseDto.getToken());
         tokenCookie.setPath("/");
         tokenCookie.setHttpOnly(true);
-        tokenCookie.setAttribute("SameSite", "Strict");
         tokenCookie.setMaxAge(60 * 60 * 6);
         response.addCookie(tokenCookie);
 
         Cookie userFirstNameCookie = new Cookie("userFirstName", authResponseDto.getFirstName());
-        userFirstNameCookie.setPath("/");
+        userFirstNameCookie.setPath("/");   
         userFirstNameCookie.setMaxAge(60 * 60 * 6);
-        userFirstNameCookie.setAttribute("SameSite", "Strict");
         response.addCookie(userFirstNameCookie);
 
         Cookie userLastNameCookie = new Cookie("userLastName", authResponseDto.getLastName());
         userLastNameCookie.setPath("/");
         userLastNameCookie.setMaxAge(60 * 60 * 6);
-        userLastNameCookie.setAttribute("SameSite", "Strict");
         response.addCookie(userLastNameCookie);
 
 
@@ -65,7 +62,6 @@ public class AuthController {
                 .getBytes(StandardCharsets.UTF_8)));
         authoritiesCookie.setPath("/");
         authoritiesCookie.setMaxAge(60 * 60 * 6);
-        authoritiesCookie.setAttribute("SameSite", "Strict");
         response.addCookie(authoritiesCookie);
 
         return ResponseEntity.status(204).build();
