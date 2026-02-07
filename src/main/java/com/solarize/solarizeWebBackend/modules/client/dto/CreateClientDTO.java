@@ -22,15 +22,15 @@ public class CreateClientDTO {
     @Schema(description = "Client first name", example = "John")
     @NotBlank(message = "First name is obligatory")
     @Pattern(
-            regexp = "^[\\p{L}'\\-]+$",
-            message = "First name must contain only letters (any alphabet), hyphens or apostrophes"
+            regexp = "^[\\p{L}'\\-\\s]+$",
+            message = "Last name must contain only letters (any alphabet), hyphens or apostrophes"
     )
     private String firstName;
 
     @Schema(description = "Client nickname or last name", example = "Doe")
     @NotBlank(message = "Nick name is obligatory")
     @Pattern(
-            regexp = "^[\\p{L}'\\-]+$",
+            regexp = "^[\\p{L}\\p{M}' \\-]+$",
             message = "Last name must contain only letters (any alphabet), hyphens or apostrophes"
     )
     private String lastName;
