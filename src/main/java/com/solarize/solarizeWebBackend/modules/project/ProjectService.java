@@ -188,4 +188,11 @@ public class ProjectService {
             log.warn("Invalid project state transition");
         }
     }
+
+    public List<Project> getProjectsByClientId(Long clientId){
+        if(!clientRepository.existsById(clientId))
+            throw new NotFoundException("Client does not exists on database");
+
+        return projectRepository.findByClientIdAndIsActiveTrue(clientId);
+    }
 }

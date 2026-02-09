@@ -12,11 +12,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,10 +41,17 @@ public class ClientController {
 
     @PreAuthorize("hasAuthority('CLIENT_READ')")
     @GetMapping()
-    public ResponseEntity<List<ClientResponseDTO>> getClients(){
-        final List<Client> clients = SERVICE.getClients();
-        if (clients.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(ClientMapper.of(clients));
+    public ResponseEntity<Page<ClientResponseDTO>> getClients(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) ClientStatusEnum status,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @PageableDefault(page = 0, size = 20) Pageable pageable
+    ){
+        final Page<Client> clients = SERVICE.getClients(search, status, city, state, startDate, endDate, pageable);
+        return ResponseEntity.ok(clients.map(ClientMapper::of));
     }
 
     @PreAuthorize("hasAuthority('CLIENT_WRITE')")

@@ -33,7 +33,6 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ProjectMapper.toDto(createdProject));
     }
 
-
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping
     public ResponseEntity<Page<ProjectSummaryDTO>> getProjects(
@@ -69,5 +68,13 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProjectById(@PathVariable Long projectId) {
         projectService.softDeleteProject(projectId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<ProjectSummaryDTO>> getProjectsByClientId(@PathVariable Long clientId) {
+        List<Project> projects = projectService.getProjectsByClientId(clientId);
+        if(projects.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ProjectMapper.toSummary(projects));
     }
 }

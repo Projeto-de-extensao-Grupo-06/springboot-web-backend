@@ -10,9 +10,13 @@ import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +32,19 @@ public class ClientService {
                 .orElseThrow(() -> new NotFoundException("Client not found."));
     }
 
-    public List<Client> getClients() {
-        return REPOSITORY.findAll();
+    public Page<Client> getClients(
+            String search,
+            ClientStatusEnum status,
+            String city,
+            String state,
+            LocalDate startDate,
+            LocalDate endDate,
+            Pageable pageable
+    ) {
+        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(LocalTime.MAX) : null;
+
+        return REPOSITORY.findAllClients(search, status, city, state, startDateTime, endDateTime, pageable);
     }
 
     public Client postClient(Client client) {
@@ -81,12 +96,12 @@ public class ClientService {
         return REPOSITORY.save(existingClient);
     }
 
-
     public void deleteClient(Long id) {
-        if (!REPOSITORY.existsById(id)) {
-            throw new NotFoundException("Client not found.");
-        }
-        REPOSITORY.deleteById(id);
+        Client client = REPOSITORY.findById(id)
+                .orElseThrow(() -> new NotFoundException("Client not found."));
+
+        client.setStatus(ClientStatusEnum.INACTIVE);
+        REPOSITORY.save(client);
     }
 
     private void validateConflict(Client client) {
