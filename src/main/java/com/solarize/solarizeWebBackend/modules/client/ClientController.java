@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.AddressMapper;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
+import com.solarize.solarizeWebBackend.modules.client.dto.RequestClientDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -73,14 +74,9 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> putClient(
             @PathVariable Long id,
-            @Valid @RequestBody CreateClientDTO dto
+            @Valid @RequestBody RequestClientDto dto
     ){
-        Address address = null;
-        if (dto.getMainAddress() != null) {
-            address = AddressMapper.toEntity(dto.getMainAddress());
-        }
-
-        Client client = ClientMapper.of(dto, address);
+        Client client = ClientMapper.of(id, dto);
         Client updated = SERVICE.putClient(id, client);
         return ResponseEntity.ok(ClientMapper.of(updated));
     }

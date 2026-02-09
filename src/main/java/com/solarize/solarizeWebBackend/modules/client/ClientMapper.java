@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
+import com.solarize.solarizeWebBackend.modules.client.dto.RequestClientDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +26,21 @@ public class ClientMapper {
                 .note(client.getNote())
                 .createdAt(client.getCreatedAt())
                 .mainAddress(of(client.getMainAddress()))
+                .build();
+    }
+
+    public static Client of(Long id, RequestClientDto client){
+        if (client == null) return null;
+
+        return Client.builder()
+                .id(id)
+                .firstName(client.getFirstName())
+                .lastName(client.getLastName())
+                .phone(client.getPhone())
+                .email(client.getEmail())
+                .documentNumber(client.getDocumentNumber())
+                .documentType(client.getDocumentType())
+                .note(client.getNote())
                 .build();
     }
 

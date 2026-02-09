@@ -1,8 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
-import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,15 +10,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(name = "Create Client", description = "Object with the necessary data to create a client")
-public class CreateClientDTO {
+@Schema(name = "Client Data Request", description = "Object with the necessary data to request Client")
+public class RequestClientDto {
     @Schema(description = "Client first name", example = "John")
     @NotBlank(message = "First name is obligatory")
     @Pattern(
@@ -58,9 +53,4 @@ public class CreateClientDTO {
     @Email(message = "Invalid e-mail")
     @NotBlank(message = "E-mail is obligatory")
     private String email;
-
-    @Schema(description = "Client main address (optional)")
-    @Valid
-    private CreateAddressDto mainAddress;
-
 }
