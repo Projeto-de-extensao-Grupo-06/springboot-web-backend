@@ -48,7 +48,7 @@ public class AddressMapper {
                 .postalCode(address.getPostalCode())
                 .neighborhood(address.getNeighborhood())
                 .city(address.getCity())
-                .uf(address.getState())
+                .state(address.getState())
                 .stateName(address.getState().getFullName())
                 .type(address.getType())
                 .apartment(address.getApartment())

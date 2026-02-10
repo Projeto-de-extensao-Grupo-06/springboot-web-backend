@@ -56,7 +56,6 @@ public class RequestClientDto {
     @NotBlank(message = "E-mail is obligatory")
     private String email;
 
-    @Schema(description = "Address data. Can be null if no update is needed.", nullable = true)
-    @Valid
-    private UpdateAddressDto mainAddress;
+    @Schema(description = "Client main address")
+    private com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto mainAddress;
 }
