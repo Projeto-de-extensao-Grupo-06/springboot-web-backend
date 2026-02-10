@@ -49,7 +49,7 @@ public class ClientController {
             @RequestParam(required = false) String state,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate,
-            @PageableDefault(page = 0, size = 20) Pageable pageable
+            @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
         final Page<Client> clients = SERVICE.getClients(search, status, city, state, startDate, endDate, pageable);
         return ResponseEntity.ok(clients.map(ClientMapper::of));
