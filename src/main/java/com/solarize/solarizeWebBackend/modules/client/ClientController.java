@@ -29,14 +29,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientController {
 
-    private final ClientService SERVICE;
+    private final ClientService clientService;
 
     @PreAuthorize("hasAuthority('CLIENT_READ')")
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> getClient(
             @PathVariable Long id
     ){
-        final Client client = SERVICE.getClient(id);
+        final Client client = clientService.getClient(id);
         return ResponseEntity.ok(ClientMapper.of(client));
     }
 
@@ -51,7 +51,7 @@ public class ClientController {
             @RequestParam(required = false) LocalDate endDate,
             @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
-        final Page<Client> clients = SERVICE.getClients(search, status, city, state, startDate, endDate, pageable);
+        final Page<Client> clients = clientService.getClients(search, status, city, state, startDate, endDate, pageable);
         return ResponseEntity.ok(clients.map(ClientMapper::of));
     }
 
@@ -66,7 +66,7 @@ public class ClientController {
         }
 
         Client client = ClientMapper.of(dto, address);
-        Client created = SERVICE.postClient(client);
+        Client created = clientService.postClient(client);
         return ResponseEntity.status(201).body(ClientMapper.of(created));
     }
 
@@ -77,7 +77,7 @@ public class ClientController {
             @Valid @RequestBody RequestClientDto dto
     ){
         Client client = ClientMapper.of(id, dto);
-        Client updated = SERVICE.putClient(id, client);
+        Client updated = clientService.putClient(client);
         return ResponseEntity.ok(ClientMapper.of(updated));
     }
 
@@ -86,7 +86,7 @@ public class ClientController {
     public ResponseEntity<Void> deleteClient(
             @PathVariable Long id
     ){
-        SERVICE.deleteClient(id);
+        clientService.deleteClient(id);
         return ResponseEntity.noContent().build();
     }
 

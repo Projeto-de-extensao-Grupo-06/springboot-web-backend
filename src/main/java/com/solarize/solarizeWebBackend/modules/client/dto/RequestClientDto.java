@@ -1,6 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
+import com.solarize.solarizeWebBackend.modules.address.dto.UpdateAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,7 +22,7 @@ public class RequestClientDto {
     @NotBlank(message = "First name is obligatory")
     @Pattern(
             regexp = "^[\\p{L}'\\-\\s]+$",
-            message = "Last name must contain only letters (any alphabet), hyphens or apostrophes"
+            message = "First name must contain only letters (any alphabet), hyphens or apostrophes"
     )
     private String firstName;
 
@@ -53,4 +55,8 @@ public class RequestClientDto {
     @Email(message = "Invalid e-mail")
     @NotBlank(message = "E-mail is obligatory")
     private String email;
+
+    @Schema(description = "Address data. Can be null if no update is needed.", nullable = true)
+    @Valid
+    private UpdateAddressDto mainAddress;
 }
