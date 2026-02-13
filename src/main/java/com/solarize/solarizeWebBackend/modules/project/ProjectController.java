@@ -1,4 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.project;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -76,5 +78,13 @@ public class ProjectController {
         List<Project> projects = projectService.getProjectsByClientId(clientId);
         if(projects.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(ProjectMapper.toSummary(projects));
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
+    @GetMapping("/leads")
+    public ResponseEntity<List<LeadResponseDTO>> getLeads() {
+        List<Project> leads = projectService.getLeads();
+        if(leads.isEmpty()) ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ProjectMapper.of(leads));
     }
 }

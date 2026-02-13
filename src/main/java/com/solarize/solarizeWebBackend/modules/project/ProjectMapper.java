@@ -11,6 +11,7 @@ import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 
@@ -90,6 +91,29 @@ public class ProjectMapper {
 
         return entities.stream()
                 .map(ProjectMapper::toSummary)
+                .collect(Collectors.toList());
+    }
+
+    public static LeadResponseDTO of(Project entity){
+        if (entity == null) return null;
+
+        return LeadResponseDTO.builder()
+                .clientName(String.join(
+                        "",
+                        entity.getClient().getFirstName(),
+                        entity.getClient().getLastName()
+                ))
+                .projectFrom(entity.getProjectFrom())
+                .createdAt(entity.getCreatedAt())
+                .status(entity.getStatus())
+                .build();
+    }
+
+    public static List<LeadResponseDTO> of(List<Project> entities){
+        if (entities == null) return null;
+
+        return entities.stream()
+                .map(ProjectMapper::of)
                 .collect(Collectors.toList());
     }
 }

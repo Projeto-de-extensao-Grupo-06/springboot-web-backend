@@ -195,4 +195,8 @@ public class ProjectService {
 
         return projectRepository.findByClientIdAndIsActiveTrue(clientId);
     }
+
+    public List<Project> getLeads(){
+        return projectRepository.findActionableLeads(LocalDateTime.now());
+    }
 }
