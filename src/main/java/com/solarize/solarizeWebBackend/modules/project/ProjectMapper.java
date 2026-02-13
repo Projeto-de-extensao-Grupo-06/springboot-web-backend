@@ -99,7 +99,7 @@ public class ProjectMapper {
 
         return LeadResponseDTO.builder()
                 .clientName(String.join(
-                        "",
+                        " ",
                         entity.getClient().getFirstName(),
                         entity.getClient().getLastName()
                 ))

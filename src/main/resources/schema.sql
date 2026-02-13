@@ -142,7 +142,7 @@ VALUES
     -- 3. [LEAD QUENTE 2] - Origem SITE (Deve aparecer no TOPO)
     ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 3, 1, 1, DATEADD('HOUR', -5, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Lead Urgente Site', 'Formulário de contato do site.'),
     -- 4. [LEAD FRIO - MADURO] - Deve aparecer (Agendado para ONTEM)
-    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 4, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'HYBRID', 'SITE_BUDGET_FORM', 'Retorno de Lead Frio', 'Cliente pediu para ligar mês que vem.'),
+    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 4, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Retorno de Lead Frio', 'Cliente pediu para ligar mês que vem.'),
     -- 5. [LEAD FRIO - VERDE] - NÃO deve aparecer (Agendado para AMANHÃ)
     ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 5, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Futuro', 'Ainda não está na hora de ligar.'),
     -- 6. [RUÍDO] - Projeto já avançado (Status 5) - NÃO deve aparecer
