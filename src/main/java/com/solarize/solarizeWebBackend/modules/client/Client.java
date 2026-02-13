@@ -38,8 +38,8 @@ public class Client {
     @JoinColumn(name = "fk_coworker_last_update")
     private Coworker coworkerLastUpdate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_main_address")
+    @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_main_address", nullable = true)
     private Address mainAddress;
 
     @PrePersist

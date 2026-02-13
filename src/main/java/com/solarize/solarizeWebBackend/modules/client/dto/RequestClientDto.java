@@ -1,6 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
-import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.dto.UpdateAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -12,20 +12,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(name = "Create Client", description = "Object with the necessary data to create a client")
-public class CreateClientDTO {
+@Schema(name = "Client Data Request", description = "Object with the necessary data to request Client")
+public class RequestClientDto {
     @Schema(description = "Client first name", example = "John")
     @NotBlank(message = "First name is obligatory")
     @Pattern(
             regexp = "^[\\p{L}'\\-\\s]+$",
-            message = "Last name must contain only letters (any alphabet), hyphens or apostrophes"
+            message = "First name must contain only letters (any alphabet), hyphens or apostrophes"
     )
     private String firstName;
 
@@ -59,8 +56,7 @@ public class CreateClientDTO {
     @NotBlank(message = "E-mail is obligatory")
     private String email;
 
-    @Schema(description = "Client main address (optional)")
+    @Schema(description = "Address data. Can be null if no update is needed.", nullable = true)
     @Valid
-    private CreateAddressDto mainAddress;
-
+    private UpdateAddressDto mainAddress;
 }
