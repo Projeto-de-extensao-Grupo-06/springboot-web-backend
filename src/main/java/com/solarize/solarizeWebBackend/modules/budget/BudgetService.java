@@ -12,6 +12,7 @@ import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
 import com.solarize.solarizeWebBackend.modules.materialUrl.repository.MaterialUrlRepository;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
+import com.solarize.solarizeWebBackend.shared.event.BudgetCreateEvent;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,7 @@ public class BudgetService {
     private final BudgetMaterialRepository budgetMaterialRepository;
     private final FixedParameterRepository fixedParameterRepository;
     private final PersonalizedParameterRepository personalizedParameterRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @EventListener(ApplicationReadyEvent.class)
     public void creatingConfigParams() {
@@ -175,7 +178,11 @@ public class BudgetService {
         budget.setSubtotal(budgetCost.get("subtotal"));
         budget.setTotalCost(budgetCost.get("totalCost"));
 
-        return budgetRepository.save(budget);
+        Budget budgetCreation = budgetRepository.save(budget);
+
+        eventPublisher.publishEvent(new BudgetCreateEvent(projectId, budgetCreation.getFinalBudget()));
+
+        return budgetCreation;
     }
 
     public Budget getBudget(Long projectId) {

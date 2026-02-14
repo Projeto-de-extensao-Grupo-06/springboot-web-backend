@@ -8,6 +8,7 @@ import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
+import com.solarize.solarizeWebBackend.shared.event.BudgetCreateEvent;
 import com.solarize.solarizeWebBackend.shared.event.ProjectDeletedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
 import com.solarize.solarizeWebBackend.modules.projectComment.ProjectCommentService;
@@ -189,6 +190,21 @@ public class ProjectService {
         }
     }
 
+    @EventListener
+    public void projectBudgetCreated(BudgetCreateEvent event) {
+        Project project = projectRepository.findById(event.projectId()).orElseThrow();
+
+        System.out.println(event.finalBudget());
+
+        if(event.finalBudget()) {
+            project.getStatus().getStateHandler().applyToFinalBudget(project);
+        } else {
+            project.getStatus().getStateHandler().applyToPreBudget(project);
+        }
+
+        projectRepository.save(project);
+    }
+
     public List<Project> getProjectsByClientId(Long clientId){
         if(!clientRepository.existsById(clientId))
             throw new NotFoundException("Client does not exists on database");
@@ -198,5 +214,12 @@ public class ProjectService {
 
     public List<Project> getLeads(){
         return projectRepository.findActionableLeads(LocalDateTime.now());
+    }
+
+    public void changeStatusClientAwaitingContact(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project does not exists"));
+        project.getStatus().getStateHandler().applyToClientAwaitingContact(project);
+        projectRepository.save(project);
     }
 }

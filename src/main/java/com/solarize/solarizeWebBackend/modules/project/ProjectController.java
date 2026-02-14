@@ -87,4 +87,12 @@ public class ProjectController {
         if(leads.isEmpty()) ResponseEntity.noContent().build();
         return ResponseEntity.ok(ProjectMapper.of(leads));
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/awaiting-contact/{projectId}")
+    public ResponseEntity<Void> clientAwaitingContactStatus(@PathVariable Long projectId) {
+        projectService.changeStatusClientAwaitingContact(projectId);
+
+        return ResponseEntity.noContent().build();
+    }
 }
