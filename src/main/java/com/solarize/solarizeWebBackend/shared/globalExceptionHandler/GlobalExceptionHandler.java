@@ -109,6 +109,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
+    @ExceptionHandler(InvalidStateTransitionException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidStateTransitionException(InvalidStateTransitionException ex) {
+        return new ResponseEntity<>(ExceptionsMapper.of(ex), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.error(ex.toString());

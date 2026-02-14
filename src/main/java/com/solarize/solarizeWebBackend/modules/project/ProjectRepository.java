@@ -54,10 +54,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             WHERE p.isActive = true
                 AND (p.status = 'CLIENT_AWAITING_CONTACT'
                     OR (
-                        p.status = 'AWAITING_RETRY'
-                        AND r.scheduledDate <= :now
-                        AND ( r.retrying = false OR r.retrying IS NULL )
-                    ) 
+                        p.status = "RETRYING"
+                    )
                 )
         ORDER BY p.statusWeight ASC, p.createdAt DESC
     """)
