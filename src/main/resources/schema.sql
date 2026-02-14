@@ -47,14 +47,24 @@ INSERT INTO permission_group (
     access_project,
     access_budget,
     access_schedule
-) VALUES (
-             'ADMIN',
-             'PROJECT_LIST',
-             0xF,
-             0xF,
-             0xF,
-             0xF
-         );
+) VALUES
+      (
+         'ADMIN',
+         'PROJECT_LIST',
+         0xF,
+         0xF,
+         0xF,
+         0xF
+      ),
+      (
+          'SECRETARIA',
+          'CLIENT_LIST',
+          0x3,
+          0x1,
+          0x0,
+          0xF
+      );
+
 
 --------------------------------------------
 -- COWORKER (RESPONSÁVEL)
@@ -67,15 +77,25 @@ INSERT INTO coworker (
     password,
     fk_permission_group,
     is_active
-) VALUES (
-    'Bryan',
-    'Rocha',
-    'bryangomesrocha@gmail.com',
-    '11964275054',
-    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-    1,
-    TRUE
-);
+) VALUES
+    (
+        'Bryan',
+        'Rocha',
+        'bryangomesrocha@gmail.com',
+        '11964275054',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        1,
+        TRUE
+    ),
+    (
+        'Ranier',
+        'Dalton',
+        'ranierd.couto@gmail.com',
+        '11949902159',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        2,
+        TRUE
+    );
 
 --------------------------------------------
 -- BUDGET
