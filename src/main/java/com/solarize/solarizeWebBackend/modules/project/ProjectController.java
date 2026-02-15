@@ -85,9 +85,14 @@ public class ProjectController {
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping("/leads")
-    public ResponseEntity<List<LeadResponseDTO>> getLeads() {
-        List<Project> leads = projectService.getLeads();
-        if(leads.isEmpty()) ResponseEntity.noContent().build();
+    public ResponseEntity<List<LeadResponseDTO>> getLeads(
+            @RequestParam(required = false) LocalDateTime minDate,
+            @RequestParam(required = false) LocalDateTime maxDate,
+            @RequestParam(required = false) ProjectStatusEnum status,
+            @RequestParam(required = false) String clientName
+    ) {
+        List<Project> leads = projectService.getLeads(minDate, maxDate, status, clientName);
+        if(leads.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(ProjectMapper.of(leads));
     }
 

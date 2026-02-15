@@ -214,8 +214,8 @@ public class ProjectService {
         return projectRepository.findByClientIdAndIsActiveTrue(clientId);
     }
 
-    public List<Project> getLeads(){
-        return projectRepository.findActionableLeads(LocalDateTime.now());
+    public List<Project> getLeads(LocalDateTime minDate, LocalDateTime maxDate, ProjectStatusEnum status, String clientName){
+        return projectRepository.findActionableLeads(minDate, maxDate, status, clientName);
     }
 
     public void changeStatusClientAwaitingContact(Long projectId) {

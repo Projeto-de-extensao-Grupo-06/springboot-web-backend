@@ -59,9 +59,21 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
                         p.status = 'RETRYING'
                     )
                 )
+                AND (:minDate IS NULL OR p.createdAt >= :minDate)
+                AND (:maxDate IS NULL OR p.createdAt <= :maxDate)
+                AND (:status IS NULL OR p.status = :status)
+                AND (:clientName IS NULL OR (
+                    LOWER(p.client.firstName) LIKE LOWER(CONCAT('%', :clientName, '%')) OR 
+                    LOWER(p.client.lastName) LIKE LOWER(CONCAT('%', :clientName, '%'))
+                ))
         ORDER BY p.statusWeight ASC, p.createdAt DESC
     """)
-    List<Project> findActionableLeads(LocalDateTime now);
+    List<Project> findActionableLeads(
+            @Param("minDate") LocalDateTime minDate,
+            @Param("maxDate") LocalDateTime maxDate,
+            @Param("status") ProjectStatusEnum status,
+            @Param("clientName") String clientName
+    );
     Optional<Project> findByIdAndIsActiveTrue(Long projectId);
     List<Project> findByClientIdAndIsActiveTrue(Long clientId);
 }
