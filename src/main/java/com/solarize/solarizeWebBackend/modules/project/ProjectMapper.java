@@ -24,6 +24,8 @@ public class ProjectMapper {
                 .status(entity.getStatus().name())
                 .responsible(CoworkerMapper.toDto(entity.getResponsible()))
                 .client(ClientMapper.of(entity.getClient()))
+                .deadline(entity.getDeadline())
+                .systemType(entity.getSystemType())
                 .build();
     }
 
