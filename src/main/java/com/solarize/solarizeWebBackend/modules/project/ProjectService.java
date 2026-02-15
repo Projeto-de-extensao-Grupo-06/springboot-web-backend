@@ -7,6 +7,8 @@ import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import com.solarize.solarizeWebBackend.shared.event.BudgetCreateEvent;
 import com.solarize.solarizeWebBackend.shared.event.ProjectDeletedEvent;
@@ -221,5 +223,12 @@ public class ProjectService {
                 .orElseThrow(() -> new NotFoundException("Project does not exists"));
         project.getStatus().getStateHandler().applyToClientAwaitingContact(project);
         projectRepository.save(project);
+    }
+
+    public  List<Schedule> getSchedulesByProjectId(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project does not exists"));
+
+        return project.getSchedules().stream().filter(s -> s.getStatus() == ScheduleStatusEnum.MARKED).toList();
     }
 }
