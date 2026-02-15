@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class LeadResponseDTO {
-    private Long id;
+    private Long projectId;
     private String clientName;
+    private String clientPhone;
     private ProjectSourceEnum projectFrom;
     private LocalDateTime createdAt;
     private ProjectStatusEnum status;

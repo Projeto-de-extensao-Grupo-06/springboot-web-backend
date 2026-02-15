@@ -98,12 +98,13 @@ public class ProjectMapper {
         if (entity == null) return null;
 
         return LeadResponseDTO.builder()
-                .id(entity.getId())
+                .projectId(entity.getId())
                 .clientName(String.join(
                         " ",
                         entity.getClient().getFirstName(),
                         entity.getClient().getLastName()
                 ))
+                .clientPhone(entity.getClient().getPhone())
                 .projectFrom(entity.getProjectFrom())
                 .createdAt(entity.getCreatedAt())
                 .status(entity.getStatus())

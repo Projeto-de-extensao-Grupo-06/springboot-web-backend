@@ -51,10 +51,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
         SELECT p FROM Project p
             LEFT JOIN FETCH p.client
             LEFT JOIN p.retry r
+            LEFT JOIN p.budget b
             WHERE p.isActive = true
-                AND (p.status = 'CLIENT_AWAITING_CONTACT'
+                AND (
+                    (p.status = 'CLIENT_AWAITING_CONTACT' AND b.id IS NOT NULL)
                     OR (
-                        p.status = "RETRYING"
+                        p.status = 'RETRYING'
                     )
                 )
         ORDER BY p.statusWeight ASC, p.createdAt DESC
