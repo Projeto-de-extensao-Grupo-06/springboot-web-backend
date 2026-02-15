@@ -4,6 +4,7 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientMapper;
+import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
@@ -45,7 +46,13 @@ public class ProjectMapper {
         project.setDescription(dto.getDescription());
         project.setAddress(address);
         project.setSystemType(dto.getProjectType());
+        project.setStatus(dto.getStatus());
 
+        if (dto.getResponsibleId() != null) {
+            Coworker responsible = new Coworker();
+            responsible.setId(dto.getResponsibleId());
+            project.setResponsible(responsible);
+        }
         return project;
     }
 
