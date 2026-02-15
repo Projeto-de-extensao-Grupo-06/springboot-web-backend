@@ -94,6 +94,7 @@ public class ProjectMapper {
         if (entity == null) return null;
 
         return LeadResponseDTO.builder()
+                .id(entity.getId())
                 .clientName(String.join(
                         " ",
                         entity.getClient().getFirstName(),
