@@ -4,6 +4,9 @@ import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManual
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleMapper;
+import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -88,11 +91,23 @@ public class ProjectController {
         return ResponseEntity.ok(ProjectMapper.of(leads));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('PROJECT_WRITE')")
     @PostMapping("/awaiting-contact/{projectId}")
     public ResponseEntity<Void> clientAwaitingContactStatus(@PathVariable Long projectId) {
         projectService.changeStatusClientAwaitingContact(projectId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority('SCHEDULE_READ')")
+    @GetMapping("/{projectId}/schedules")
+    public ResponseEntity<List<ScheduleResponseDTO>> getProjectSchedules(@PathVariable Long projectId) {
+        List<Schedule> schedules = projectService.getSchedulesByProjectId(projectId);
+
+        if(schedules.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        
+        return ResponseEntity.ok(ScheduleMapper.toDtoList(schedules));
     }
 }

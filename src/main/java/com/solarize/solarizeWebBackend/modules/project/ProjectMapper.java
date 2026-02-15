@@ -2,13 +2,9 @@ package com.solarize.solarizeWebBackend.modules.project;
 
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
-import com.solarize.solarizeWebBackend.modules.address.AddressMapper;
-import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientMapper;
-import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
-import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
