@@ -27,6 +27,7 @@ public class ProjectMapper {
                 .client(ClientMapper.of(entity.getClient()))
                 .deadline(entity.getDeadline())
                 .systemType(entity.getSystemType())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 

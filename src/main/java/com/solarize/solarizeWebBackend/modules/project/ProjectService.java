@@ -58,10 +58,15 @@ public class ProjectService {
             throw new NotFoundException("Client does not exists on database");
         }
 
-        Coworker responsibleCoworker = coworkerRepository.findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
-                        .orElseThrow(() -> new NotFoundException("Coworker does not exists on database, or is not active."));
+        Coworker responsibleCoworker = coworkerRepository
+                .findById(project.getResponsible().getId())
+                .orElseThrow(() ->
+                        new NotFoundException("Responsible coworker not found"));
 
-        project.setStatus(ProjectStatusEnum.NEW);
+        if (project.getStatus() == null) {
+            project.setStatus(ProjectStatusEnum.NEW);
+        }
+
         project.setIsActive(true);
         project.setCreatedAt(LocalDateTime.now());
         project.setResponsible(responsibleCoworker);

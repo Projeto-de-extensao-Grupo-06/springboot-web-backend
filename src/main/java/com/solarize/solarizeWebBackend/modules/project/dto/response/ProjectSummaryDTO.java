@@ -24,4 +24,5 @@ public class ProjectSummaryDTO {
     private SystemTypeEnum systemType;
     private Integer commentCount;
     private Integer fileCount;
+    private LocalDateTime createdAt;
 }
