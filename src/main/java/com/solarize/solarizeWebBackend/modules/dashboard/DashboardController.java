@@ -21,6 +21,7 @@ import java.util.List;
 public class DashboardController {
 
     private final DashboardService dashboardService;
+    private final com.solarize.solarizeWebBackend.modules.dashboard.mapper.DashboardMapper dashboardMapper;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/kpis")
@@ -28,10 +29,13 @@ public class DashboardController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (startDate == null) startDate = LocalDate.now().minusDays(30);
+        if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        return ResponseEntity.ok(dashboardService.getKpis(startDate, endDate));
+        KpiStatsDTO stats = dashboardService.getKpiStats(startDate, endDate);
+        String mostCostlyChannel = dashboardService.getMostCostlyChannel(startDate, endDate);
+        
+        return ResponseEntity.ok(dashboardMapper.toKpiDTO(stats, mostCostlyChannel));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -40,10 +44,15 @@ public class DashboardController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (startDate == null) startDate = LocalDate.now().minusDays(30);
+        if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        return ResponseEntity.ok(dashboardService.getAcquisitionChannels(startDate, endDate));
+        List<Object[]> rawData = dashboardService.getAcquisitionChannels(startDate, endDate);
+        List<AcquisitionChannelDTO> dtos = rawData.stream()
+            .map(dashboardMapper::toAcquisitionChannelDTO)
+            .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -52,10 +61,15 @@ public class DashboardController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (startDate == null) startDate = LocalDate.now().minusMonths(6); // Default to 6 months for trends
+        if (startDate == null) startDate = LocalDate.now().minusMonths(12); // Default to 12 months for trends
         if (endDate == null) endDate = LocalDate.now();
 
-        return ResponseEntity.ok(dashboardService.getFinancials(startDate, endDate));
+        List<Object[]> rawData = dashboardService.getFinancials(startDate, endDate);
+        List<FinancialDTO> dtos = rawData.stream()
+            .map(dashboardMapper::toFinancialDTO)
+            .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -64,7 +78,7 @@ public class DashboardController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (startDate == null) startDate = LocalDate.now().minusDays(30);
+        if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
         return ResponseEntity.ok(dashboardService.getProjectStatus(startDate, endDate));
@@ -76,7 +90,7 @@ public class DashboardController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (startDate == null) startDate = LocalDate.now().minusDays(30);
+        if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
         return ResponseEntity.ok(dashboardService.getSalesFunnel(startDate, endDate));

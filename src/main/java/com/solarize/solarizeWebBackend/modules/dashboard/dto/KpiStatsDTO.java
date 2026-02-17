@@ -1,4 +1,3 @@
-
 package com.solarize.solarizeWebBackend.modules.dashboard.dto;
 
 import lombok.AllArgsConstructor;
@@ -10,9 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FinancialDTO {
-    private Integer year;
-    private Integer month;
-    private Double totalCost;
+public class KpiStatsDTO {
     private Double totalProfit;
+    private Long totalProjects;
+    private Long completedProjects;
+    private Long newProjects;
+    private Long contractsSignedProjects;
+    private Double completionRate;
+    private Double funnelConversionRate;
 }

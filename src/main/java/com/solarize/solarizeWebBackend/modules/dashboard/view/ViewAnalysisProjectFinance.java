@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +19,7 @@ public class ViewAnalysisProjectFinance {
     private String acquisitionChannel;
     private LocalDateTime createdAt;
     private String status;
-    private BigDecimal totalRevenue;
-    private BigDecimal totalProjectCost;
-    private BigDecimal profitMargin;
+    private Double totalRevenue;
+    private Double totalProjectCost;
+    private Double profitMargin;
 }

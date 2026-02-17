@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.dashboard.view;
 
 import com.solarize.solarizeWebBackend.modules.dashboard.dto.FinancialDTO;
 import com.solarize.solarizeWebBackend.modules.dashboard.dto.ProjectStatusDTO;
+import com.solarize.solarizeWebBackend.modules.dashboard.dto.KpiStatsDTO;
 import com.solarize.solarizeWebBackend.modules.dashboard.dto.SalesFunnelDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,16 +15,19 @@ import java.util.List;
 public interface ViewAnalysisProjectFinanceRepository extends JpaRepository<ViewAnalysisProjectFinance, Long> {
 
     @Query("""
-        SELECT
+        SELECT new com.solarize.solarizeWebBackend.modules.dashboard.dto.KpiStatsDTO(
             COALESCE(SUM(v.profitMargin), 0),
             COUNT(v.idProject),
             SUM(CASE WHEN v.status = 'COMPLETED' THEN 1 ELSE 0 END),
             SUM(CASE WHEN v.status = 'NEW' THEN 1 ELSE 0 END),
-            SUM(CASE WHEN v.status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1 ELSE 0 END)
+            SUM(CASE WHEN v.status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1 ELSE 0 END),
+            ROUND(COALESCE(SUM(CASE WHEN v.status = 'COMPLETED' THEN 1.0 ELSE 0.0 END) * 100.0 / NULLIF(COUNT(v.idProject), 0), 0), 2),
+            ROUND(COALESCE(SUM(CASE WHEN v.status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1.0 ELSE 0.0 END) * 100.0 / NULLIF(SUM(CASE WHEN v.status = 'NEW' THEN 1 ELSE 0 END), 0), 0), 2)
+        )
         FROM ViewAnalysisProjectFinance v
         WHERE v.createdAt >= :startDate AND v.createdAt <= :endDate
     """)
-    Object[] getKpiRawStats(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    KpiStatsDTO getKpiRawStats(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Query("""
         SELECT v.acquisitionChannel
@@ -35,16 +39,16 @@ public interface ViewAnalysisProjectFinanceRepository extends JpaRepository<View
     """)
     String findMostCostlyChannel(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    // Channels: Name, Count
     @Query("""
         SELECT
             CASE v.acquisitionChannel
                 WHEN 'SITE_BUDGET_FORM' THEN 'Site'
                 WHEN 'INTERNAL_MANUAL_ENTRY' THEN 'Boca a Boca'
                 WHEN 'WHATSAPP_BOT' THEN 'Rede Social'
-                ELSE v.acquisitionChannel
+                ELSE CAST(v.acquisitionChannel AS string)
             END,
-            COUNT(v)
+            COUNT(v),
+            ROUND(COUNT(v) * 100.0 / NULLIF((SELECT COUNT(v2) FROM ViewAnalysisProjectFinance v2 WHERE v2.createdAt >= :startDate AND v2.createdAt <= :endDate), 0), 2)
         FROM ViewAnalysisProjectFinance v
         WHERE v.createdAt >= :startDate AND v.createdAt <= :endDate
         GROUP BY v.acquisitionChannel
@@ -55,18 +59,17 @@ public interface ViewAnalysisProjectFinanceRepository extends JpaRepository<View
     Long countByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("""
-        SELECT new com.solarize.solarizeWebBackend.modules.dashboard.dto.FinancialDTO(
+        SELECT
             YEAR(v.createdAt),
             MONTH(v.createdAt),
             SUM(v.totalProjectCost),
             SUM(v.profitMargin)
-        )
         FROM ViewAnalysisProjectFinance v
         WHERE v.createdAt >= :startDate AND v.createdAt <= :endDate
         GROUP BY YEAR(v.createdAt), MONTH(v.createdAt)
         ORDER BY YEAR(v.createdAt) ASC, MONTH(v.createdAt) ASC
     """)
-    List<FinancialDTO> getFinancials(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    List<Object[]> getFinancials(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Query("""
         SELECT new com.solarize.solarizeWebBackend.modules.dashboard.dto.ProjectStatusDTO(

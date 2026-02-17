@@ -30,7 +30,6 @@ INSERT INTO address (id_address, postal_code, street_name, number, neighborhood,
 --------------------------------------------
 -- 4. CLIENT
 --------------------------------------------
--- 4.1 Critical Clients (IDs 1-5) linked to Projects
 INSERT INTO client (first_name, last_name, document_number, document_type, created_at, phone, email, fk_main_address, status) VALUES
 ('João', 'Silva', '12345678901', 'CPF', '2025-08-01 10:00:00', '1933233431', 'joao.silva@example.com', 1, 'ACTIVE'),
 ('Maria', 'Oliveira', '12345678902', 'CPF', '2025-09-10 14:30:00', '2199865432', 'maria.oliveira@example.com', 2, 'ACTIVE'),
@@ -38,7 +37,6 @@ INSERT INTO client (first_name, last_name, document_number, document_type, creat
 ('Lucia', 'Ferreira', '98765432100', 'CPF', '2025-10-20 11:00:00', '21988887777', 'lucia.ferreira@example.com', 4, 'ACTIVE'),
 ('Empresa Tech', 'Solar', '55666777000199', 'CNPJ', '2025-11-01 15:45:00', '3133334444', 'contato@techsolar.com', 5, 'ACTIVE');
 
--- 4.2 Additional Volume Clients (IDs Generated, No Address)
 INSERT INTO client (first_name, last_name, phone, email, status, document_number, document_type, created_at, updated_at) VALUES
 ('João', 'da Silva', '11999999999', 'joao@email.com', 'ACTIVE', '12345678900', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Maria', 'Souza', '11888888888', 'maria@email.com', 'ACTIVE', '98765432100', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

@@ -1,7 +1,15 @@
-
 package com.solarize.solarizeWebBackend.modules.dashboard.dto;
 
-public record SalesFunnelDTO(
-    String stage,
-    Long value
-) {}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class SalesFunnelDTO {
+    private String stage;
+    private Long value;
+}

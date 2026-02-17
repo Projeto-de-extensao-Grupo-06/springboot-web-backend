@@ -1,11 +1,17 @@
-
 package com.solarize.solarizeWebBackend.modules.dashboard.dto;
 
-import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record KpiDTO(
-    BigDecimal totalProfitMargin,
-    String mostCostlyChannel,
-    Double projectCompletionRate,
-    Double funnelConversionRate
-) {}
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class KpiDTO {
+    private Double totalProfitMargin;
+    private String mostCostlyChannel;
+    private Double projectCompletionRate;
+    private Double funnelConversionRate;
+}
