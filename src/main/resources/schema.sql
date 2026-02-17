@@ -3,8 +3,8 @@
 --------------------------------------------
 INSERT INTO permission_group (id_permission_group, role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
 (1, 'ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
-(2, 'TECHNICAL', 'SCHEDULE', 1, 7, 1, 15),
-(3, 'SALES', 'CLIENT_LIST', 15, 3, 15, 1);
+(2, 'TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
+(3, 'SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
 
 --------------------------------------------
 -- 2. COWORKER
