@@ -23,8 +23,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
         SELECT c FROM Client c
         LEFT JOIN c.mainAddress a
         WHERE (:status IS NULL OR c.status = :status)
-          AND (:city IS NULL OR LOWER(a.city) LIKE LOWER(CONCAT('%', :city, '%')))
-          AND (:state IS NULL OR LOWER(a.state) = LOWER(:state))
+          AND ((:city) IS NULL OR a.city IN (:city))
+          AND ((:state) IS NULL OR a.state IN (:state))
           AND (cast(:startDate as timestamp) IS NULL OR c.createdAt >= :startDate)
           AND (cast(:endDate as timestamp) IS NULL OR c.createdAt <= :endDate)
           AND (:search IS NULL OR :search = '' OR (
@@ -37,8 +37,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Page<Client> findAllClients(
             @Param("search") String search,
             @Param("status") ClientStatusEnum status,
-            @Param("city") String city,
-            @Param("state") String state,
+            @Param("city") List<String> city,
+            @Param("state") List<String> state,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable
