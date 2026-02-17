@@ -2,17 +2,18 @@ package com.solarize.solarizeWebBackend.modules.project;
 
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
-import com.solarize.solarizeWebBackend.modules.address.AddressMapper;
-import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientMapper;
-import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
+import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
-import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectMapper {
     public static ProjectSummaryDTO toSummary(Project entity) {
@@ -53,12 +54,15 @@ public class ProjectMapper {
 
         Project project = new Project();
         Client client = new Client();
+        Coworker coworker = new Coworker();
 
         client.setId(dto.getClientId());
+        coworker.setId(dto.getResponsibleId());
         project.setName(dto.getName());
         project.setClient(client);
         project.setDescription(dto.getDescription());
         project.setSystemType(dto.getProjectType());
+        project.setResponsible(coworker);
 
         return project;
     }
@@ -80,5 +84,38 @@ public class ProjectMapper {
                 .clientId(entity.getClient().getId())
                 .addressId(entity.getAddress().getId())
                 .build();
+    }
+
+    public static List<ProjectSummaryDTO> toSummary(List<Project> entities){
+        if (entities == null) return null;
+
+        return entities.stream()
+                .map(ProjectMapper::toSummary)
+                .collect(Collectors.toList());
+    }
+
+    public static LeadResponseDTO of(Project entity){
+        if (entity == null) return null;
+
+        return LeadResponseDTO.builder()
+                .projectId(entity.getId())
+                .clientName(String.join(
+                        " ",
+                        entity.getClient().getFirstName(),
+                        entity.getClient().getLastName()
+                ))
+                .clientPhone(entity.getClient().getPhone())
+                .projectFrom(entity.getProjectFrom())
+                .createdAt(entity.getCreatedAt())
+                .status(entity.getStatus())
+                .build();
+    }
+
+    public static List<LeadResponseDTO> of(List<Project> entities){
+        if (entities == null) return null;
+
+        return entities.stream()
+                .map(ProjectMapper::of)
+                .collect(Collectors.toList());
     }
 }

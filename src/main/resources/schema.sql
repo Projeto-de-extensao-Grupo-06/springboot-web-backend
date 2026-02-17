@@ -1,11 +1,41 @@
 --------------------------------------------
 -- CLIENTS
 --------------------------------------------
-INSERT INTO client (first_name, last_name, phone, email)
+INSERT INTO client (first_name, last_name, phone, email, status, document_number, document_type, created_at, updated_at)
 VALUES
-('João', 'da Silva', '11999999999', 'joao@email.com'),
-('Maria', 'Souza', '11888888888', 'maria@email.com'),
-('Carlos', 'Pereira', '11777777777', 'carlos@email.com');
+('João', 'da Silva', '11999999999', 'joao@email.com', 'ACTIVE', '12345678900', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Maria', 'Souza', '11888888888', 'maria@email.com', 'ACTIVE', '98765432100', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Carlos', 'Pereira', '11777777777', 'carlos@email.com', 'INACTIVE', '11122233344', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ana', 'Oliveira', '11912345678', 'ana.oliveira@email.com', 'ACTIVE', '44455566677', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ricardo', 'Santos', '21987654321', 'ricardo.santos@email.com', 'ACTIVE', '88899900011', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Luciana', 'Mendes', '31998877665', 'luciana.mendes@email.com', 'INACTIVE', '22233344455', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Marcos', 'Almeida', '1133445566', 'contato@almeidame.com', 'ACTIVE', '12345678000199', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Fernanda', 'Costa', '41995544332', 'fer.costa@email.com', 'ACTIVE', '77788899922', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Roberto', 'Ferreira', '51988772211', 'roberto.f@email.com', 'ACTIVE', '55566677788', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Juliana', 'Lima', '61991122334', 'juliana.lima@email.com', 'ACTIVE', '99900011122', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Bruno', 'Rocha', '1144556677', 'financeiro@rochacorp.com', 'ACTIVE', '98765432000188', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Camila', 'Barbosa', '71992233445', 'camila.b@email.com', 'INACTIVE', '33344455566', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Tiago', 'Nunes', '81987651234', 'tiago.nunes@email.com', 'ACTIVE', '11100099988', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Gabriel', 'Duarte', '11911112222', 'gabriel.duarte@email.com', 'ACTIVE', '10120230344', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Beatriz', 'Pinto', '21922223333', 'beatriz.p@email.com', 'ACTIVE', '50560670788', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('André', 'Teixeira', '31933334444', 'andre.tex@email.com', 'INACTIVE', '90980870766', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Larissa', 'Cavalcanti', '41944445555', 'lari.cav@email.com', 'ACTIVE', '11223344000155', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Felipe', 'Cardoso', '51955556666', 'felipe.c@email.com', 'ACTIVE', '30340450599', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Patrícia', 'Gomes', '61966667777', 'patri.gomes@email.com', 'ACTIVE', '60670780811', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Henrique', 'Souza', '71977778888', 'h.souza@email.com', 'ACTIVE', '80890910122', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Daniela', 'Moreira', '81988889999', 'dani.moreira@email.com', 'INACTIVE', '44332211000100', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Leonardo', 'Freitas', '11912123434', 'leo.freitas@email.com', 'ACTIVE', '12132343455', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Vanessa', 'Lopes', '21923234545', 'vanessa.l@email.com', 'ACTIVE', '54565676788', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Gustavo', 'Batista', '31934345656', 'gustavo.b@email.com', 'ACTIVE', '98978767655', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Letícia', 'Assis', '41945456767', 'leticia.assis@email.com', 'ACTIVE', '10190980877', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Sérgio', 'Marques', '51956567878', 'sergio.m@email.com', 'ACTIVE', '55443322000111', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Aline', 'Vieira', '61967678989', 'aline.v@email.com', 'INACTIVE', '70780890933', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Maurício', 'Moraes', '71978789090', 'mau.moraes@email.com', 'ACTIVE', '20230340455', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Tatiane', 'Ribeiro', '81989890101', 'tati.rib@email.com', 'ACTIVE', '40450560677', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Renato', 'Carvalho', '11990901212', 'renato.c@email.com', 'ACTIVE', '80870760644', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Sabrina', 'Gonçalves', '21901012323', 'sabrina.g@email.com', 'ACTIVE', '66554433000122', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Igor', 'Fernandes', '31912123434', 'igor.f@email.com', 'ACTIVE', '90910120233', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Priscila', 'Monteiro', '41923234545', 'pri.monteiro@email.com', 'ACTIVE', '30320210144', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --------------------------------------------
 -- PERMISSION GROUP
@@ -17,14 +47,24 @@ INSERT INTO permission_group (
     access_project,
     access_budget,
     access_schedule
-) VALUES (
-             'ADMIN',
-             'PROJECT_LIST',
-             0xF,
-             0xF,
-             0xF,
-             0xF
-         );
+) VALUES
+      (
+         'ADMIN',
+         'PROJECT_LIST',
+         0xF,
+         0xF,
+         0xF,
+         0xF
+      ),
+      (
+          'SECRETARIA',
+          'CLIENT_LIST',
+          0x3,
+          0x1,
+          0x0,
+          0xF
+      );
+
 
 --------------------------------------------
 -- COWORKER (RESPONSÁVEL)
@@ -37,15 +77,25 @@ INSERT INTO coworker (
     password,
     fk_permission_group,
     is_active
-) VALUES (
-    'Bryan',
-    'Rocha',
-    'bryangomesrocha@gmail.com',
-    '11964275054',
-    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-    1,
-    TRUE
-);
+) VALUES
+    (
+        'Bryan',
+        'Rocha',
+        'bryangomesrocha@gmail.com',
+        '11964275054',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        1,
+        TRUE
+    ),
+    (
+        'Ranier',
+        'Dalton',
+        'ranierd.couto@gmail.com',
+        '11949902159',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        2,
+        TRUE
+    );
 
 --------------------------------------------
 -- BUDGET
@@ -104,19 +154,24 @@ VALUES
 --------------------------------------------
 -- PROJECTS
 --------------------------------------------
-INSERT INTO project (
-    status,
-    status_weight,
-    preview_status,
-    is_active,
-    fk_client,
-    fk_responsible,
-    fk_address,
-    created_at,
-    deadline,
-    system_type,
-    project_from,
-    name,
-    description
-) VALUES
-('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');
+INSERT INTO project (status, status_weight, preview_status, is_active, fk_client, fk_responsible, fk_address, created_at, deadline, system_type, project_from, name, description)
+VALUES
+    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Projeto Padrão', 'Instalação simples'),
+    -- 2. [LEAD QUENTE 1] - Origem BOT (Deve aparecer no TOPO)
+    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 2, 1, 1, DATEADD('HOUR', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Urgente Bot', 'Cliente interagiu com o bot e quer falar.'),
+    -- 3. [LEAD QUENTE 2] - Origem SITE (Deve aparecer no TOPO)
+    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 3, 1, 1, DATEADD('HOUR', -5, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Lead Urgente Site', 'Formulário de contato do site.'),
+    -- 4. [LEAD FRIO - MADURO] - Deve aparecer (Agendado para ONTEM)
+    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 4, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Retorno de Lead Frio', 'Cliente pediu para ligar mês que vem.'),
+    -- 5. [LEAD FRIO - VERDE] - NÃO deve aparecer (Agendado para AMANHÃ)
+    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 5, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Futuro', 'Ainda não está na hora de ligar.'),
+    -- 6. [RUÍDO] - Projeto já avançado (Status 5) - NÃO deve aparecer
+    ('SCHEDULED_TECHNICAL_VISIT', 5, 'PRE_BUDGET', TRUE, 6, 1, 1, DATEADD('DAY', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Visita Técnica', 'Projeto em andamento normal.');
+
+--------------------------------------------
+-- RETRY QUEUE
+--------------------------------------------
+INSERT INTO retry_queue (scheduled_date, retrying, fk_project)
+VALUES
+(DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
+(DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));

@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project.state.status;
 
+import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectBuilder;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
@@ -57,6 +58,41 @@ class NewTest {
         project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
 
         assertEquals(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT, project.getStatus());
+        assertEquals(ProjectStatusEnum.NEW, project.getPreviewStatus());
+    }
+
+
+    @Test
+    @DisplayName("Should set status to FINAL_BUDGET and previewStatus to NEW when a valid final budge exists")
+    void applyToFinalBudgetSetStatusFinalBudgetAndPreviewStatusNew() {
+        Budget budget = new Budget();
+        budget.setFinalBudget(true);
+
+        Project project = ProjectBuilder.builder()
+                .withBudget(budget)
+                .withStatus(ProjectStatusEnum.NEW)
+                .build();
+
+        project.getStatus().getStateHandler().applyToFinalBudget(project);
+
+        assertEquals(ProjectStatusEnum.FINAL_BUDGET, project.getStatus());
+        assertEquals(ProjectStatusEnum.NEW, project.getPreviewStatus());
+    }
+
+    @Test
+    @DisplayName("Should set status to PRE_BUDGET and previewStatus to NEW when a valid final budge exists")
+    void applyToPreBudgetSetStatusPreBudgetAndPreviewStatusNew() {
+        Budget budget = new Budget();
+        budget.setFinalBudget(false);
+
+        Project project = ProjectBuilder.builder()
+                .withBudget(budget)
+                .withStatus(ProjectStatusEnum.NEW)
+                .build();
+
+        project.getStatus().getStateHandler().applyToPreBudget(project);
+
+        assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getStatus());
         assertEquals(ProjectStatusEnum.NEW, project.getPreviewStatus());
     }
 
@@ -145,9 +181,6 @@ class NewTest {
                 Arguments.of("NEW -> NEW",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
 
-                Arguments.of("NEW -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
-
                 Arguments.of("NEW -> CLIENT_AWAITING_CONTACT",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
 
@@ -159,9 +192,6 @@ class NewTest {
 
                 Arguments.of("NEW -> TECHNICAL_VISIT_COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
-
-                Arguments.of("NEW -> FINAL_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToFinalBudget(p)),
 
                 Arguments.of("NEW -> AWAITING_MATERIALS",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToAwaitingMaterials(p)),

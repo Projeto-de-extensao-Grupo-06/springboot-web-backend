@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class Project {
     @JoinColumn(name = "fk_address")
     private Address address;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     private LocalDateTime deadline;

@@ -30,11 +30,22 @@ public class Client {
     private String phone;
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ClientStatusEnum status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_coworker_last_update")
     private Coworker coworkerLastUpdate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_main_address")
+    @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_main_address", nullable = true)
     private Address mainAddress;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = ClientStatusEnum.ACTIVE;
+        }
+    }
 }

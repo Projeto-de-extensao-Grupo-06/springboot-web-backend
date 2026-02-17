@@ -1,8 +1,16 @@
 package com.solarize.solarizeWebBackend.modules.address;
 
 import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.dto.LookupResponseDTO;
 import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import com.solarize.solarizeWebBackend.modules.address.dto.UpdateAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
+import com.solarize.solarizeWebBackend.modules.address.projection.StateCityProjection;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class AddressMapper {
     public static Address toEntity(CreateAddressDto dto) {
@@ -48,10 +56,31 @@ public class AddressMapper {
                 .postalCode(address.getPostalCode())
                 .neighborhood(address.getNeighborhood())
                 .city(address.getCity())
-                .uf(address.getState())
+                .state(address.getState())
                 .stateName(address.getState().getFullName())
                 .type(address.getType())
                 .apartment(address.getApartment())
                 .build();
     }
+
+    public static List<LookupResponseDTO> toDTO(List<StateCityProjection> entities){
+        if (entities == null) return null;
+
+        Map<BrazilianState, List<String>> groupedMap = entities.stream()
+                .collect(Collectors.groupingBy(
+                        StateCityProjection::getState,
+                        TreeMap::new,
+                        Collectors.mapping(StateCityProjection::getCity, Collectors.toList())
+                ));
+
+        return groupedMap.entrySet().stream()
+                .map(entry ->
+                        LookupResponseDTO.builder()
+                                .cities(entry.getValue())
+                                .state(entry.getKey())
+                                .build()
+                )
+                .collect(Collectors.toList());
+    }
+
 }

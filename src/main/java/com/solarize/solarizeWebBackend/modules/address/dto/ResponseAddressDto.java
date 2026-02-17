@@ -16,7 +16,7 @@ public class ResponseAddressDto {
     private String number;
     private String neighborhood;
     private String city;
-    private BrazilianState uf;
+    private BrazilianState state;
     private String stateName;
     private TypeEnum type;
     private String apartment;
