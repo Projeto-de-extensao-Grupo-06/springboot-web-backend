@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/schedules")
 @RequiredArgsConstructor
 public class ScheduleController {
 
     private final ScheduleService service;
 
     @PreAuthorize("hasAuthority('SCHEDULE_WRITE')")
-    @PostMapping
+    @PostMapping("/schedules")
     public ResponseEntity<ScheduleResponseDTO> createSchedule(
             @RequestBody @Valid CreateScheduleDTO scheduleDTO,
             @RequestParam(required = false, defaultValue = "false") Boolean force
@@ -31,7 +30,7 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasAuthority('SCHEDULE_UPDATE')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/schedules/{id}")
     public ResponseEntity<ScheduleResponseDTO> updateSchedule(@PathVariable Long id, @Valid @RequestBody CreateScheduleDTO scheduleDTO, @RequestParam(required = false, defaultValue = "false") Boolean force){
         Schedule updatedSchedule = service.updateSchedule(id, ScheduleMapper.toEntity(scheduleDTO), force);
 
@@ -40,7 +39,7 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasAuthority('SCHEDULE_READ')")
-    @GetMapping("/{id}")
+    @GetMapping("/schedules/{id}")
     public ResponseEntity<ScheduleResponseDTO> getScheduleById(@PathVariable Long id) {
         Schedule schedule = service.findById(id);
         ScheduleResponseDTO dto = ScheduleMapper.toDto(schedule);
@@ -48,7 +47,7 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasAuthority('SCHEDULE_READ')")
-    @GetMapping
+    @GetMapping("/schedules")
     public ResponseEntity<List<ScheduleResponseDTO>> getAllSchedules(
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer month
@@ -64,7 +63,7 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasAuthority('SCHEDULE_DELETE')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/schedules/{id}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         service.deleteSchedule(id);
         return ResponseEntity.status(204).build();
