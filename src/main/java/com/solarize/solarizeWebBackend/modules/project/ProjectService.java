@@ -7,7 +7,10 @@ import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
+import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
+import com.solarize.solarizeWebBackend.shared.event.BudgetCreateEvent;
 import com.solarize.solarizeWebBackend.shared.event.ProjectDeletedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
 import com.solarize.solarizeWebBackend.modules.projectComment.ProjectCommentService;
@@ -78,6 +81,13 @@ public class ProjectService {
                     .orElseThrow(() -> new NotFoundException("Client not found."));
 
             existing.setClient(found);
+        }
+
+        if (incoming.getResponsible() != null && incoming.getResponsible().getId() != null) {
+            Coworker found = coworkerRepository.findById(incoming.getResponsible().getId())
+                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
+
+            existing.setResponsible(found);
         }
 
         existing.setName(
@@ -189,10 +199,43 @@ public class ProjectService {
         }
     }
 
+    @EventListener
+    public void projectBudgetCreated(BudgetCreateEvent event) {
+        Project project = projectRepository.findById(event.projectId()).orElseThrow();
+
+        System.out.println(event.finalBudget());
+
+        if(event.finalBudget()) {
+            project.getStatus().getStateHandler().applyToFinalBudget(project);
+        } else {
+            project.getStatus().getStateHandler().applyToPreBudget(project);
+        }
+
+        projectRepository.save(project);
+    }
+
     public List<Project> getProjectsByClientId(Long clientId){
         if(!clientRepository.existsById(clientId))
             throw new NotFoundException("Client does not exists on database");
 
         return projectRepository.findByClientIdAndIsActiveTrue(clientId);
+    }
+
+    public List<Project> getLeads(LocalDateTime minDate, LocalDateTime maxDate, ProjectStatusEnum status, String clientName){
+        return projectRepository.findActionableLeads(minDate, maxDate, status, clientName);
+    }
+
+    public void changeStatusClientAwaitingContact(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project does not exists"));
+        project.getStatus().getStateHandler().applyToClientAwaitingContact(project);
+        projectRepository.save(project);
+    }
+
+    public  List<Schedule> getSchedulesByProjectId(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project does not exists"));
+
+        return project.getSchedules().stream().filter(s -> s.getStatus() == ScheduleStatusEnum.MARKED).toList();
     }
 }

@@ -47,14 +47,24 @@ INSERT INTO permission_group (
     access_project,
     access_budget,
     access_schedule
-) VALUES (
-             'ADMIN',
-             'PROJECT_LIST',
-             0xF,
-             0xF,
-             0xF,
-             0xF
-         );
+) VALUES
+      (
+         'ADMIN',
+         'PROJECT_LIST',
+         0xF,
+         0xF,
+         0xF,
+         0xF
+      ),
+      (
+          'SECRETARIA',
+          'CLIENT_LIST',
+          0x3,
+          0x1,
+          0x0,
+          0xF
+      );
+
 
 --------------------------------------------
 -- COWORKER (RESPONSÁVEL)
@@ -67,15 +77,25 @@ INSERT INTO coworker (
     password,
     fk_permission_group,
     is_active
-) VALUES (
-    'Bryan',
-    'Rocha',
-    'bryangomesrocha@gmail.com',
-    '11964275054',
-    '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-    1,
-    TRUE
-);
+) VALUES
+    (
+        'Bryan',
+        'Rocha',
+        'bryangomesrocha@gmail.com',
+        '11964275054',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        1,
+        TRUE
+    ),
+    (
+        'Ranier',
+        'Dalton',
+        'ranierd.couto@gmail.com',
+        '11949902159',
+        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
+        2,
+        TRUE
+    );
 
 --------------------------------------------
 -- BUDGET
@@ -134,19 +154,24 @@ VALUES
 --------------------------------------------
 -- PROJECTS
 --------------------------------------------
-INSERT INTO project (
-    status,
-    status_weight,
-    preview_status,
-    is_active,
-    fk_client,
-    fk_responsible,
-    fk_address,
-    created_at,
-    deadline,
-    system_type,
-    project_from,
-    name,
-    description
-) VALUES
-('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', 'Projeto Solar — Cliente João', 'Projeto de instalação 5kWp');
+INSERT INTO project (status, status_weight, preview_status, is_active, fk_client, fk_responsible, fk_address, created_at, deadline, system_type, project_from, name, description)
+VALUES
+    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Projeto Padrão', 'Instalação simples'),
+    -- 2. [LEAD QUENTE 1] - Origem BOT (Deve aparecer no TOPO)
+    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 2, 1, 1, DATEADD('HOUR', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Urgente Bot', 'Cliente interagiu com o bot e quer falar.'),
+    -- 3. [LEAD QUENTE 2] - Origem SITE (Deve aparecer no TOPO)
+    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 3, 1, 1, DATEADD('HOUR', -5, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Lead Urgente Site', 'Formulário de contato do site.'),
+    -- 4. [LEAD FRIO - MADURO] - Deve aparecer (Agendado para ONTEM)
+    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 4, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Retorno de Lead Frio', 'Cliente pediu para ligar mês que vem.'),
+    -- 5. [LEAD FRIO - VERDE] - NÃO deve aparecer (Agendado para AMANHÃ)
+    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 5, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Futuro', 'Ainda não está na hora de ligar.'),
+    -- 6. [RUÍDO] - Projeto já avançado (Status 5) - NÃO deve aparecer
+    ('SCHEDULED_TECHNICAL_VISIT', 5, 'PRE_BUDGET', TRUE, 6, 1, 1, DATEADD('DAY', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Visita Técnica', 'Projeto em andamento normal.');
+
+--------------------------------------------
+-- RETRY QUEUE
+--------------------------------------------
+INSERT INTO retry_queue (scheduled_date, retrying, fk_project)
+VALUES
+(DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
+(DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));

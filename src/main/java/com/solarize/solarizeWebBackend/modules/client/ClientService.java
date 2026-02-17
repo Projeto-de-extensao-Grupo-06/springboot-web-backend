@@ -32,8 +32,8 @@ public class ClientService {
     public Page<Client> getClients(
             String search,
             ClientStatusEnum status,
-            String city,
-            String state,
+            List<String> city,
+            List<String> state,
             LocalDate startDate,
             LocalDate endDate,
             Pageable pageable

@@ -47,7 +47,33 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             Pageable pageable
     );
 
-
+    @Query("""
+        SELECT p FROM Project p
+            LEFT JOIN FETCH p.client
+            LEFT JOIN p.retry r
+            LEFT JOIN p.budget b
+            WHERE p.isActive = true
+                AND (
+                    (p.status = 'CLIENT_AWAITING_CONTACT' AND b.id IS NOT NULL)
+                    OR (
+                        p.status = 'RETRYING'
+                    )
+                )
+                AND (:minDate IS NULL OR p.createdAt >= :minDate)
+                AND (:maxDate IS NULL OR p.createdAt <= :maxDate)
+                AND (:status IS NULL OR p.status = :status)
+                AND (:clientName IS NULL OR (
+                    LOWER(p.client.firstName) LIKE LOWER(CONCAT('%', :clientName, '%')) OR 
+                    LOWER(p.client.lastName) LIKE LOWER(CONCAT('%', :clientName, '%'))
+                ))
+        ORDER BY p.statusWeight ASC, p.createdAt DESC
+    """)
+    List<Project> findActionableLeads(
+            @Param("minDate") LocalDateTime minDate,
+            @Param("maxDate") LocalDateTime maxDate,
+            @Param("status") ProjectStatusEnum status,
+            @Param("clientName") String clientName
+    );
     Optional<Project> findByIdAndIsActiveTrue(Long projectId);
     List<Project> findByClientIdAndIsActiveTrue(Long clientId);
 }

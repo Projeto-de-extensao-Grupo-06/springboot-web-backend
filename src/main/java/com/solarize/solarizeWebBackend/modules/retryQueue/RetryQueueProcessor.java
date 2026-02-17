@@ -31,7 +31,6 @@ public class RetryQueueProcessor {
 
     private void processQueue(List<RetryQueue> queue) {
         queue.forEach(retry -> {
-
             try {
                 Project project = retry.getProject();
                 projectService.setProjectStatusToRetrying(project);
@@ -43,6 +42,4 @@ public class RetryQueueProcessor {
             }
         });
     }
-
-
 }
