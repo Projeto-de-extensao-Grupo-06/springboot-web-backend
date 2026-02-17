@@ -175,3 +175,155 @@ INSERT INTO retry_queue (scheduled_date, retrying, fk_project)
 VALUES
 (DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
 (DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
+
+
+--------------------------------------------
+-- DASHBOARD VIEWS
+--------------------------------------------
+
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECT_FINANCE AS
+SELECT
+    p.id_project,
+    p.project_from AS acquisition_channel,
+    p.created_at,
+    p.status,
+    COALESCE(b.total_cost, 0) AS total_revenue,
+    COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0) AS total_project_cost,
+    COALESCE(b.total_cost, 0) - (COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0)) AS profit_margin
+FROM
+    project p
+LEFT JOIN
+    budget b ON b.fk_project = p.id_project
+WHERE
+    p.is_active = true;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_KPIS AS
+WITH ProjectCounts AS (
+    SELECT
+        COUNT(id_project) AS total_projects,
+        SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS completed_projects,
+        SUM(CASE WHEN status = 'NEW' THEN 1 ELSE 0 END) AS new_projects,
+        SUM(CASE WHEN status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1 ELSE 0 END) AS contracts_signed_projects
+    FROM
+        project
+    WHERE
+        is_active = true
+),
+FinancialSummary AS (
+    SELECT
+        acquisition_channel,
+        SUM(total_project_cost) AS total_cost_by_channel,
+        ROW_NUMBER() OVER (ORDER BY SUM(total_project_cost) DESC) as rn
+    FROM
+        VIEW_ANALYSIS_PROJECT_FINANCE
+    GROUP BY
+        acquisition_channel
+)
+SELECT
+    (SELECT SUM(profit_margin) FROM VIEW_ANALYSIS_PROJECT_FINANCE) AS total_profit_margin,
+    (SELECT acquisition_channel FROM FinancialSummary WHERE rn = 1) AS most_costly_channel,
+    (PC.completed_projects * 100.0 / NULLIF(PC.total_projects, 0)) AS project_completion_rate,
+    (PC.contracts_signed_projects * 100.0 / NULLIF(PC.new_projects, 0)) AS funnel_conversion_rate
+FROM
+    ProjectCounts PC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_ACQUISITION_CHANNELS AS
+WITH ChannelCounts AS (
+    SELECT
+        acquisition_channel,
+        COUNT(id_project) AS channel_project_count
+    FROM
+        VIEW_ANALYSIS_PROJECT_FINANCE
+    GROUP BY
+        acquisition_channel
+),
+TotalProjects AS (
+    SELECT COUNT(id_project) AS total_projects FROM project WHERE is_active = true
+)
+SELECT
+    CC.acquisition_channel AS nome,
+    CC.channel_project_count,
+    (CC.channel_project_count * 100.0 / NULLIF((SELECT total_projects FROM TotalProjects), 0)) AS percentual
+FROM
+    ChannelCounts CC
+ORDER BY
+    percentual DESC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROFIT_COST_MONTHLY AS
+SELECT
+    YEAR(created_at) AS ano,
+    MONTH(created_at) AS mes,
+    SUM(total_project_cost) AS total_cost,
+    SUM(profit_margin) AS total_profit
+FROM
+    VIEW_ANALYSIS_PROJECT_FINANCE
+GROUP BY
+    YEAR(created_at), MONTH(created_at)
+ORDER BY
+    ano ASC, mes ASC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECTS_STATUS_SUMMARY AS
+SELECT
+    CASE p.status
+        WHEN 'COMPLETED' THEN 'Finalizado'
+        WHEN 'NEGOTIATION_FAILED' THEN 'Finalizado'
+        WHEN 'SCHEDULED_TECHNICAL_VISIT' THEN 'Agendado'
+        WHEN 'SCHEDULED_INSTALLING_VISIT' THEN 'Agendado'
+        WHEN 'NEW' THEN 'Novo'
+        ELSE 'Em andamento'
+    END AS status_group,
+    COUNT(p.id_project) AS quantidade
+FROM
+    project p
+WHERE
+    p.is_active = true
+GROUP BY
+    status_group;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_SALES_FUNNEL_STAGES AS
+SELECT
+    CASE p.status
+        WHEN 'PRE_BUDGET' THEN 'Pré-Orçamento'
+        WHEN 'FINAL_BUDGET' THEN 'Proposta Enviada' 
+        WHEN 'INSTALLED' THEN 'Instalado'
+        WHEN 'COMPLETED' THEN 'Finalizado/Entregue'
+        ELSE 'Outras Etapas'
+    END AS etapa,
+    COUNT(p.id_project) AS valor
+FROM
+    project p
+WHERE
+    p.is_active = true AND p.status IN ('PRE_BUDGET', 'FINAL_BUDGET', 'INSTALLED', 'COMPLETED')
+GROUP BY
+    etapa;
+
+--------------------------------------------
+-- ADDITIONAL TEST DATA FOR DASHBOARD
+--------------------------------------------
+
+INSERT INTO project (status, status_weight, preview_status, is_active, fk_client, fk_responsible, fk_address, created_at, deadline, system_type, project_from, name, description)
+VALUES
+    -- Completed Projects (Revenue)
+    ('COMPLETED', 10, 'INSTALLED', TRUE, 1, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE_BUDGET_FORM', 'Instalação Residencial Solar', 'Instalação completa 5kWp'),
+    ('COMPLETED', 10, 'INSTALLED', TRUE, 2, 1, 1, DATEADD('MONTH', -2, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'WHATSAPP_BOT', 'Sistema Off-Grid Sítio', 'Baterias e Paineis'),
+    ('COMPLETED', 10, 'INSTALLED', TRUE, 7, 1, 1, DATEADD('DAY', -15, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', 'Comercial Padaria', 'Sistema de 10kWp'),
+
+    -- In Progress
+    ('INSTALLED', 9, 'SCHEDULED_INSTALLING_VISIT', TRUE, 8, 1, 1, DATEADD('DAY', -5, NOW()), DATEADD('DAY', 20, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Instalação em Andamento', 'Equipe em campo'),
+    ('FINAL_BUDGET', 6, 'PRE_BUDGET', TRUE, 9, 1, 1, DATEADD('DAY', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'SITE_BUDGET_FORM', 'Proposta Aceita', 'Aguardando assinatura'),
+
+    -- Lost/Negotiation Failed
+    ('NEGOTIATION_FAILED', 11, 'PRE_BUDGET', TRUE, 10, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Desistência Preço', 'Achou caro'),
+
+    -- New Leads
+    ('NEW', 3, NULL, TRUE, 11, 1, 1, NOW(), DATEADD('DAY', 5, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Recente 1', 'Interessado em redução de conta'),
+    ('NEW', 3, NULL, TRUE, 12, 1, 1, NOW(), DATEADD('DAY', 5, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Lead Recente 2', 'Fazenda');
+
+INSERT INTO budget (total_cost, material_cost, service_cost, discount, final_budget, created_at, fk_project)
+VALUES
+    (25000.00, 15000.00, 5000.00, 0.00, TRUE, DATEADD('MONTH', -1, NOW()), (SELECT id_project FROM project WHERE name = 'Instalação Residencial Solar')),
+    (15000.00, 10000.00, 3000.00, 0.00, TRUE, DATEADD('MONTH', -2, NOW()), (SELECT id_project FROM project WHERE name = 'Sistema Off-Grid Sítio')),
+    (45000.00, 30000.00, 10000.00, 1000.00, TRUE, DATEADD('DAY', -15, NOW()), (SELECT id_project FROM project WHERE name = 'Comercial Padaria')),
+    (22000.00, 12000.00, 5000.00, 0.00, TRUE, DATEADD('DAY', -5, NOW()), (SELECT id_project FROM project WHERE name = 'Instalação em Andamento')),
+    (18000.00, 10000.00, 4000.00, 500.00, TRUE, DATEADD('DAY', -2, NOW()), (SELECT id_project FROM project WHERE name = 'Proposta Aceita'));
