@@ -104,7 +104,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('SCHEDULE_READ')")
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
     @GetMapping("/{projectId}/schedules")
     public ResponseEntity<List<ScheduleResponseDTO>> getProjectSchedules(@PathVariable Long projectId) {
         List<Schedule> schedules = projectService.getSchedulesByProjectId(projectId);

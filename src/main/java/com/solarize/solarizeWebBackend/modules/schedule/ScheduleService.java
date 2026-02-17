@@ -246,12 +246,4 @@ public class ScheduleService {
 
         repository.deleteAll(schedules);
     }
-
-
-    public  List<Schedule> getSchedulesByProjectId(Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("Project does not exists"));
-
-        return project.getSchedules();
-    }
 }

@@ -83,6 +83,13 @@ public class ProjectService {
             existing.setClient(found);
         }
 
+        if (incoming.getResponsible() != null && incoming.getResponsible().getId() != null) {
+            Coworker found = coworkerRepository.findById(incoming.getResponsible().getId())
+                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
+
+            existing.setResponsible(found);
+        }
+
         existing.setName(
                 Optional.ofNullable(incoming.getName())
                         .orElse(existing.getName())

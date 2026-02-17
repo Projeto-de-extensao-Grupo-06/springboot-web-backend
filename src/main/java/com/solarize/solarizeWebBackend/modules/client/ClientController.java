@@ -45,8 +45,8 @@ public class ClientController {
     public ResponseEntity<Page<ClientResponseDTO>> getClients(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) ClientStatusEnum status,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String state,
+            @RequestParam(required = false) List<String> city,
+            @RequestParam(required = false) List<String> state,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate,
             @PageableDefault(page = 0, size = 30) Pageable pageable
