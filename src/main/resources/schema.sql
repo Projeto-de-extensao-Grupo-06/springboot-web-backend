@@ -76,15 +76,15 @@ INSERT INTO client (first_name, last_name, phone, email, status, document_number
 -- 5. PROJECT
 --------------------------------------------
 INSERT INTO project (id_project, name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
-(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', '2025-09-15 09:00:00', DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
-(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', '2025-09-20 10:30:00', DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
-(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', '2025-10-02 14:00:00', DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
-(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', '2025-10-15 11:00:00', DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
-(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', '2025-10-28 16:00:00', DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
-(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', '2025-11-05 08:30:00', DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
-(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', '2025-11-10 13:00:00', DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
-(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', '2025-11-12 09:00:00', DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
-(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', '2025-11-20 15:00:00', DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
+(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
+(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
+(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
+(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
+(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
+(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
+(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
+(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
+(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
 
 --------------------------------------------
 -- 6. BUDGET
@@ -174,7 +174,13 @@ SELECT
     p.status,
     COALESCE(b.total_cost, 0) AS total_revenue,
     COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0) AS total_project_cost,
-    COALESCE(b.total_cost, 0) - (COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0)) AS profit_margin
+    COALESCE(b.total_cost, 0) - (COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0)) AS profit_margin,
+    CASE
+        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
+        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado' 
+        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
+        ELSE 'Outras Etapas'
+    END AS funnel_stage
 FROM
     project p
 LEFT JOIN
@@ -267,17 +273,20 @@ GROUP BY
 
 CREATE OR REPLACE VIEW VIEW_ANALYSIS_SALES_FUNNEL_STAGES AS
 SELECT
-    CASE p.status
-        WHEN 'PRE_BUDGET' THEN 'Pré-Orçamento'
-        WHEN 'FINAL_BUDGET' THEN 'Proposta Enviada' 
-        WHEN 'INSTALLED' THEN 'Instalado'
-        WHEN 'COMPLETED' THEN 'Finalizado/Entregue'
+    CASE
+        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
+        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado' 
+        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
         ELSE 'Outras Etapas'
     END AS etapa,
     COUNT(p.id_project) AS valor
 FROM
     project p
 WHERE
-    p.is_active = true AND p.status IN ('PRE_BUDGET', 'FINAL_BUDGET', 'INSTALLED', 'COMPLETED')
+    p.is_active = true AND p.status IN (
+        'NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS',
+        'FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT',
+        'INSTALLED', 'COMPLETED'
+    )
 GROUP BY
     etapa;

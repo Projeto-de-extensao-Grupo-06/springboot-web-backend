@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.modules.dashboard.dto;
+package com.solarize.solarizeWebBackend.modules.analysis.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

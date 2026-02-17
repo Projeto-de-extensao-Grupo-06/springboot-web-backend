@@ -1,7 +1,7 @@
-package com.solarize.solarizeWebBackend.modules.dashboard;
+package com.solarize.solarizeWebBackend.modules.analysis;
 
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.*;
-import com.solarize.solarizeWebBackend.modules.dashboard.view.ViewAnalysisProjectFinanceRepository;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.*;
+import com.solarize.solarizeWebBackend.modules.analysis.view.ViewAnalysisProjectFinanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DashboardService {
+public class AnalysisService {
 
     private final ViewAnalysisProjectFinanceRepository viewRepository;
 

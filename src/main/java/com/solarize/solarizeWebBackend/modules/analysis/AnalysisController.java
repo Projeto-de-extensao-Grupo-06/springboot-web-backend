@@ -1,7 +1,7 @@
-package com.solarize.solarizeWebBackend.modules.dashboard;
+package com.solarize.solarizeWebBackend.modules.analysis;
 
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.*;
-import com.solarize.solarizeWebBackend.modules.dashboard.DashboardService;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.*;
+import com.solarize.solarizeWebBackend.modules.analysis.mapper.AnalysisMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("/analysis")
 @RequiredArgsConstructor
-public class DashboardController {
+public class AnalysisController {
 
-    private final DashboardService dashboardService;
-    private final com.solarize.solarizeWebBackend.modules.dashboard.mapper.DashboardMapper dashboardMapper;
+    private final AnalysisService analysisService;
+    private final AnalysisMapper analysisMapper;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/kpis")
@@ -32,10 +32,10 @@ public class DashboardController {
         if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        KpiStatsDTO stats = dashboardService.getKpiStats(startDate, endDate);
-        String mostCostlyChannel = dashboardService.getMostCostlyChannel(startDate, endDate);
+        KpiStatsDTO stats = analysisService.getKpiStats(startDate, endDate);
+        String mostCostlyChannel = analysisService.getMostCostlyChannel(startDate, endDate);
         
-        return ResponseEntity.ok(dashboardMapper.toKpiDTO(stats, mostCostlyChannel));
+        return ResponseEntity.ok(analysisMapper.toKpiDTO(stats, mostCostlyChannel));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -47,9 +47,9 @@ public class DashboardController {
         if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        List<Object[]> rawData = dashboardService.getAcquisitionChannels(startDate, endDate);
+        List<Object[]> rawData = analysisService.getAcquisitionChannels(startDate, endDate);
         List<AcquisitionChannelDTO> dtos = rawData.stream()
-            .map(dashboardMapper::toAcquisitionChannelDTO)
+            .map(analysisMapper::toAcquisitionChannelDTO)
             .toList();
 
         return ResponseEntity.ok(dtos);
@@ -64,9 +64,9 @@ public class DashboardController {
         if (startDate == null) startDate = LocalDate.now().minusMonths(12); // Default to 12 months for trends
         if (endDate == null) endDate = LocalDate.now();
 
-        List<Object[]> rawData = dashboardService.getFinancials(startDate, endDate);
+        List<Object[]> rawData = analysisService.getFinancials(startDate, endDate);
         List<FinancialDTO> dtos = rawData.stream()
-            .map(dashboardMapper::toFinancialDTO)
+            .map(analysisMapper::toFinancialDTO)
             .toList();
 
         return ResponseEntity.ok(dtos);
@@ -81,7 +81,7 @@ public class DashboardController {
         if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        return ResponseEntity.ok(dashboardService.getProjectStatus(startDate, endDate));
+        return ResponseEntity.ok(analysisService.getProjectStatus(startDate, endDate));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -93,6 +93,6 @@ public class DashboardController {
         if (startDate == null) startDate = LocalDate.now().minusMonths(12);
         if (endDate == null) endDate = LocalDate.now();
 
-        return ResponseEntity.ok(dashboardService.getSalesFunnel(startDate, endDate));
+        return ResponseEntity.ok(analysisService.getSalesFunnel(startDate, endDate));
     }
 }

@@ -1,5 +1,5 @@
 
-package com.solarize.solarizeWebBackend.modules.dashboard.view;
+package com.solarize.solarizeWebBackend.modules.analysis.view;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -22,4 +22,5 @@ public class ViewAnalysisProjectFinance {
     private Double totalRevenue;
     private Double totalProjectCost;
     private Double profitMargin;
+    private String funnelStage;
 }

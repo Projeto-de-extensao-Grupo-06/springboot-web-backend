@@ -1,13 +1,13 @@
-package com.solarize.solarizeWebBackend.modules.dashboard.mapper;
+package com.solarize.solarizeWebBackend.modules.analysis.mapper;
 
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.AcquisitionChannelDTO;
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.FinancialDTO;
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.KpiDTO;
-import com.solarize.solarizeWebBackend.modules.dashboard.dto.KpiStatsDTO;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.AcquisitionChannelDTO;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.FinancialDTO;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.KpiDTO;
+import com.solarize.solarizeWebBackend.modules.analysis.dto.KpiStatsDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DashboardMapper {
+public class AnalysisMapper {
 
     public KpiDTO toKpiDTO(KpiStatsDTO stats, String mostCostlyChannel) {
         if (stats == null) {
