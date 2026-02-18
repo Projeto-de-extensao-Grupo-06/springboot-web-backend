@@ -44,4 +44,29 @@ public class PermissionGroupController {
             throw new BadRequestException(e.getMessage());
         }
     }
+
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<GetPermissionGroupDto> updatePermissionGroup(
+            @PathVariable long id,
+            @RequestBody @Valid PermissionGroupDto dto
+    ) {
+        try {
+            PermissionGroup updated = service.updatePermissionGroup(
+                    id,
+                    PermissionGroupMapper.toEntity(dto)
+            );
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(PermissionGroupMapper.toDto(updated));
+
+        } catch (IllegalAccessException e) {
+            throw new ServerErrorException("Error mapping DTO to entity during permission group update");
+        } catch (MappingException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
 }

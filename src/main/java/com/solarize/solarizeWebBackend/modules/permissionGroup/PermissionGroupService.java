@@ -1,11 +1,13 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
+import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 @Service
@@ -32,4 +34,38 @@ public class PermissionGroupService {
 
         return repository.save(permissionGroup);
     }
+
+    public PermissionGroup updatePermissionGroup(Long id, PermissionGroup updatedData) {
+        PermissionGroup existing = repository.findById(id)
+                .orElseThrow(() ->
+                        new NotFoundException("PermissionGroup with id " + id + " does not exist.")
+                );
+
+        if (!existing.getRole().equals(updatedData.getRole())) {
+            boolean exists = repository.existsByRole(updatedData.getRole());
+
+            if (exists) {
+                throw new ConflictException("A permission group with this name already exists.");
+            }
+        }
+
+        existing.setRole(updatedData.getRole());
+        existing.setMainModule(updatedData.getMainModule());
+
+        Field[] fields = PermissionGroup.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(ModulePermission.class)) {
+                try {
+                    field.setAccessible(true);
+                    field.set(existing, field.get(updatedData));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("Error updating module permissions");
+                }
+            }
+        }
+
+        return repository.save(existing);
+    }
+
 }
