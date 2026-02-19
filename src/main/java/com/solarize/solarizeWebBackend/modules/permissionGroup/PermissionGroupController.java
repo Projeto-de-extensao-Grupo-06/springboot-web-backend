@@ -69,4 +69,10 @@ public class PermissionGroupController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePermissionGroup(@PathVariable long id) {
+        service.deletePermissionGroup(id);
+        return ResponseEntity.noContent().build();
+    }
 }
