@@ -12,13 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateProjectCommentRequestDTO {
-
-    @NotNull(message = "The author ID is  required")
-    private Long authorId;
-
     @NotBlank(message = "The comment can´t be blank")
     @Size(max = 5000, message = "The comment exceed the limit of characters")
     private String comment;
-
-
 }
