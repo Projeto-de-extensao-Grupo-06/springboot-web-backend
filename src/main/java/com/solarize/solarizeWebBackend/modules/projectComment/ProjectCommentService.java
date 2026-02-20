@@ -4,9 +4,6 @@ import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
-import com.solarize.solarizeWebBackend.modules.projectComment.dto.CreateProjectCommentRequestDTO;
-import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentMapper;
-import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentResponseDTO;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +12,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
