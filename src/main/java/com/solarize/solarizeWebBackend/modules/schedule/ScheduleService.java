@@ -38,31 +38,22 @@ public class ScheduleService {
     private final SchedulerService schedulerService;
 
     public Schedule createSchedule(Schedule schedule, Boolean force) {
-        Coworker coworker;
-
-        if(schedule.getProject().getId() == null && schedule.getType() != ScheduleTypeEnum.NOTE) {
+        if((schedule.getProject() == null || schedule.getProject().getId() == null) && schedule.getType() != ScheduleTypeEnum.NOTE) {
             throw new BadRequestException("A project ID must be provided for this schedule type. " +
                     "Only NOTE type schedules can be created without an associated project.");
         }
 
-        if(schedule.getStartDate().isAfter(schedule.getEndDate())) {
-            throw new BadRequestException("Schedule cannot have a start date after en date");
+        if(schedule.getEndDate() != null && schedule.getStartDate().isAfter(schedule.getEndDate())) {
+            throw new BadRequestException("Schedule cannot have a start date after end date");
         }
 
-        if(schedule.getProject().getId() != null && !projectRepository.existsById(schedule.getProject().getId())) {
+        if(schedule.getProject() != null && schedule.getProject().getId() != null && !projectRepository.existsById(schedule.getProject().getId())) {
             throw new NotFoundException("Project does not exists.");
         }
 
-        if(schedule.getCoworker().getId() == null) {
-            coworker = coworkerRepository
-                    .findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
-                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
-        } else {
-            coworker = coworkerRepository.findById(schedule.getCoworker().getId())
-                    .orElseThrow(() -> new NotFoundException("Coworker not found."));
-        }
-
-
+        Coworker coworker = coworkerRepository
+                .findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(() -> new NotFoundException("Coworker not found."));
         schedule.setCoworker(coworker);
 
         if(!force) {
@@ -84,7 +75,7 @@ public class ScheduleService {
                 newSchedule.getEndDate(),
                 newSchedule.getStatus(),
                 newSchedule.getType(),
-                newSchedule.getProject().getId(),
+                newSchedule.getProject() != null ? newSchedule.getProject().getId() : null,
                 newSchedule.getNotificationAlertTime()
         ));
 
@@ -107,7 +98,6 @@ public class ScheduleService {
                     .ifPresent(e -> {throw e;});
 
         }
-
 
         existingSchedule.setTitle(
                 Optional.ofNullable(schedule.getTitle())
@@ -147,7 +137,7 @@ public class ScheduleService {
                 existingSchedule.getEndDate(),
                 existingSchedule.getStatus(),
                 existingSchedule.getType(),
-                existingSchedule.getProject().getId(),
+                existingSchedule.getProject() != null ? existingSchedule.getProject().getId() : null,
                 existingSchedule.getNotificationAlertTime()
         ));
 
