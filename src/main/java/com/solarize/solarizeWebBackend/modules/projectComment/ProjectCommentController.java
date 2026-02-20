@@ -29,12 +29,11 @@ public class ProjectCommentController {
 
     private final ProjectCommentService projectCommentService;
 
-    @PreAuthorize("hasAuthority('PROJECT_WRITE')")
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
     @PostMapping
     public ResponseEntity<ProjectCommentResponseDTO> create(@PathVariable Long projectId, @Valid @RequestBody CreateProjectCommentRequestDTO requestDTO){
         ProjectCommentResponseDTO newProjectComment = ProjectCommentMapper.toDto(
                 projectCommentService.create(
-                        requestDTO.getAuthorId(),
                         projectId,
                         requestDTO.getComment()
                 )
@@ -53,7 +52,7 @@ public class ProjectCommentController {
         return ResponseEntity.ok(dtoPage);
     }
 
-    @PreAuthorize("hasAuthority('PROJECT_DELETE')")
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id){
         projectCommentService.deleteComment(id);

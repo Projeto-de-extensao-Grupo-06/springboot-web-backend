@@ -30,8 +30,10 @@ public class ProjectCommentService {
         return repository.countByProjectId(projectId);
     }
 
-    public ProjectComment create(Long authorId, Long projectId, String comment) {
-        Coworker author = coworkerRepository.findById(authorId)
+    public ProjectComment create(Long projectId, String comment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Coworker author = coworkerRepository.findByEmailAndIsActiveTrue(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Author not found"));
 
         Project project = projectRepository.findById(projectId)
@@ -65,9 +67,10 @@ public class ProjectCommentService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         if (!isAdmin && !comment.getAuthor().getEmail().equals(currentUserEmail)){
-            throw new AccessDeniedException("You are not allowed  to delete others users comments");
+            throw new AccessDeniedException("You are not allowed to delete others users comments");
            
         }
+
         repository.delete(comment);
     }
 }
