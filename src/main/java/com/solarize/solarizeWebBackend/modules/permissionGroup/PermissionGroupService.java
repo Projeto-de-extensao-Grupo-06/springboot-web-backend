@@ -75,6 +75,13 @@ public class PermissionGroupService {
                         new NotFoundException("PermissionGroup with id " + id + " does not exist.")
                 );
 
+
+        Boolean isCoworkerInGroup = repository.hasCoworkerInGroup(existing);
+
+        if(isCoworkerInGroup) {
+            throw new ConflictException("This permissionGroup has a coworker and cannot be deleted.");
+        }
+
         if(existing.getRole().equalsIgnoreCase("ADMIN")) {
             throw new BadRequestException("Cannot delete ADMIN role.");
         }
