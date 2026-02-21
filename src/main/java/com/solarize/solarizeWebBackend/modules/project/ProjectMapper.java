@@ -25,6 +25,9 @@ public class ProjectMapper {
                 .status(entity.getStatus().name())
                 .responsible(CoworkerMapper.toDto(entity.getResponsible()))
                 .client(ClientMapper.of(entity.getClient()))
+                .deadline(entity.getDeadline())
+                .systemType(entity.getSystemType())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 
@@ -44,7 +47,13 @@ public class ProjectMapper {
         project.setDescription(dto.getDescription());
         project.setAddress(address);
         project.setSystemType(dto.getProjectType());
+        project.setStatus(dto.getStatus());
 
+        if (dto.getResponsibleId() != null) {
+            Coworker responsible = new Coworker();
+            responsible.setId(dto.getResponsibleId());
+            project.setResponsible(responsible);
+        }
         return project;
     }
 
