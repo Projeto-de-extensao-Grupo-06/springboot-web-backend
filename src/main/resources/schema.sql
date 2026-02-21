@@ -145,10 +145,10 @@ INSERT INTO coworker_project (fk_coworker, fk_project, is_responsible) VALUES
 -- 11. SCHEDULE
 --------------------------------------------
 INSERT INTO schedule (title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
-('Visita Técnica João', 'Medição de telhado', '2026-02-25 10:00:00', '2026-02-25 12:00:00', 'TECHNICAL_VISIT', 'FINISHED', TRUE, 1, 2),
+('Visita Técnica João', 'Medição de telhado', '2026-02-25 10:00:00', '2026-02-25 12:00:00', 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
 ('Instalação Maria', 'Instalação Off-grid', '2026-02-01 08:00:00', '2026-02-03 18:00:00', 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
 ('Visita Técnica Lucia', 'Avaliação local', '2026-02-18 14:00:00', '2026-02-18 16:00:00', 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
-('Instalação Shopping', 'Montagem Carport', '2026-02-05 08:00:00', '2026-02-10 18:00:00', 'INSTALL_VISIT', 'MARKED', TRUE, 7, 3);
+('Instalação Shopping', 'Montagem Carport', '2026-02-05 08:00:00', '2026-02-10 18:00:00', 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
 
 --------------------------------------------
 -- 12. PORTFOLIO
