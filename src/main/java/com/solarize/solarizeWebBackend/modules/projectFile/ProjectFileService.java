@@ -7,6 +7,7 @@ import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import com.solarize.solarizeWebBackend.shared.files.FileStorageStrategy;
 import com.solarize.solarizeWebBackend.shared.files.FileTransfer;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -168,6 +169,24 @@ public class ProjectFileService {
         }
     }
 
+    @Transactional
+    public void deleteFile(Long projectId, Long fileId) {
+
+        ProjectFile file = repository.findById(fileId)
+                .orElseThrow(() -> new NotFoundException("File not found"));
+
+        if (!file.getProject().getId().equals(projectId)) {
+            throw new BadRequestException("File does not belong to this project");
+        }
+
+        long totalWithSameHash = repository.countByCheckSum(file.getCheckSum());
+
+        repository.delete(file);
+
+        if (totalWithSameHash == 1) {
+            storageStrategy.delete(file.getFilename());
+        }
+    }
 
 }
 

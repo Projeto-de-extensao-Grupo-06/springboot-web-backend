@@ -70,5 +70,17 @@ public class ProjectFileController {
                 .header(HttpHeaders.CONTENT_TYPE, file.getContentType() != null ? file.getContentType() : "application/octet-stream")
                 .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(content.length))
                 .body(new ByteArrayResource(content));
-    }}
+    }
+    @PreAuthorize("hasAuthority('PROJECT_DELETE')")
+    @DeleteMapping("/{fileId}")
+    public ResponseEntity<Void> deleteFile(
+            @PathVariable Long projectId,
+            @PathVariable Long fileId
+    ) {
+
+        service.deleteFile(projectId, fileId);
+
+        return ResponseEntity.noContent().build();
+    }
+}
 

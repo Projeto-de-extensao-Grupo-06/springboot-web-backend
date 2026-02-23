@@ -156,7 +156,7 @@ VALUES
 --------------------------------------------
 INSERT INTO project (status, status_weight, preview_status, is_active, fk_client, fk_responsible, fk_address, created_at, deadline, system_type, project_from, name, description)
 VALUES
-    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Projeto Padrão', 'Instalação simples'),
+    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 2, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Projeto Padrão', 'Instalação simples'),
     -- 2. [LEAD QUENTE 1] - Origem BOT (Deve aparecer no TOPO)
     ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 2, 1, 1, DATEADD('HOUR', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Urgente Bot', 'Cliente interagiu com o bot e quer falar.'),
     -- 3. [LEAD QUENTE 2] - Origem SITE (Deve aparecer no TOPO)
