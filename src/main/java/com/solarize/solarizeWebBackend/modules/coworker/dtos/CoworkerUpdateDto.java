@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.coworker.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -38,4 +39,8 @@ public class CoworkerUpdateDto {
             message = "Phone must be valid (10–15 digits, may include country code)"
     )
     private String phone;
+
+    @NotNull(message = "Permission group is obligatory.")
+    @Schema(description = "Permission group ID", example = "1")
+    private Long permissionGroupId;
 }

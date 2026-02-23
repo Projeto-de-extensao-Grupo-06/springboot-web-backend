@@ -24,4 +24,9 @@ public class CoworkerResponseDto {
     @Schema(description = "Telefone do usuário", example = "11969166583")
     private String phone;
 
+    @Schema(description = "ID do grupo de permissão", example = "1")
+    private Long permissionGroupId;
+
+    @Schema(description = "Role do grupo de permissão", example = "ADMIN")
+    private String permissionGroupRole;
 }

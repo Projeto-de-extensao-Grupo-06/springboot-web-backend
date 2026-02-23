@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCreateDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerUpdateDto;
+import com.solarize.solarizeWebBackend.modules.permissionGroup.PermissionGroup;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,12 @@ public class CoworkerMapper {
         coworker.setEmail(dto.getEmail());
         coworker.setPassword(dto.getPassword());
 
+        if(dto.getPermissionGroupId() != null) {
+            PermissionGroup permissionGroup = new PermissionGroup();
+            permissionGroup.setId(dto.getPermissionGroupId());
+            coworker.setPermission(permissionGroup);
+        }
+
         return coworker;
     }
 
@@ -29,6 +36,12 @@ public class CoworkerMapper {
         coworker.setLastName(dto.getLastName());
         coworker.setPhone(dto.getPhone());
         coworker.setEmail(dto.getEmail());
+
+        if(dto.getPermissionGroupId() != null) {
+            PermissionGroup permissionGroup = new PermissionGroup();
+            permissionGroup.setId(dto.getPermissionGroupId());
+            coworker.setPermission(permissionGroup);
+        }
 
         return coworker;
     }
@@ -42,6 +55,8 @@ public class CoworkerMapper {
                 .lastName(coworker.getLastName())
                 .email(coworker.getEmail())
                 .phone(coworker.getPhone())
+                .permissionGroupId(coworker.getPermission() != null ? coworker.getPermission().getId() : null)
+                .permissionGroupRole(coworker.getPermission() != null ? coworker.getPermission().getRole() : null)
                 .build();
     }
 
@@ -59,6 +74,11 @@ public class CoworkerMapper {
         if(dto.getFirstName() != null) coworker.setFirstName(dto.getFirstName());
         if(dto.getLastName() != null) coworker.setLastName(dto.getLastName());
         if(dto.getPhone() != null) coworker.setPhone(dto.getPhone());
+        if(dto.getPermissionGroupId() != null) {
+            PermissionGroup permissionGroup = new PermissionGroup();
+            permissionGroup.setId(dto.getPermissionGroupId());
+            coworker.setPermission(permissionGroup);
+        }
     }
 
 }
