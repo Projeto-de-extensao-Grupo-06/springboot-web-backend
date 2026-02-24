@@ -1,9 +1,10 @@
-package com.solarize.solarizeWebBackend.modules.projectComment.dto;
+package com.solarize.solarizeWebBackend.modules.projectComment;
 
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerMapper;
 import com.solarize.solarizeWebBackend.modules.project.Project;
-import com.solarize.solarizeWebBackend.modules.projectComment.ProjectComment;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.CreateProjectCommentRequestDTO;
+import com.solarize.solarizeWebBackend.modules.projectComment.dto.ProjectCommentResponseDTO;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class ProjectCommentMapper {
 
         return ProjectCommentResponseDTO.builder()
                 .id(project.getId())
-                .author(CoworkerMapper.toDto(project.getAuthor()))
+                .author(CoworkerMapper.toDtoWithoutCredential(project.getAuthor()))
                 .comment(project.getComment())
                 .createdAt(project.getCreatedAt())
                 .build();

@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.project.dto.response;
 
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
+import com.solarize.solarizeWebBackend.modules.project.SystemTypeEnum;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,9 @@ public class ProjectSummaryDTO {
     private LocalDateTime nextSchedule;
     private CoworkerResponseDto responsible;
     private ClientResponseDTO client;
+    private LocalDateTime deadline;
+    private SystemTypeEnum systemType;
     private Integer commentCount;
     private Integer fileCount;
+    private LocalDateTime createdAt;
 }

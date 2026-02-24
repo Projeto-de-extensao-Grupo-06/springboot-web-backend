@@ -13,5 +13,6 @@ public interface ProjectFileRepository extends JpaRepository<ProjectFile, Long> 
     List<ProjectFile> findByCheckSum(String checkSum);
     List<ProjectFile> findAllByProject(Project project);
     List<ProjectFile> findAllByProjectId(Long projectId);
+    long countByCheckSum(String checkSum);
 
 }
