@@ -24,6 +24,8 @@ public class ScheduleValidationsHelper {
                     LocalDateTime start2 = schedule.getStartDate();
                     LocalDateTime end2 = schedule.getEndDate();
 
+                    if (end1 == null || end2 == null) return false;
+
                     return start1.isBefore(end2) && end1.isAfter(start2);
                 });
 

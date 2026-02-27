@@ -4,7 +4,9 @@ import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,12 @@ public class Budget {
     private Double subtotal;
     private Double totalCost;
     private Double discount;
+    private Double materialCost;
+    private Double serviceCost;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
 
     @Enumerated(value = EnumType.STRING)
     private DiscountType discountType;

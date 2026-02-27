@@ -27,7 +27,5 @@ public class CreateScheduleDTO {
     @NotNull(message = "The type is obligatory")
     private ScheduleTypeEnum type;
 
-    private Long coworkerId;
-
     private Long projectId;
 }
