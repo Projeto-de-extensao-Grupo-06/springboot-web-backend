@@ -11,8 +11,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
+
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+    @Query("""
+        SELECT new com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto(
+            SUM(CASE WHEN p.deadline BETWEEN CURRENT_TIMESTAMP AND :#{T(java.time.LocalDateTime).now().plusDays(7)} THEN 1L ELSE 0L END),
+            SUM(CASE WHEN p.status = 'CLIENT_AWAITING_CONTACT' THEN 1L ELSE 0L END),
+            SUM(CASE WHEN p.createdAt >= :#{T(java.time.LocalDateTime).now().minusDays(7)} THEN 1L ELSE 0L END),
+            SUM(CASE WHEN p.status IN ('AWAITING_RETRY', 'RETRYING') THEN 1L ELSE 0L END)
+        ) FROM Project p
+        WHERE p.isActive = true AND p.status NOT IN ('NEGOTIATION_FAILED', 'COMPLETED')
+    """)
+    ProjectKpiDto getProjectKpis();
 
     boolean existsByName(String name);
 
