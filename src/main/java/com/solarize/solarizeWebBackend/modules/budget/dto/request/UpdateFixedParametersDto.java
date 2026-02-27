@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class UpdateFixedParametersDto {
     @Valid
-    private List<FixedParameterDto> fixedParameters;
+    private List<FixedParameterDto> fixedParamaters;
 
     @Data
     public static class FixedParameterDto {

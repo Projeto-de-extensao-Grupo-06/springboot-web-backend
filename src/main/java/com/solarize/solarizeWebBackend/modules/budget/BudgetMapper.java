@@ -113,7 +113,7 @@ public class BudgetMapper {
     }
 
     public static List<FixedParameter> toEntity(UpdateFixedParametersDto dto) {
-        return dto.getFixedParameters().stream().map(d -> {
+        return dto.getFixedParamaters().stream().map(d -> {
             FixedParameterTemplate template = new FixedParameterTemplate();
             FixedParameter fixedParameter = new FixedParameter();
 
