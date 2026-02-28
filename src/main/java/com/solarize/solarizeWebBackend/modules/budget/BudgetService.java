@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -401,5 +403,9 @@ public class BudgetService {
         budget.setTotalCost(totalCosts.get("totalCost"));
 
         return budgetRepository.save(budget);
+    }
+
+    public List<FixedParameterTemplate> getFixedParameters() {
+        return fixedParameterTemplateRepository.findAll();
     }
 }

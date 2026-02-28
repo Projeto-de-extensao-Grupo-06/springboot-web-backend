@@ -2,10 +2,14 @@ package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.response.FixedParametersTemplateDto;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
+import com.solarize.solarizeWebBackend.modules.budget.model.FixedParameter;
+import com.solarize.solarizeWebBackend.modules.budget.model.FixedParameterTemplate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -82,5 +86,12 @@ public class BudgetController {
     public ResponseEntity<BudgetResponseDto> deleteFixedParameter(@PathVariable Long budgetId, @PathVariable Long parameterId) {
         Budget budget = budgetService.deletePersonalizedParameter(budgetId, parameterId);
         return ResponseEntity.ok(BudgetMapper.toDto(budget));
+    }
+
+    @PreAuthorize("hasAuthority('BUDGET_READ')")
+    @GetMapping("/budgets/parameters/fixed")
+    public ResponseEntity<List<FixedParametersTemplateDto>> getFixedParametersList() {
+        List<FixedParameterTemplate> fixedParameters = budgetService.getFixedParameters();
+        return ResponseEntity.ok(BudgetMapper.toDto(fixedParameters));
     }
 }
