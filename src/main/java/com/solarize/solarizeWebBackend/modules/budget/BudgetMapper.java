@@ -104,7 +104,7 @@ public class BudgetMapper {
     public static List<BudgetMaterial> toEntity(UpdateMaterialDto dto) {
         return dto.getMaterials().stream().map(d -> {
             MaterialUrl materialUrl = new MaterialUrl();
-            materialUrl.setId(d.getMaterialId());
+            materialUrl.setId(d.getMaterialUrlId());
 
             return BudgetMaterial.builder()
                     .quantity(d.getQuantity())
