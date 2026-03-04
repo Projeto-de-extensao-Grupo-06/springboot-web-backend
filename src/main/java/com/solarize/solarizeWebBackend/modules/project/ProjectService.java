@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
@@ -240,10 +241,14 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    public  List<Schedule> getSchedulesByProjectId(Long projectId) {
+    public List<Schedule> getSchedulesByProjectId(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project does not exists"));
 
         return project.getSchedules().stream().filter(s -> s.getStatus() == ScheduleStatusEnum.MARKED).toList();
+    }
+
+    public ProjectKpiDto getProjectKpis() {
+        return projectRepository.getProjectKpis();
     }
 }
