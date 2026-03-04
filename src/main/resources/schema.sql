@@ -76,30 +76,15 @@ INSERT INTO client (first_name, last_name, phone, email, status, document_number
 -- 5. PROJECT
 --------------------------------------------
 INSERT INTO project (id_project, name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
-(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -2, NOW()), DATEADD('DAY', 5, NOW()), 1, 2, 1),
-(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -45, NOW()), DATEADD('DAY', -10, NOW()), 2, 3, 2),
-(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', DATEADD('DAY', -100, NOW()), DATEADD('DAY', -50, NOW()), 3, 1, 3),
-(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -15, NOW()), DATEADD('DAY', 20, NOW()), 4, 4, 4),
-(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', NOW(), DATEADD('DAY', 30, NOW()), 5, 2, 5),
-(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -1, NOW()), DATEADD('DAY', 45, NOW()), 1, 2, 1),
-(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -20, NOW()), DATEADD('DAY', 2, NOW()), 3, 3, 3),
-(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -60, NOW()), DATEADD('DAY', -15, NOW()), 2, 4, 2),
-(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -5, NOW()), DATEADD('DAY', 25, NOW()), 4, 1, 4);
-
---------------------------------------------
--- 6. BUDGET
---------------------------------------------
-INSERT INTO budget (id_budget, total_cost, discount, material_cost, service_cost, final_budget, fk_project, created_at) VALUES
-(1, 18000.00, 500.00, 10000.00, 5000.00, TRUE, 1, DATEADD('DAY', -2, NOW())),
-(2, 45000.00, 2000.00, 25000.00, 12000.00, TRUE, 2, DATEADD('DAY', -45, NOW())),
-(3, 8500.00, 0.00, 5000.00, 2000.00, FALSE, 4, DATEADD('DAY', -15, NOW())),
-(4, 22000.00, 1000.00, 12000.00, 6000.00, TRUE, 3, DATEADD('DAY', -100, NOW())),
-(5, 50000.00, 0.00, 30000.00, 10000.00, TRUE, 7, DATEADD('DAY', -20, NOW())),
-(6, 12000.00, 0.00, 8000.00, 4000.00, FALSE, 6, DATEADD('DAY', -1, NOW())),
-(7, 30000.00, 1500.00, 15000.00, 8000.00, TRUE, 8, DATEADD('DAY', -60, NOW())),
-(8, 0.00, 0.00, 0.00, 0.00, FALSE, 5, NOW()),
-(9, 0.00, 0.00, 0.00, 0.00, FALSE, 9, DATEADD('DAY', -5, NOW()));
-
+(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
+(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
+(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
+(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
+(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
+(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
+(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
+(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
+(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
 --------------------------------------------
 -- 7. MATERIAL
 --------------------------------------------
@@ -118,16 +103,6 @@ INSERT INTO material_url (id_material_url, url, fk_material, price, hidden) VALU
 (2, 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 3500.00, FALSE),
 (3, 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 2800.00, FALSE),
 (4, 'https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE);
-
---------------------------------------------
--- 9. BUDGET MATERIAL
---------------------------------------------
-INSERT INTO budget_material (fk_budget, fk_material_url, quantity, price) VALUES
-(1, 1, 10, 900.00),
-(1, 4, 50, 12.00),
-(2, 2, 2, 3500.00),
-(2, 3, 4, 2800.00),
-(4, 1, 20, 900.00);
 
 --------------------------------------------
 -- 10. COWORKER PROJECT
