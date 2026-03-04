@@ -85,21 +85,6 @@ INSERT INTO project (id_project, name, description, status, status_weight, previ
 (7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
 (8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
 (9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
-
---------------------------------------------
--- 6. BUDGET
---------------------------------------------
-INSERT INTO budget (id_budget, total_cost, discount, material_cost, service_cost, final_budget, fk_project, created_at) VALUES
-(1, 18000.00, 500.00, 10000.00, 5000.00, TRUE, 1, CURRENT_TIMESTAMP),
-(2, 45000.00, 2000.00, 25000.00, 12000.00, TRUE, 2, CURRENT_TIMESTAMP),
-(3, 8500.00, 0.00, 5000.00, 2000.00, FALSE, 4, CURRENT_TIMESTAMP),
-(4, 22000.00, 1000.00, 12000.00, 6000.00, TRUE, 3, CURRENT_TIMESTAMP),
-(5, 50000.00, 0.00, 30000.00, 10000.00, TRUE, 7, CURRENT_TIMESTAMP),
-(6, 12000.00, 0.00, 8000.00, 4000.00, FALSE, 6, CURRENT_TIMESTAMP),
-(7, 30000.00, 1500.00, 15000.00, 8000.00, TRUE, 8, CURRENT_TIMESTAMP),
-(8, 0.00, 0.00, 0.00, 0.00, FALSE, 5, CURRENT_TIMESTAMP),
-(9, 0.00, 0.00, 0.00, 0.00, FALSE, 9, CURRENT_TIMESTAMP);
-
 --------------------------------------------
 -- 7. MATERIAL
 --------------------------------------------
@@ -118,16 +103,6 @@ INSERT INTO material_url (id_material_url, url, fk_material, price, hidden) VALU
 (2, 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 3500.00, FALSE),
 (3, 'https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 2800.00, FALSE),
 (4, 'https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE);
-
---------------------------------------------
--- 9. BUDGET MATERIAL
---------------------------------------------
-INSERT INTO budget_material (fk_budget, fk_material_url, quantity, price) VALUES
-(1, 1, 10, 900.00),
-(1, 4, 50, 12.00),
-(2, 2, 2, 3500.00),
-(2, 3, 4, 2800.00),
-(4, 1, 20, 900.00);
 
 --------------------------------------------
 -- 10. COWORKER PROJECT

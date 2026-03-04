@@ -76,7 +76,7 @@ public class BudgetController {
 
     @PreAuthorize("hasAuthority('BUDGET_UPDATE')")
     @DeleteMapping("/budgets/{budgetId}/parameters/fixed/{parameterName}")
-    public ResponseEntity<BudgetResponseDto> deleteFixedParameter(@PathVariable Long budgetId, @PathVariable FixedParameterName parameterName) {
+    public ResponseEntity<BudgetResponseDto> deleteFixedParameter(@PathVariable Long budgetId, @PathVariable String parameterName) {
         Budget budget = budgetService.deleteFixedParameter(budgetId, parameterName);
         return ResponseEntity.ok(BudgetMapper.toDto(budget));
     }

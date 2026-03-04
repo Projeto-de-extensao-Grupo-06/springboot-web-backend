@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.budget.dto.request;
 
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,7 +15,7 @@ public class UpdateFixedParametersDto {
     @Data
     public static class FixedParameterDto {
         @NotNull
-        private FixedParameterName parameterName;
+        private String parameterName;
 
         @PositiveOrZero
         @NotNull

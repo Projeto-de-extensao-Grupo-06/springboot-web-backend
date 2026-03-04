@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -89,37 +90,37 @@ public class BudgetService {
         List<FixedParameterTemplate> templates = List.of(
                 FixedParameterTemplate
                   .builder()
-                  .uniqueName(FixedParameterName.FOOD)
+                  .uniqueName("Alimentação")
                   .type(ParameterValueType.AMOUNT)
                   .build(),
 
                 FixedParameterTemplate
                   .builder()
-                  .uniqueName(FixedParameterName.TRANSPORT)
+                  .uniqueName("Transporte")
                   .type(ParameterValueType.AMOUNT)
                   .build(),
 
                 FixedParameterTemplate
                         .builder()
-                        .uniqueName(FixedParameterName.LABOR) // Mão de obra
+                        .uniqueName("Mão de Obra")
                         .type(ParameterValueType.AMOUNT)
                         .build(),
 
                 FixedParameterTemplate
                         .builder()
-                        .uniqueName(FixedParameterName.RISK_FACTOR)
+                        .uniqueName("Fator de Risco")
                         .type(ParameterValueType.AMOUNT)
                         .build(),
 
                 FixedParameterTemplate
                         .builder()
-                        .uniqueName(FixedParameterName.ENGINEERING_FEE) // Custo com o engenheiro.
+                        .uniqueName("Engenheiro")
                         .type(ParameterValueType.AMOUNT)
                         .build(),
 
                 FixedParameterTemplate
                         .builder()
-                        .uniqueName(FixedParameterName.APPROVAL_FEE) // Homologação do projeto.
+                        .uniqueName("Taxas de Homologação")
                         .type(ParameterValueType.AMOUNT)
                         .build()
         );
@@ -180,11 +181,17 @@ public class BudgetService {
         budget.setSubtotal(budgetCost.get("subtotal"));
         budget.setTotalCost(budgetCost.get("totalCost"));
 
-        Budget budgetCreation = budgetRepository.save(budget);
+        try {
+            Budget saved = budgetRepository.save(budget);
 
-        eventPublisher.publishEvent(new BudgetCreateEvent(projectId, budgetCreation.getFinalBudget()));
+            eventPublisher.publishEvent(
+                    new BudgetCreateEvent(projectId, saved.getFinalBudget())
+            );
 
-        return budgetCreation;
+            return saved;
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("The project already has a linked budget.");
+        }
     }
 
     public Budget getBudget(Long projectId) {
@@ -362,7 +369,7 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
-    public Budget deleteFixedParameter(Long budgetId, FixedParameterName parameterName) {
+    public Budget deleteFixedParameter(Long budgetId, String parameterName) {
         FixedParameterTemplate template = fixedParameterTemplateRepository.findByUniqueName(parameterName)
                 .orElseThrow(() -> new NotFoundException("Fixed parameter does not exists."));
 

@@ -208,12 +208,15 @@ public class ProjectService {
     public void projectBudgetCreated(BudgetCreateEvent event) {
         Project project = projectRepository.findById(event.projectId()).orElseThrow();
 
-        System.out.println(event.finalBudget());
-
-        if(event.finalBudget()) {
-            project.getStatus().getStateHandler().applyToFinalBudget(project);
-        } else {
-            project.getStatus().getStateHandler().applyToPreBudget(project);
+        try {
+            if(event.finalBudget()) {
+                project.getStatus().getStateHandler().applyToFinalBudget(project);
+            } else {
+                project.getStatus().getStateHandler().applyToPreBudget(project);
+            }
+        } catch (InvalidStateTransitionException ex) {
+            log.warn(ex.getMessage());
+            return;
         }
 
         projectRepository.save(project);
