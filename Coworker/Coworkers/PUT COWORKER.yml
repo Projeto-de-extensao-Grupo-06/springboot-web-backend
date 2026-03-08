@@ -1,0 +1,26 @@
+info:
+  name: PUT COWORKER
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/coworkers/3"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Luis",
+        "lastName": "Silva",
+        "email": "luissilvas@gmail.com",
+       "phone": "11972795939",
+        "password": "Senha113@",
+        "permissionGroupId": 1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

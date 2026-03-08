@@ -1,0 +1,22 @@
+info:
+  name: LOGIN
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{base_url}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+          "email": "bryangomesrocha@gmail.com",
+          "password": "0624"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

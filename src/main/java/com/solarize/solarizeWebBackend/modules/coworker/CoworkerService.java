@@ -19,8 +19,8 @@ public class CoworkerService {
 
     public Coworker createCoworker(Coworker coworker) {
         validateConflict(coworker);
+        validateAdminCreation(coworker);
         validatePermissionGroup(coworker);
-        // Buscar o PermissionGroup completo do banco de dados
         coworker.setPermission(permissionGroupService.permissionGroupById(coworker.getPermission().getId()));
         coworker.setPassword(passwordEncoder.encode(coworker.getPassword()));
         return REPOSITORY.save(coworker);
@@ -45,7 +45,7 @@ public class CoworkerService {
         if (coworkerUpdate.getPhone() != null) coworker.setPhone(coworkerUpdate.getPhone());
         if (coworkerUpdate.getPermission() != null) {
             validatePermissionGroup(coworkerUpdate);
-            // Buscar o PermissionGroup completo do banco de dados
+            validateAdminCreation(coworkerUpdate);
             coworker.setPermission(permissionGroupService.permissionGroupById(coworkerUpdate.getPermission().getId()));
         }
 
@@ -90,6 +90,23 @@ public class CoworkerService {
         }
 
         permissionGroupService.permissionGroupById(coworker.getPermission().getId());
+    }
+
+    private boolean isUserAdmin() {
+        String loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Coworker loggedUser = REPOSITORY.findByEmailAndIsActiveTrue(loggedUserEmail)
+                .orElseThrow(() -> new NotFoundException("Logged user not found."));
+
+        return loggedUser.getPermission() != null && loggedUser.getPermission().getId() == 1L;
+    }
+
+    public void validateAdminCreation(Coworker coworker) {
+        if(coworker.getPermission() != null && coworker.getPermission().getId() == 1L) {
+            if(!isUserAdmin()) {
+                throw new ConflictException("Only admins can create or assign admin permission.");
+            }
+        }
     }
 
 }
