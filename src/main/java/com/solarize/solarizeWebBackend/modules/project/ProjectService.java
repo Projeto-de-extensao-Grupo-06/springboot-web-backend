@@ -64,9 +64,7 @@ public class ProjectService {
                 .orElseThrow(() ->
                         new NotFoundException("Responsible coworker not found"));
 
-        if (project.getStatus() == null) {
             project.setStatus(ProjectStatusEnum.NEW);
-        }
 
         project.setIsActive(true);
         project.setCreatedAt(LocalDateTime.now());

@@ -1,10 +1,20 @@
-CREATE FUNCTION IF NOT EXISTS unaccent(str TEXT) RETURNS TEXT DETERMINISTIC RETURN str COLLATE utf8mb4_unicode_ci;
+CREATE ALIAS IF NOT EXISTS UNACCENT
+FOR "com.solarize.solarizeWebBackend.shared.config.TextFunctions.unaccent";
+
 --------------------------------------------
 -- 1. PERMISSION GROUP
 --------------------------------------------
 INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
 ('ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
 ('TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
+('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
+
+--------------------------------------------
+-- 1. PERMISSION GROUP
+--------------------------------------------
+INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
+('ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
+( 'TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
 ('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
 
 --------------------------------------------
@@ -77,16 +87,15 @@ INSERT INTO client (first_name, last_name, phone, email, status, document_number
 -- 5. PROJECT
 --------------------------------------------
 INSERT INTO project (name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
-('Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-09-15', INTERVAL 30 DAY), 1, 2, 1),
-('Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-09-20', INTERVAL 30 DAY), 2, 3, 2),
-('Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATE_ADD('2025-10-02', INTERVAL 30 DAY), 3, 1, 3),
-('Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-10-15', INTERVAL 30 DAY), 4, 4, 4),
-('Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATE_ADD('2025-10-28', INTERVAL 30 DAY), 5, 2, 5),
-('Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-11-05', INTERVAL 30 DAY), 1, 2, 1),
-('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-11-10', INTERVAL 30 DAY), 3, 3, 3),
-('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-11-12', INTERVAL 30 DAY), 2, 4, 2),
-('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-11-20', INTERVAL 30 DAY), 4, 1, 4);
-
+('Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
+('Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
+('Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
+('Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
+('Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
+('Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
+('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
+('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
+('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
 --------------------------------------------
 -- 7. MATERIAL
 --------------------------------------------
@@ -122,10 +131,10 @@ INSERT INTO coworker_project (fk_coworker, fk_project, is_responsible) VALUES
 -- 11. SCHEDULE
 --------------------------------------------
 INSERT INTO schedule (title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
-('Visita Técnica João', 'Medição de telhado', DATE_ADD(NOW(), INTERVAL 24 HOUR), DATE_ADD(NOW(), INTERVAL 26 HOUR), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
-('Instalação Maria', 'Instalação Off-grid', DATE_ADD(NOW(), INTERVAL -10 DAY), DATE_ADD(NOW(), INTERVAL -7 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
-('Visita Técnica Lucia', 'Avaliação local', DATE_ADD(NOW(), INTERVAL -5 DAY), DATE_ADD(NOW(), INTERVAL -5 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
-('Instalação Shopping', 'Montagem Carport', DATE_ADD(NOW(), INTERVAL -15 DAY), DATE_ADD(NOW(), INTERVAL -10 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
+('Visita Técnica João', 'Medição de telhado', DATEADD('HOUR', 24, NOW()), DATEADD('HOUR', 26, NOW()), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
+('Instalação Maria', 'Instalação Off-grid', DATEADD('DAY', -10, NOW()), DATEADD('DAY', -7, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
+('Visita Técnica Lucia', 'Avaliação local', DATEADD('DAY', -5, NOW()), DATEADD('DAY', -5, NOW()), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
+('Instalação Shopping', 'Montagem Carport', DATEADD('DAY', -15, NOW()), DATEADD('DAY', -10, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
 
 --------------------------------------------
 -- 12. PORTFOLIO
@@ -135,16 +144,13 @@ INSERT INTO portfolio (title, description, image_path, fk_project) VALUES
 ('Backup Hospitalar', 'Sistema de segurança energética', '/images/portfolio/maria_clinic.jpg', 2);
 
 --------------------------------------------
--- 13. RETRY QUEUE (comentado: projetos referenciados não existem)
+-- 13. RETRY QUEUE
 --------------------------------------------
--- INSERT INTO retry_queue (scheduled_date, retrying, fk_project) VALUES
--- (DATE_ADD(NOW(), INTERVAL -1 DAY), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
--- (DATE_ADD(NOW(), INTERVAL 1 DAY), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
+INSERT INTO retry_queue (scheduled_date, retrying, fk_project) VALUES
+(DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
+(DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
 
---------------------------------------------
--- VIEWS
---------------------------------------------
-DROP TABLE IF EXISTS VIEW_ANALYSIS_PROJECT_FINANCE;
+DROP TABLE IF EXISTS VIEW_ANALYSIS_PROJECT_FINANCE CASCADE;
 
 CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECT_FINANCE AS
 SELECT
