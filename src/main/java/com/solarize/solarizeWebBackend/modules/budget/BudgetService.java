@@ -412,6 +412,33 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
+    public Budget calculatePreBudget(Project project, Double monthlyBill) {
+        double bill = monthlyBill != null ? monthlyBill : 0.0;
+        double consumption = bill / 0.90;
+        double kwp = (bill > 0) ? (consumption / (30 * 5.0 * 0.75)) : 0.0; 
+        double cost = kwp * 4500;
+
+        Budget preBudget = new Budget();
+        preBudget.setProject(project);
+        preBudget.setFinalBudget(false);
+        preBudget.setSubtotal(cost);
+        preBudget.setTotalCost(cost);
+        
+        PersonalizedParameter preBudgetParam = PersonalizedParameter.builder()
+                .name("Pré-orçamento")
+                .type(ParameterValueType.AMOUNT)
+                .parameterValue(cost)
+                .budget(preBudget)
+                .build();
+                
+        preBudget.getPersonalizedParameters().add(preBudgetParam);
+        
+        budgetRepository.save(preBudget);
+        eventPublisher.publishEvent(new BudgetCreateEvent(project.getId(), false));
+
+        return preBudget;
+    }
+
     public List<FixedParameterTemplate> getFixedParameters() {
         return fixedParameterTemplateRepository.findAll();
     }

@@ -47,8 +47,11 @@ public class AuthFilter extends OncePerRequestFilter {
         List<SimpleGrantedAuthority> authorities = null;
 
         Cookie[] cookies = request.getCookies();
-
-        if(cookies != null){
+        String headerAuth = request.getHeader("Authorization");
+    
+        if (headerAuth != null) {
+            jwtToken = headerAuth;
+        } else if (cookies != null) {
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals("Authorization")){
                     jwtToken = cookie.getValue();
@@ -56,7 +59,6 @@ public class AuthFilter extends OncePerRequestFilter {
                 }
             }
         }
-
 
         if (Objects.nonNull(jwtToken)) {
             try {
@@ -79,6 +81,15 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     private void  addUsernameInContext(HttpServletRequest request, String username, String jwtToken, List<SimpleGrantedAuthority> authorities){
+
+        if ("BOT_USER".equals(username)) {
+            if (!jwtTokenManager.getExpirationDateFromToken(jwtToken).before(new Date())) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+            return;
+        }
 
         UserDetails userDetails = authService.loadUserByUsername(username);
 

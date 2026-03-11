@@ -32,6 +32,18 @@ public class New implements Status {
     }
 
     @Override
+    public void applyToNegotiationFailed(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.NEGOTIATION_FAILED);
+    }
+
+    @Override
+    public void applyToContactNotRequested(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.CONTACT_NOT_REQUESTED);
+    }
+
+    @Override
     public void applyToFinalBudget(Project project) {
         project.setPreviewStatus(project.getStatus());
         project.setStatus(ProjectStatusEnum.FINAL_BUDGET);

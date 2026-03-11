@@ -62,6 +62,16 @@ public class JwtTokenManager {
 
     }
 
+    public String generateBotToken(String username, List<String> authorities){
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("authorities", authorities)
+                .signWith(parseSecret())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity * 1_000))
+                .compact();
+    }
+
     public <T> T getClaimForToken(String token, Function<Claims, T> claimsResolver){
 
         Claims claims = getAllClaimsFromToken(token);

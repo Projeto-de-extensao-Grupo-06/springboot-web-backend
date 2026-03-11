@@ -2,12 +2,17 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotCreateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotUpdateStatusDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectBotCreatedDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleMapper;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
+import com.solarize.solarizeWebBackend.modules.budget.dto.response.PreBudgetEstimationDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -121,5 +126,37 @@ public class ProjectController {
         }
         
         return ResponseEntity.ok(ScheduleMapper.toDtoList(schedules));
+    }
+    
+    @PreAuthorize("hasAuthority('PROJECT_WRITE') or authentication.principal == 'BOT_USER'")
+    @PostMapping("/bot")
+    public ResponseEntity<PreBudgetEstimationDto> createBotProject(@RequestBody @Valid ProjectBotLeadCreateDto dto) {
+        Project project = projectService.createBotProject(dto);
+        
+        double bill = Double.parseDouble(dto.getMonthlyBill());
+        double consumption = bill / 0.90;
+        double kwp = (bill > 0) ? (consumption / (30 * 5.0 * 0.75)) : 0.0; 
+        double cost = project.getBudget().getTotalCost();
+        double savings = bill * 0.95;
+        double paybackYears = (savings > 0) ? (cost / (savings * 12)) : 0.0;
+        
+        String message = String.format("Lead processado no CRM! Foi gerada a estimativa técnica de %.2f kWp para cobrir uma conta de R$ %.2f. Custo estimado: R$ %.2f. Payback: %.1f anos. Pode informar o cliente!", kwp, bill, cost, paybackYears);
+
+        PreBudgetEstimationDto response = PreBudgetEstimationDto.builder()
+                .kwp(kwp)
+                .bill(bill)
+                .cost(cost)
+                .paybackYears(paybackYears)
+                .message(message)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
+    @PatchMapping("/{projectId}/contact-status")
+    public ResponseEntity<Void> updateBotContactStatus(@PathVariable Long projectId, @RequestBody @Valid ProjectBotUpdateStatusDto dto) {
+        projectService.updateBotContactStatus(projectId, dto.getStatus());
+        return ResponseEntity.noContent().build();
     }
 }

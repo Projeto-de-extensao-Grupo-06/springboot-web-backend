@@ -16,6 +16,18 @@ public class PreBudget implements Status {
     }
 
     @Override
+    public void applyToNegotiationFailed(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.NEGOTIATION_FAILED);
+    }
+
+    @Override
+    public void applyToContactNotRequested(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.CONTACT_NOT_REQUESTED);
+    }
+
+    @Override
     public void applyToAwaitingRetry(Project project) {
         StateMachineHelper.projectNeedARetryScheduled(project);
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -18,6 +19,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     boolean existsByDocumentNumberAndIdNot(String documentNumber, Long id);
     boolean existsByEmailAndIdNot(String email, Long id);
     boolean existsByPhoneAndIdNot(String phone, Long id);
+    Optional<Client> findByPhone(String phone);
 
     @Query("""
         SELECT c FROM Client c
