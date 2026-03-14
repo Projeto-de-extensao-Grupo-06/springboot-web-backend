@@ -28,7 +28,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
           AND (cast(:startDate as timestamp) IS NULL OR c.createdAt >= :startDate)
           AND (cast(:endDate as timestamp) IS NULL OR c.createdAt <= :endDate)
           AND (:search IS NULL OR :search = '' OR (
-              LOWER(CONCAT(c.firstName, ' ', c.lastName)) LIKE LOWER(CONCAT('%', :search, '%')) OR
+             CAST(FUNCTION('UNACCENT', LOWER(CONCAT(c.firstName, ' ', c.lastName))) AS string)
+             LIKE CONCAT('%', CAST(FUNCTION('UNACCENT', LOWER(:search)) AS string), '%') OR
               c.email LIKE CONCAT('%', :search, '%') OR
               c.phone LIKE CONCAT('%', :search, '%') OR
               c.documentNumber LIKE CONCAT('%', :search, '%')
