@@ -2,10 +2,8 @@ package com.solarize.solarizeWebBackend.modules.project;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
-import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotUpdateStatusDto;
-import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectBotCreatedDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
@@ -30,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -131,15 +130,14 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('PROJECT_WRITE') or authentication.principal == 'BOT_USER'")
     @PostMapping("/bot")
     public ResponseEntity<PreBudgetEstimationDto> createBotProject(@RequestBody @Valid ProjectBotLeadCreateDto dto) {
-        Project project = projectService.createBotProject(dto);
-        
-        double bill = Double.parseDouble(dto.getMonthlyBill());
-        double consumption = bill / 0.90;
-        double kwp = (bill > 0) ? (consumption / (30 * 5.0 * 0.75)) : 0.0; 
-        double cost = project.getBudget().getTotalCost();
-        double savings = bill * 0.95;
-        double paybackYears = (savings > 0) ? (cost / (savings * 12)) : 0.0;
-        
+        Map<String, Double> projectPreBudgetResults = projectService.createBotProject(dto);
+
+        Double kwp = projectPreBudgetResults.get("kwp");
+        Double bill = projectPreBudgetResults.get("bill");
+        Double cost = projectPreBudgetResults.get("cost");
+        Double paybackYears = projectPreBudgetResults.get("paybackYears");
+
+
         String message = String.format("Lead processado no CRM! Foi gerada a estimativa técnica de %.2f kWp para cobrir uma conta de R$ %.2f. Custo estimado: R$ %.2f. Payback: %.1f anos. Pode informar o cliente!", kwp, bill, cost, paybackYears);
 
         PreBudgetEstimationDto response = PreBudgetEstimationDto.builder()

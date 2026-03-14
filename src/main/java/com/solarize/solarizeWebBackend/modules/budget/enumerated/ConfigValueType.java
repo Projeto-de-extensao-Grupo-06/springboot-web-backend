@@ -4,5 +4,7 @@ public enum ConfigValueType {
     PERCENT,
     AMOUNT,
     KM,
-    QUANTITY
+    QUANTITY,
+    HOUR,
+    INTEGER
 }

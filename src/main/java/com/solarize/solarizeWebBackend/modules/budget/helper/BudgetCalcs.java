@@ -9,6 +9,7 @@ import com.solarize.solarizeWebBackend.modules.budget.model.PersonalizedParamete
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -130,5 +131,45 @@ public class BudgetCalcs {
 
     private static double safeDouble(Double value) {
         return value != null ? value : 0.0;
+    }
+
+    public static Map<String, Double> preBudgetCalc(
+            Double monthlyBill,
+            Double tariff,
+            Double sunHours,
+            Double systemEfficiency,
+            Double pricePerKwp
+    ) {
+        Map<String, Double> result = new HashMap<>();
+
+        double bill = monthlyBill != null ? monthlyBill : 0.0;
+        final int MONTHS_PER_YEAR = 12;
+        final int DAYS = 30;
+
+        double consumption = bill > 0 ? bill / tariff : 0.0;
+
+        double kwp = (bill > 0)
+                ? (consumption / (DAYS * sunHours * systemEfficiency))
+                : 0.0;
+
+        double generation = kwp * sunHours * DAYS * systemEfficiency;
+
+        double savings = generation * tariff;
+
+        double cost = kwp * pricePerKwp;
+
+        double paybackYears = (savings > 0)
+                ? cost / (savings * MONTHS_PER_YEAR)
+                : 0.0;
+
+        result.put("bill", bill);
+        result.put("consumption", consumption);
+        result.put("kwp", kwp);
+        result.put("generation", generation);
+        result.put("savings", savings);
+        result.put("cost", cost);
+        result.put("paybackYears", paybackYears);
+
+        return result;
     }
 }

@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -295,7 +296,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project createBotProject(ProjectBotLeadCreateDto dto) {
+    public Map<String, Double> createBotProject(ProjectBotLeadCreateDto dto) {
         Client client = clientService.findOrCreateClientBot(
             dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress()
         );
@@ -315,10 +316,8 @@ public class ProjectService {
         Project savedProject = projectRepository.save(project);
         
         Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
-        Budget preBudget = budgetService.calculatePreBudget(savedProject, monthlyBillValue);
-        savedProject.setBudget(preBudget);
-        
-        return savedProject;
+
+        return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
     }
 
     public ProjectKpiDto getProjectKpis() {

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
@@ -48,32 +49,77 @@ public class BudgetService {
     @EventListener(ApplicationReadyEvent.class)
     public void creatingConfigParams() {
         List<ConfigParameter> parameters = List.of(
+
                 ConfigParameter
                         .builder()
                         .uniqueName("KWH_VALUE")
                         .configValueType(ConfigValueType.AMOUNT)
                         .parameterValue(0.64)
                         .build(),
+
                 ConfigParameter
                         .builder()
                         .uniqueName("FUEL_VALUE")
                         .configValueType(ConfigValueType.AMOUNT)
                         .parameterValue(6.16)
                         .build(),
+
                 ConfigParameter
                         .builder()
                         .uniqueName("KM_PER_LITER")
                         .configValueType(ConfigValueType.KM)
                         .parameterValue(8.0)
                         .build(),
+
                 ConfigParameter
                         .builder()
                         .uniqueName("VALUE_MULTIPLIER_PER_KWH")
                         .configValueType(ConfigValueType.AMOUNT)
                         .parameterValue(100.0)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_TARIFF")
+                        .configValueType(ConfigValueType.AMOUNT)
+                        .parameterValue(0.90)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_SUN_HOURS")
+                        .configValueType(ConfigValueType.HOUR)
+                        .parameterValue(5.0)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_SYSTEM_EFFICIENCY")
+                        .configValueType(ConfigValueType.PERCENT)
+                        .parameterValue(0.75)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_PRICE_PER_KWP")
+                        .configValueType(ConfigValueType.AMOUNT)
+                        .parameterValue(4500.0)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_DAYS_PER_MONTH")
+                        .configValueType(ConfigValueType.INTEGER)
+                        .parameterValue(30.0)
+                        .build(),
+
+                ConfigParameter
+                        .builder()
+                        .uniqueName("SOLAR_MONTHS_PER_YEAR")
+                        .configValueType(ConfigValueType.INTEGER)
+                        .parameterValue(12.0)
                         .build()
         );
-
 
         for(ConfigParameter parameter : parameters) {
            Optional<ConfigParameter> configParam =  configParameterRepository.findByUniqueName(parameter.getUniqueName());
@@ -412,31 +458,63 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
-    public Budget calculatePreBudget(Project project, Double monthlyBill) {
-        double bill = monthlyBill != null ? monthlyBill : 0.0;
-        double consumption = bill / 0.90;
-        double kwp = (bill > 0) ? (consumption / (30 * 5.0 * 0.75)) : 0.0; 
-        double cost = kwp * 4500;
+    public Map<String, Double> calculatePreBudget(Project project, Double monthlyBill) {
+        List<ConfigParameter> parameters = configParameterRepository.findAll();
+
+        Double tariff = Objects.requireNonNull(parameters.stream()
+                        .filter(p -> p.getUniqueName().equals("SOLAR_TARIFF"))
+                        .findFirst()
+                        .orElse(null))
+                .getParameterValue();
+
+        Double sunHours = Objects.requireNonNull(parameters.stream()
+                        .filter(p -> p.getUniqueName().equals("SOLAR_SUN_HOURS"))
+                        .findFirst()
+                        .orElse(null))
+                        .getParameterValue();
+
+        Double systemEfficiency = Objects.requireNonNull(parameters.stream()
+                        .filter(p -> p.getUniqueName().equals("SOLAR_SYSTEM_EFFICIENCY"))
+                        .findFirst()
+                        .orElse(null))
+                .getParameterValue();
+
+
+        Double pricePerKwp = Objects.requireNonNull(parameters.stream()
+                        .filter(p -> p.getUniqueName().equals("SOLAR_SYSTEM_EFFICIENCY"))
+                        .findFirst()
+                        .orElse(null))
+                .getParameterValue();
+
+        Map<String, Double> results = BudgetCalcs.preBudgetCalc(
+                monthlyBill,
+                tariff,
+                sunHours,
+                systemEfficiency,
+                pricePerKwp
+        );
 
         Budget preBudget = new Budget();
         preBudget.setProject(project);
         preBudget.setFinalBudget(false);
-        preBudget.setSubtotal(cost);
-        preBudget.setTotalCost(cost);
         
         PersonalizedParameter preBudgetParam = PersonalizedParameter.builder()
                 .name("Pré-orçamento")
                 .type(ParameterValueType.AMOUNT)
-                .parameterValue(cost)
+                .parameterValue(results.get("cost"))
                 .budget(preBudget)
                 .build();
                 
         preBudget.getPersonalizedParameters().add(preBudgetParam);
-        
+
+        Map<String, Double> totalCosts = BudgetCalcs.budgetTotalCost(preBudget);
+        preBudget.setSubtotal(totalCosts.get("subtotal"));
+        preBudget.setTotalCost(totalCosts.get("totalCost"));
+
         budgetRepository.save(preBudget);
         eventPublisher.publishEvent(new BudgetCreateEvent(project.getId(), false));
 
-        return preBudget;
+        return results;
     }
 
     public List<FixedParameterTemplate> getFixedParameters() {
