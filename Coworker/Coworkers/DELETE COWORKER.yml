@@ -1,0 +1,26 @@
+info:
+  name: DELETE COWORKER
+  type: http
+  seq: 2
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/coworkers/2"
+  body:
+    type: json
+    data: |-
+      [
+          {
+              "firstName": "Bryan",
+              "lastName": "Silva",
+              "email": "bryan@gmail.com",
+              "phone": "11964275054"
+          }
+      ]
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
