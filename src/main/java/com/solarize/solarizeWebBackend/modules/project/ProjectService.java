@@ -2,12 +2,17 @@ package com.solarize.solarizeWebBackend.modules.project;
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.AddressRepository;
+import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
+import com.solarize.solarizeWebBackend.modules.client.ClientService;
+import com.solarize.solarizeWebBackend.modules.client.ClientStatusEnum;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
+import com.solarize.solarizeWebBackend.modules.budget.BudgetService;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
@@ -49,6 +54,8 @@ public class ProjectService {
     private final ProjectFileService projectFileService;
     private final CoworkerRepository coworkerRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final ClientService clientService;
+    private final BudgetService budgetService;
 
     public Project projectManualCreate(Project project) {
         if(project.getAddress().getId() != null && !addressRepository.existsById(project.getAddress().getId())) {
@@ -112,8 +119,6 @@ public class ProjectService {
         return projectRepository.save(existing);
     }
 
-
-
     public Project createManualProject(Project project, @NotNull(message = "Client ID is required") Long clientId, Long addressId){
 
         if (projectRepository.existsByName(project.getName())){
@@ -142,6 +147,34 @@ public class ProjectService {
     public void setProjectStatusToRetrying(Project project) {
         project.getStatus().getStateHandler().applyToRetrying(project);
         projectRepository.save(project);
+    }
+
+    @Transactional
+    public Project createBotProject(Long clientId, String systemType, Double estimatedCost) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new NotFoundException("Client not found"));
+
+        Project project = new Project();
+        project.setName("Orçamento Solar - " + client.getFirstName());
+        project.setClient(client);
+        project.setProjectFrom(ProjectSourceEnum.WHATSAPP_BOT);
+        project.setStatus(ProjectStatusEnum.NEW);
+        project.setCreatedAt(LocalDateTime.now());
+        project.setIsActive(true);
+        project.setSystemType(SystemTypeEnum.valueOf(systemType.toUpperCase()));
+
+        Project savedProject = projectRepository.save(project);
+        
+        Budget preBudget = new Budget();
+        preBudget.setProject(savedProject);
+        preBudget.setFinalBudget(false);
+        preBudget.setSubtotal(estimatedCost);
+        preBudget.setTotalCost(estimatedCost);
+        savedProject.setBudget(preBudget);
+        
+        eventPublisher.publishEvent(new BudgetCreateEvent(savedProject.getId(), false));
+
+        return savedProject;
     }
 
     public Page<ProjectSummaryDTO> findAllProjectsSummary(String search,
@@ -239,11 +272,53 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
+    public void updateBotContactStatus(Long projectId, ProjectStatusEnum status) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("Project does not exists"));
+        
+        if (status == ProjectStatusEnum.CLIENT_AWAITING_CONTACT) {
+            project.getStatus().getStateHandler().applyToClientAwaitingContact(project);
+        } else if (status == ProjectStatusEnum.CONTACT_NOT_REQUESTED) {
+            project.getStatus().getStateHandler().applyToContactNotRequested(project);
+        } else {
+            throw new IllegalArgumentException("Invalid status for bot contact update");
+        }
+        
+        projectRepository.save(project);
+    }
+
     public List<Schedule> getSchedulesByProjectId(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project does not exists"));
 
         return project.getSchedules().stream().filter(s -> s.getStatus() == ScheduleStatusEnum.MARKED).toList();
+    }
+
+    @Transactional
+    public Project createBotProject(ProjectBotLeadCreateDto dto) {
+        Client client = clientService.findOrCreateClientBot(
+            dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress()
+        );
+
+        Project project = new Project();
+        project.setName("Orçamento Solar - " + client.getFirstName());
+        project.setClient(client);
+        if (client.getMainAddress() != null) {
+            project.setAddress(client.getMainAddress());
+        }
+        project.setProjectFrom(ProjectSourceEnum.WHATSAPP_BOT);
+        project.setStatus(ProjectStatusEnum.NEW);
+        project.setSystemType(SystemTypeEnum.ON_GRID);
+        project.setCreatedAt(LocalDateTime.now());
+        project.setIsActive(true);
+
+        Project savedProject = projectRepository.save(project);
+        
+        Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
+        Budget preBudget = budgetService.calculatePreBudget(savedProject, monthlyBillValue);
+        savedProject.setBudget(preBudget);
+        
+        return savedProject;
     }
 
     public ProjectKpiDto getProjectKpis() {

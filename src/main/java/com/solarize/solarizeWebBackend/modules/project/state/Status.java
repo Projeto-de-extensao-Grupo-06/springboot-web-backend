@@ -57,6 +57,10 @@ public interface Status {
         throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> NEGOTIATION_FAILED");
     }
 
+    default void applyToContactNotRequested(Project project) {
+        throw new InvalidStateTransitionException("Invalid state transition: " + this.getClass().getSimpleName() + " -> CONTACT_NOT_REQUESTED");
+    }
+
     default void forceStatus(Project project, ProjectStatusEnum status) {
         project.setPreviewStatus(project.getStatus());
         project.setStatus(status);

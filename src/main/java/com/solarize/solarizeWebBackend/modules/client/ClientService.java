@@ -2,9 +2,13 @@ package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.AddressRepository;
+import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
+import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
+import com.solarize.solarizeWebBackend.modules.client.dto.ClientExistsResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,20 @@ public class ClientService {
     public Client getClient(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Client not found."));
+    }
+
+    public ClientExistsResponseDto checkClientExistsByPhone(String phone) {
+        Optional<Client> client = clientRepository.findByPhone(phone);
+        if (client.isPresent()) {
+            return ClientExistsResponseDto.builder()
+                    .exists(true)
+                    .clientId(client.get().getId())
+                    .build();
+        }
+        return com.solarize.solarizeWebBackend.modules.client.dto.ClientExistsResponseDto.builder()
+                .exists(false)
+                .clientId(null)
+                .build();
     }
 
     public Page<Client> getClients(
@@ -138,6 +156,37 @@ public class ClientService {
 
         if (clientRepository.existsByPhoneAndIdNot(client.getPhone(), client.getId()))
             throw new ConflictException("Phone already exists");
+    }
+
+    @Transactional
+    public Client findOrCreateClientBot(String phone, String firstName, String lastName, CreateAddressDto botAddressDto) {
+        Client client = clientRepository.findByPhone(phone).orElse(null);
+        if (client == null) {
+            client = new Client();
+            client.setFirstName(firstName != null && !firstName.isEmpty() ? firstName : "Cliente");
+            client.setLastName(lastName);
+            client.setPhone(phone);
+            client.setStatus(ClientStatusEnum.ACTIVE);
+            
+            if (botAddressDto != null) {
+                Address address = new Address();
+                address.setPostalCode(botAddressDto.getPostalCode() != null && !botAddressDto.getPostalCode().isBlank() ? botAddressDto.getPostalCode() : "00000-000");
+                address.setStreetName(botAddressDto.getStreetName() != null && !botAddressDto.getStreetName().isBlank() ? botAddressDto.getStreetName() : "Não informado");
+                address.setNumber(botAddressDto.getNumber() != null && !botAddressDto.getNumber().isBlank() ? botAddressDto.getNumber() : "S/N");
+                address.setNeighborhood(botAddressDto.getNeighborhood() != null && !botAddressDto.getNeighborhood().isBlank() ? botAddressDto.getNeighborhood() : "Não informado");
+                
+                address.setCity(botAddressDto.getCity());
+                address.setState(botAddressDto.getState());
+                address.setType(botAddressDto.getType());
+                address.setApartment(botAddressDto.getApartment());
+
+                address = addressRepository.save(address);
+                client.setMainAddress(address);
+            }
+            
+            client = clientRepository.save(client);
+        }
+        return client;
     }
 
 }

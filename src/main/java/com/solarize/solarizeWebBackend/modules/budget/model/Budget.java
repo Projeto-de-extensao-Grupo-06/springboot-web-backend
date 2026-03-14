@@ -37,12 +37,15 @@ public class Budget {
 
     private Boolean finalBudget;
 
+    @Builder.Default
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BudgetMaterial> materials = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FixedParameter> fixedParameters = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PersonalizedParameter> personalizedParameters = new ArrayList<>();
 

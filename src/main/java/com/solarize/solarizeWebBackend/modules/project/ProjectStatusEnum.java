@@ -19,7 +19,8 @@ public enum ProjectStatusEnum {
     SCHEDULED_INSTALLING_VISIT(6, new ScheduledInstallingVisit()),
     INSTALLED(10, new Installed()),
     COMPLETED(13, new Completed()),
-    NEGOTIATION_FAILED(12, new NegotiationFailed());
+    NEGOTIATION_FAILED(12, new NegotiationFailed()),
+    CONTACT_NOT_REQUESTED(14, new ContactNotRequested());
 
     private final Integer weight;
     private final Status stateHandler;

@@ -5,6 +5,13 @@ import com.solarize.solarizeWebBackend.modules.address.AddressMapper;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.CreateClientDTO;
 import com.solarize.solarizeWebBackend.modules.client.dto.RequestClientDto;
+import com.solarize.solarizeWebBackend.modules.client.dto.ClientExistsResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +38,14 @@ public class ClientController {
     ){
         final Client client = clientService.getClient(id);
         return ResponseEntity.ok(ClientMapper.of(client));
+    }
+
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<ClientExistsResponseDto> checkClientExistsByPhone(
+            @PathVariable String phone
+    ){
+        final ClientExistsResponseDto response = clientService.checkClientExistsByPhone(phone);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasAuthority('CLIENT_READ')")
