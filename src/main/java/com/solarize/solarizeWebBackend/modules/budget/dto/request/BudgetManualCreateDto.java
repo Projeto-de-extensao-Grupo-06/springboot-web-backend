@@ -54,7 +54,7 @@ public class BudgetManualCreateDto {
     @Data
     public static class FixedParameterCreateDto {
         @NotNull
-        private FixedParameterName parameterName;
+        private String parameterName;
 
         @PositiveOrZero
         @NotNull

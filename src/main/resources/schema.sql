@@ -1,8 +1,43 @@
 --------------------------------------------
--- CLIENTS
+-- 1. PERMISSION GROUP
 --------------------------------------------
-INSERT INTO client (first_name, last_name, phone, email, status, document_number, document_type, created_at, updated_at)
-VALUES
+INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
+('ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
+( 'TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
+('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
+
+--------------------------------------------
+-- 2. COWORKER
+--------------------------------------------
+INSERT INTO coworker (first_name, last_name, email, phone, password, is_active, fk_permission_group) VALUES
+('Sálvio', 'Nobrega', 'salvio.admin@solarize.com.br', '11987654321', '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG', TRUE, 1),
+('Cristiano', 'Ribeiro', 'cristiano.eng@solarize.com.br', '11912345678', '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG', TRUE, 2),
+('Maria', 'Gomes', 'maria.tec@solarize.com.br', '11998765432', '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG', TRUE, 2),
+('Ana', 'Vendas', 'ana.sales@solarize.com.br', '11955554444', '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG', TRUE, 3),
+('Bryan', 'Rocha', 'bryangomesrocha@gmail.com', '11964275054', '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG', TRUE, 1);
+
+--------------------------------------------
+-- 3. ADDRESS
+--------------------------------------------
+INSERT INTO address (postal_code, street_name, number, neighborhood, city, state, type) VALUES
+('13010-050', 'Rua XV de Novembro', '123', 'Centro', 'Campinas', 'SP', 'RESIDENTIAL'),
+('01311-000', 'Av. Paulista', '2000', 'Bela Vista', 'São Paulo', 'SP', 'BUILDING'),
+('88015-000', 'Rua Bocaiúva', '90', 'Centro', 'Florianópolis', 'SC', 'COMMERCIAL'),
+('22021-001', 'Av. Atlântica', '500', 'Copacabana', 'Rio de Janeiro', 'RJ', 'RESIDENTIAL'),
+('30130-000', 'Rua da Bahia', '1000', 'Centro', 'Belo Horizonte', 'MG', 'COMMERCIAL'),
+('70000-000', 'Asa Norte', 'SQN 102', 'Plano Piloto', 'Brasília', 'DF', 'RESIDENTIAL');
+
+--------------------------------------------
+-- 4. CLIENT
+--------------------------------------------
+INSERT INTO client (first_name, last_name, document_number, document_type, created_at, phone, email, fk_main_address, status) VALUES
+('João', 'Silva', '12345678901', 'CPF', '2025-08-01 10:00:00', '1933233431', 'joao.silva@example.com', 1, 'ACTIVE'),
+('Maria', 'Oliveira', '12345678902', 'CPF', '2025-09-10 14:30:00', '2199865432', 'maria.oliveira@example.com', 2, 'ACTIVE'),
+('Pedro', 'Santos', '11222333000144', 'CNPJ', '2025-10-05 09:00:00', '4899123456', 'pedro.santos@example.com', 3, 'ACTIVE'),
+('Lucia', 'Ferreira', '98765432100', 'CPF', '2025-10-20 11:00:00', '21988887777', 'lucia.ferreira@example.com', 4, 'ACTIVE'),
+('Empresa Tech', 'Solar', '55666777000199', 'CNPJ', '2025-11-01 15:45:00', '3133334444', 'contato@techsolar.com', 5, 'ACTIVE');
+
+INSERT INTO client (first_name, last_name, phone, email, status, document_number, document_type, created_at, updated_at) VALUES
 ('João', 'da Silva', '11999999999', 'joao@email.com', 'ACTIVE', '12345678900', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Maria', 'Souza', '11888888888', 'maria@email.com', 'ACTIVE', '98765432100', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Carlos', 'Pereira', '11777777777', 'carlos@email.com', 'INACTIVE', '11122233344', 'CNPJ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -38,140 +73,195 @@ VALUES
 ('Priscila', 'Monteiro', '41923234545', 'pri.monteiro@email.com', 'ACTIVE', '30320210144', 'CPF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --------------------------------------------
--- PERMISSION GROUP
+-- 5. PROJECT
 --------------------------------------------
-INSERT INTO permission_group (
-    role,
-    main_module,
-    access_client,
-    access_project,
-    access_budget,
-    access_schedule
-) VALUES
-      (
-         'ADMIN',
-         'PROJECT_LIST',
-         0xF,
-         0xF,
-         0xF,
-         0xF
-      ),
-      (
-          'SECRETARIA',
-          'CLIENT_LIST',
-          0x3,
-          0x1,
-          0x0,
-          0xF
-      );
-
+INSERT INTO project (name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
+('Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
+('Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
+('Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
+('Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
+('Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
+('Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
+('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
+('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
+('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
+--------------------------------------------
+-- 7. MATERIAL
+--------------------------------------------
+INSERT INTO material (name, metric, hidden, description) VALUES
+('Painel Solar 550W (Solar Center)', 'UNIT', FALSE, 'Ficha Técnica Painel'),
+('Inversor On-Grid 5kW (Painel Forte)', 'UNIT', FALSE, 'Manual Inversor'),
+('Cabo Solar 6mm', 'METER', FALSE, NULL),
+('Bateria 5kWh (EcoSolar)', 'UNIT', FALSE, 'Certificação Bateria'),
+('Estrutura de Fixação Telhado', 'UNIT', FALSE, NULL);
 
 --------------------------------------------
--- COWORKER (RESPONSÁVEL)
+-- 8. MATERIAL URL
 --------------------------------------------
-INSERT INTO coworker (
-    first_name,
-    last_name,
-    email,
-    phone,
-    password,
-    fk_permission_group,
-    is_active
-) VALUES
-    (
-        'Bryan',
-        'Rocha',
-        'bryangomesrocha@gmail.com',
-        '11964275054',
-        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-        1,
-        TRUE
-    ),
-    (
-        'Ranier',
-        'Dalton',
-        'ranierd.couto@gmail.com',
-        '11949902159',
-        '$2a$12$dUlemf8rtZhoMu/nH.5XtOmerR.uxfLp5vmVbYVrzduguD.d/jhWG',
-        2,
-        TRUE
-    );
+INSERT INTO material_url (url, fk_material, price, hidden) VALUES
+('https://solarcenter.com/fichas/painel550w.pdf', 1, 900.00, FALSE),
+('https://painelforte.com.br/manual/inversor5kw.pdf', 2, 3500.00, FALSE),
+('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 2800.00, FALSE),
+('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE);
 
 --------------------------------------------
--- BUDGET
+-- 10. COWORKER PROJECT
 --------------------------------------------
--- INSERT INTO budget (
---     total_cost,
---     discount,
---     final_budget
--- ) VALUES (
---     15000.00,
---     0.00,
---     TRUE
--- );
+INSERT INTO coworker_project (fk_coworker, fk_project, is_responsible) VALUES
+(2, 1, TRUE),
+(3, 2, TRUE),
+(1, 3, TRUE),
+(4, 4, TRUE),
+(2, 5, TRUE),
+(2, 6, FALSE),
+(3, 7, TRUE);
 
 --------------------------------------------
--- MATERIALS
+-- 11. SCHEDULE
 --------------------------------------------
-INSERT INTO material(name, metric, hidden)
-VALUES
-    ('Painel Solar 550W', 'unit', false),
-    ('Inversor On-Grid 5kW', 'unit', false),
-    ('Cabo Solar 6mm', 'meter', false),
-    ('Bateria 5kWh', 'unit', false);
+INSERT INTO schedule (title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
+('Visita Técnica João', 'Medição de telhado', DATEADD('HOUR', 24, NOW()), DATEADD('HOUR', 26, NOW()), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
+('Instalação Maria', 'Instalação Off-grid', DATEADD('DAY', -10, NOW()), DATEADD('DAY', -7, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
+('Visita Técnica Lucia', 'Avaliação local', DATEADD('DAY', -5, NOW()), DATEADD('DAY', -5, NOW()), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
+('Instalação Shopping', 'Montagem Carport', DATEADD('DAY', -15, NOW()), DATEADD('DAY', -10, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
 
 --------------------------------------------
--- MATERIAL URL
+-- 12. PORTFOLIO
 --------------------------------------------
-INSERT INTO material_url (url, fk_material, price, hidden)
-VALUES
-    ( 'https://solarcenter.com/fichas/painel550w.pdf', 1, 1500.0, false),
-    ( 'https://painelforte.com.br/manual/inversor5kw.pdf', 2, 2042.5, false),
-    ('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 500.0, false),
-    ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 500.0, false);
-
-   --------------------------------------------
-   -- ADDRESS
-   --------------------------------------------
-   INSERT INTO address (
-       postal_code,
-       street_name,
-       number,
-       neighborhood,
-       city,
-       state,
-       type
-   ) VALUES (
-       '01001-000',
-       'Rua das Palmeiras',
-       '123',
-       'Centro',
-       'São Paulo',
-       'SP',
-       'RESIDENTIAL'
-   );
+INSERT INTO portfolio (title, description, image_path, fk_project) VALUES
+('Residência Sustentável', 'Sistema 5kWp em telhado cerâmico', '/images/portfolio/joao_v1.jpg', 1),
+('Backup Hospitalar', 'Sistema de segurança energética', '/images/portfolio/maria_clinic.jpg', 2);
 
 --------------------------------------------
--- PROJECTS
+-- 13. RETRY QUEUE
 --------------------------------------------
-INSERT INTO project (status, status_weight, preview_status, is_active, fk_client, fk_responsible, fk_address, created_at, deadline, system_type, project_from, name, description)
-VALUES
-    ('NEW', 3, NULL, TRUE, 1, 1, 1, NOW(), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Projeto Padrão', 'Instalação simples'),
-    -- 2. [LEAD QUENTE 1] - Origem BOT (Deve aparecer no TOPO)
-    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 2, 1, 1, DATEADD('HOUR', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Urgente Bot', 'Cliente interagiu com o bot e quer falar.'),
-    -- 3. [LEAD QUENTE 2] - Origem SITE (Deve aparecer no TOPO)
-    ('CLIENT_AWAITING_CONTACT', 1, 'NEW', TRUE, 3, 1, 1, DATEADD('HOUR', -5, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Lead Urgente Site', 'Formulário de contato do site.'),
-    -- 4. [LEAD FRIO - MADURO] - Deve aparecer (Agendado para ONTEM)
-    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 4, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'OFF_GRID', 'SITE_BUDGET_FORM', 'Retorno de Lead Frio', 'Cliente pediu para ligar mês que vem.'),
-    -- 5. [LEAD FRIO - VERDE] - NÃO deve aparecer (Agendado para AMANHÃ)
-    ('AWAITING_RETRY', 11, 'NEGOTIATION_FAILED', TRUE, 5, 1, 1, DATEADD('MONTH', -1, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Lead Futuro', 'Ainda não está na hora de ligar.'),
-    -- 6. [RUÍDO] - Projeto já avançado (Status 5) - NÃO deve aparecer
-    ('SCHEDULED_TECHNICAL_VISIT', 5, 'PRE_BUDGET', TRUE, 6, 1, 1, DATEADD('DAY', -2, NOW()), DATEADD('DAY', 10, NOW()), 'ON_GRID', 'WHATSAPP_BOT', 'Visita Técnica', 'Projeto em andamento normal.');
-
---------------------------------------------
--- RETRY QUEUE
---------------------------------------------
-INSERT INTO retry_queue (scheduled_date, retrying, fk_project)
-VALUES
+INSERT INTO retry_queue (scheduled_date, retrying, fk_project) VALUES
 (DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
 (DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
+
+DROP TABLE IF EXISTS VIEW_ANALYSIS_PROJECT_FINANCE CASCADE;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECT_FINANCE AS
+SELECT
+    p.id_project,
+    p.project_from AS acquisition_channel,
+    p.created_at,
+    p.status,
+    COALESCE(b.total_cost, 0) AS total_revenue,
+    COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0) AS total_project_cost,
+    COALESCE(b.total_cost, 0) - (COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0)) AS profit_margin,
+    CASE
+        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
+        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado'
+        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
+        ELSE 'Outras Etapas'
+    END AS funnel_stage
+FROM
+    project p
+LEFT JOIN
+    budget b ON b.fk_project = p.id_project
+WHERE
+    p.is_active = true;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_KPIS AS
+WITH ProjectCounts AS (
+    SELECT
+        COUNT(id_project) AS total_projects,
+        SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS completed_projects,
+        SUM(CASE WHEN status = 'NEW' THEN 1 ELSE 0 END) AS new_projects,
+        SUM(CASE WHEN status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1 ELSE 0 END) AS contracts_signed_projects
+    FROM
+        project
+    WHERE
+        is_active = true
+),
+FinancialSummary AS (
+    SELECT
+        acquisition_channel,
+        SUM(total_project_cost) AS total_cost_by_channel,
+        ROW_NUMBER() OVER (ORDER BY SUM(total_project_cost) DESC) as rn
+    FROM
+        VIEW_ANALYSIS_PROJECT_FINANCE
+    GROUP BY
+        acquisition_channel
+)
+SELECT
+    (SELECT SUM(profit_margin) FROM VIEW_ANALYSIS_PROJECT_FINANCE) AS total_profit_margin,
+    (SELECT acquisition_channel FROM FinancialSummary WHERE rn = 1) AS most_costly_channel,
+    (PC.completed_projects * 100.0 / NULLIF(PC.total_projects, 0)) AS project_completion_rate,
+    (PC.contracts_signed_projects * 100.0 / NULLIF(PC.new_projects, 0)) AS funnel_conversion_rate
+FROM
+    ProjectCounts PC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_ACQUISITION_CHANNELS AS
+WITH ChannelCounts AS (
+    SELECT
+        acquisition_channel,
+        COUNT(id_project) AS channel_project_count
+    FROM
+        VIEW_ANALYSIS_PROJECT_FINANCE
+    GROUP BY
+        acquisition_channel
+),
+TotalProjects AS (
+    SELECT COUNT(id_project) AS total_projects FROM project WHERE is_active = true
+)
+SELECT
+    CC.acquisition_channel AS nome,
+    CC.channel_project_count,
+    (CC.channel_project_count * 100.0 / NULLIF((SELECT total_projects FROM TotalProjects), 0)) AS percentual
+FROM
+    ChannelCounts CC
+ORDER BY
+    percentual DESC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROFIT_COST_MONTHLY AS
+SELECT
+    YEAR(created_at) AS ano,
+    MONTH(created_at) AS mes,
+    SUM(total_project_cost) AS total_cost,
+    SUM(profit_margin) AS total_profit
+FROM
+    VIEW_ANALYSIS_PROJECT_FINANCE
+GROUP BY
+    YEAR(created_at), MONTH(created_at)
+ORDER BY
+    ano ASC, mes ASC;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECTS_STATUS_SUMMARY AS
+SELECT
+    CASE p.status
+        WHEN 'COMPLETED' THEN 'Finalizado'
+        WHEN 'NEGOTIATION_FAILED' THEN 'Finalizado'
+        WHEN 'SCHEDULED_TECHNICAL_VISIT' THEN 'Agendado'
+        WHEN 'SCHEDULED_INSTALLING_VISIT' THEN 'Agendado'
+        WHEN 'NEW' THEN 'Novo'
+        ELSE 'Em andamento'
+    END AS status_group,
+    COUNT(p.id_project) AS quantidade
+FROM
+    project p
+WHERE
+    p.is_active = true
+GROUP BY
+    status_group;
+
+CREATE OR REPLACE VIEW VIEW_ANALYSIS_SALES_FUNNEL_STAGES AS
+SELECT
+    CASE
+        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
+        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado'
+        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
+        ELSE 'Outras Etapas'
+    END AS etapa,
+    COUNT(p.id_project) AS valor
+FROM
+    project p
+WHERE
+    p.is_active = true AND p.status IN (
+        'NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS',
+        'FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT',
+        'INSTALLED', 'COMPLETED'
+    )
+GROUP BY
+    etapa;

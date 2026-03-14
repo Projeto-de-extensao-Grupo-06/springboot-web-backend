@@ -18,8 +18,7 @@ public class FixedParameterTemplate {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private FixedParameterName uniqueName;
+    private String uniqueName;
 
     @Column(nullable = false)
     private ParameterValueType type;

@@ -47,7 +47,7 @@ public class BudgetResponseDto {
     @Data
     @Builder
     public static class FixedParameterResponseDto {
-        private FixedParameterName parameterName;
+        private String parameterName;
         private ParameterValueType valueType;
         private Double value;
     }

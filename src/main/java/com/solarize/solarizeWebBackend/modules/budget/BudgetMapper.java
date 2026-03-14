@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetResponseDto;
+import com.solarize.solarizeWebBackend.modules.budget.dto.response.FixedParametersTemplateDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
 import com.solarize.solarizeWebBackend.modules.materialUrl.model.MaterialUrl;
 
@@ -103,7 +104,7 @@ public class BudgetMapper {
     public static List<BudgetMaterial> toEntity(UpdateMaterialDto dto) {
         return dto.getMaterials().stream().map(d -> {
             MaterialUrl materialUrl = new MaterialUrl();
-            materialUrl.setId(d.getMaterialId());
+            materialUrl.setId(d.getMaterialUrlId());
 
             return BudgetMaterial.builder()
                     .quantity(d.getQuantity())
@@ -113,7 +114,7 @@ public class BudgetMapper {
     }
 
     public static List<FixedParameter> toEntity(UpdateFixedParametersDto dto) {
-        return dto.getFixedParameters().stream().map(d -> {
+        return dto.getFixedParamaters().stream().map(d -> {
             FixedParameterTemplate template = new FixedParameterTemplate();
             FixedParameter fixedParameter = new FixedParameter();
 
@@ -136,5 +137,14 @@ public class BudgetMapper {
 
             return personalizedParameter;
         }).toList();
+    }
+
+    public static List<FixedParametersTemplateDto> toDto(List<FixedParameterTemplate> fixedParameterTemplate) {
+        return fixedParameterTemplate.stream().map((p) ->
+            FixedParametersTemplateDto.builder()
+                   .type(p.getType())
+                   .name(p.getUniqueName())
+                   .build()
+        ).toList();
     }
 }

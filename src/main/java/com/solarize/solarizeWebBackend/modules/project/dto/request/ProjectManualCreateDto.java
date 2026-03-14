@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project.dto.request;
 
+import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.SystemTypeEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,4 +26,8 @@ public class ProjectManualCreateDto {
 
     @NotNull
     private SystemTypeEnum projectType;
+    @NotNull
+    private ProjectStatusEnum status;
+    @NotNull
+    private Long responsibleId;
 }

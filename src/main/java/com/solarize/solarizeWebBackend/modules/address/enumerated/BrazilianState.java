@@ -8,6 +8,7 @@ public enum BrazilianState {
     AM("Amazonas"),
     BA("Bahia"),
     CE("Ceará"),
+    DF("Distrito Federal"),
     ES("Espírito Santo"),
     GO("Goiás"),
     MA("Maranhão"),

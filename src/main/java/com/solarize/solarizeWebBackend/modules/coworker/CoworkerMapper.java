@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerCreateDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerUpdateDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.PermissionGroup;
+import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerWithoutCredentialDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +58,15 @@ public class CoworkerMapper {
                 .phone(coworker.getPhone())
                 .permissionGroupId(coworker.getPermission() != null ? coworker.getPermission().getId() : null)
                 .permissionGroupRole(coworker.getPermission() != null ? coworker.getPermission().getRole() : null)
+                .build();
+    }
+
+    public static CoworkerWithoutCredentialDto toDtoWithoutCredential(Coworker coworker) {
+        if(coworker == null) return null;
+
+        return CoworkerWithoutCredentialDto.builder()
+                .firstName(coworker.getFirstName())
+                .lastName(coworker.getLastName())
                 .build();
     }
 

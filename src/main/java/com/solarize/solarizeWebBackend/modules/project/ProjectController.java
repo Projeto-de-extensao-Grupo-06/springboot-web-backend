@@ -3,6 +3,7 @@ import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponse
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleMapper;
@@ -51,6 +52,12 @@ public class ProjectController {
                 projectService.findAllProjectsSummary(search, status, responsibleId, clientId, pageable);
 
         return ResponseEntity.ok(result);
+    }
+
+    @PreAuthorize("hasAuthority('PROJECT_READ')")
+    @GetMapping("/kpis")
+    public ResponseEntity<ProjectKpiDto> getProjectKpis() {
+        return ResponseEntity.ok(projectService.getProjectKpis());
     }
 
     @PreAuthorize("hasAuthority('PROJECT_READ')")

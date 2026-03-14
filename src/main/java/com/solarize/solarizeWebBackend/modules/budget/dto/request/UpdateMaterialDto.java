@@ -18,7 +18,7 @@ public class UpdateMaterialDto {
     public static class BudgetMaterialDto {
         @NotNull
         @Positive
-        private Long materialId;
+        private Long materialUrlId;
 
         @NotNull
         @Positive

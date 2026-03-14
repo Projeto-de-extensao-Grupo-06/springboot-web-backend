@@ -47,6 +47,8 @@ public class ClientService {
     public Client postClient(Client client) {
         validateConflict(client);
 
+        System.out.println(client.getMainAddress().getId());
+
         try {
             DocumentTypeEnum type = DocumentTypeEnum.valueOf(client.getDocumentType().toUpperCase());
             type.strategy.validate(client.getDocumentNumber());

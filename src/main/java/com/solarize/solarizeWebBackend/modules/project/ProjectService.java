@@ -6,6 +6,7 @@ import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
+import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
@@ -58,10 +59,15 @@ public class ProjectService {
             throw new NotFoundException("Client does not exists on database");
         }
 
-        Coworker responsibleCoworker = coworkerRepository.findByEmailAndIsActiveTrue(SecurityContextHolder.getContext().getAuthentication().getName())
-                        .orElseThrow(() -> new NotFoundException("Coworker does not exists on database, or is not active."));
+        Coworker responsibleCoworker = coworkerRepository
+                .findById(project.getResponsible().getId())
+                .orElseThrow(() ->
+                        new NotFoundException("Responsible coworker not found"));
 
-        project.setStatus(ProjectStatusEnum.NEW);
+        if (project.getStatus() == null) {
+            project.setStatus(ProjectStatusEnum.NEW);
+        }
+
         project.setIsActive(true);
         project.setCreatedAt(LocalDateTime.now());
         project.setResponsible(responsibleCoworker);
@@ -203,12 +209,15 @@ public class ProjectService {
     public void projectBudgetCreated(BudgetCreateEvent event) {
         Project project = projectRepository.findById(event.projectId()).orElseThrow();
 
-        System.out.println(event.finalBudget());
-
-        if(event.finalBudget()) {
-            project.getStatus().getStateHandler().applyToFinalBudget(project);
-        } else {
-            project.getStatus().getStateHandler().applyToPreBudget(project);
+        try {
+            if(event.finalBudget()) {
+                project.getStatus().getStateHandler().applyToFinalBudget(project);
+            } else {
+                project.getStatus().getStateHandler().applyToPreBudget(project);
+            }
+        } catch (InvalidStateTransitionException ex) {
+            log.warn(ex.getMessage());
+            return;
         }
 
         projectRepository.save(project);
@@ -232,10 +241,14 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    public  List<Schedule> getSchedulesByProjectId(Long projectId) {
+    public List<Schedule> getSchedulesByProjectId(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project does not exists"));
 
         return project.getSchedules().stream().filter(s -> s.getStatus() == ScheduleStatusEnum.MARKED).toList();
+    }
+
+    public ProjectKpiDto getProjectKpis() {
+        return projectRepository.getProjectKpis();
     }
 }

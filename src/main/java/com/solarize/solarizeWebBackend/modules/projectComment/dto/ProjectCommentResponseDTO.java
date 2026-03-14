@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.projectComment.dto;
 
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
+import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerWithoutCredentialDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class ProjectCommentResponseDTO {
 
     private Long id;
-    private CoworkerResponseDto author;
+    private CoworkerWithoutCredentialDto author;
     private String comment;
     private LocalDateTime createdAt;
 
