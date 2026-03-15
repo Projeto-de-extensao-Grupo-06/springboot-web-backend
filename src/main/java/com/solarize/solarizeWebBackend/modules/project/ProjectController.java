@@ -1,9 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.*;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.LeadResponseDTO;
-import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectManualCreateDto;
-import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectUpdateDto;
-import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
-import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotUpdateStatusDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
@@ -152,7 +149,7 @@ public class ProjectController {
     }
 
     @PostMapping("/site")
-    public ResponseEntity<PreBudgetEstimationDto> createSiteProject(@RequestBody @Valid ProjectBotLeadCreateDto dto) {
+    public ResponseEntity<PreBudgetEstimationDto> createSiteProject(@RequestBody @Valid ProjectSiteLeadCreateDto dto) {
         Map<String, Double> projectPreBudgetResults = projectService.createSiteProject(dto);
 
         Double kwp = projectPreBudgetResults.get("kwp");

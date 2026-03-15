@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.modules.client.ClientStatusEnum;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectSiteLeadCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.budget.BudgetService;
@@ -318,10 +319,11 @@ public class ProjectService {
 
         return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
     }
+
     @Transactional
-    public Map<String, Double> createSiteProject(ProjectBotLeadCreateDto dto) {
-        Client client = clientService.findOrCreateClientBot(
-            dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress()
+    public Map<String, Double> createSiteProject(ProjectSiteLeadCreateDto dto) {
+        Client client = clientService.findOrCreateClientSite(
+            dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress(), dto.getEmail()
         );
 
         Project project = new Project();
