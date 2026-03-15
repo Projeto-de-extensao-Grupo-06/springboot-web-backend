@@ -49,6 +49,7 @@ public class SecurityConfig {
                         "/auth/confirm-otp",
                         "/auth/change-password/token",
                         "/auth/bot/login",
+                        "/projects/site",
                         "/h2-console/**"
                         )
                         .permitAll()

@@ -151,6 +151,28 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/site")
+    public ResponseEntity<PreBudgetEstimationDto> createSiteProject(@RequestBody @Valid ProjectBotLeadCreateDto dto) {
+        Map<String, Double> projectPreBudgetResults = projectService.createSiteProject(dto);
+
+        Double kwp = projectPreBudgetResults.get("kwp");
+        Double bill = projectPreBudgetResults.get("bill");
+        Double cost = projectPreBudgetResults.get("cost");
+        Double paybackYears = projectPreBudgetResults.get("paybackYears");
+
+        String message = String.format("Lead processado no CRM! Foi gerada a estimativa técnica de %.2f kWp para cobrir uma conta de R$ %.2f. Custo estimado: R$ %.2f. Payback: %.1f anos. Pode informar o cliente!", kwp, bill, cost, paybackYears);
+
+        PreBudgetEstimationDto response = PreBudgetEstimationDto.builder()
+                .kwp(kwp)
+                .bill(bill)
+                .cost(cost)
+                .paybackYears(paybackYears)
+                .message(message)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
     @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     @PatchMapping("/{projectId}/contact-status")
     public ResponseEntity<Void> updateBotContactStatus(@PathVariable Long projectId, @RequestBody @Valid ProjectBotUpdateStatusDto dto) {

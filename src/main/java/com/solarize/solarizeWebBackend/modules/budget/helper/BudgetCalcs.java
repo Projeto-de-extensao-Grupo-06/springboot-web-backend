@@ -140,6 +140,14 @@ public class BudgetCalcs {
             Double systemEfficiency,
             Double pricePerKwp
     ) {
+
+        System.out.println("monthlyBill=" + monthlyBill);
+        System.out.println("tariff=" + tariff);
+        System.out.println("sunHours=" + sunHours);
+        System.out.println("systemEfficiency=" + systemEfficiency);
+        System.out.println("pricePerKwp=" + pricePerKwp);
+
+
         Map<String, Double> result = new HashMap<>();
 
         double bill = monthlyBill != null ? monthlyBill : 0.0;

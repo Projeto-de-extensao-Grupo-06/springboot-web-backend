@@ -310,11 +310,33 @@ public class ProjectService {
         project.setProjectFrom(ProjectSourceEnum.WHATSAPP_BOT);
         project.setStatus(ProjectStatusEnum.NEW);
         project.setSystemType(SystemTypeEnum.ON_GRID);
-        project.setCreatedAt(LocalDateTime.now());
         project.setIsActive(true);
 
         Project savedProject = projectRepository.save(project);
         
+        Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
+
+        return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
+    }
+    @Transactional
+    public Map<String, Double> createSiteProject(ProjectBotLeadCreateDto dto) {
+        Client client = clientService.findOrCreateClientBot(
+            dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress()
+        );
+
+        Project project = new Project();
+        project.setName("Orçamento Solar - " + client.getFirstName());
+        project.setClient(client);
+        if (client.getMainAddress() != null) {
+            project.setAddress(client.getMainAddress());
+        }
+        project.setProjectFrom(ProjectSourceEnum.SITE_BUDGET_FORM);
+        project.setStatus(ProjectStatusEnum.NEW);
+        project.setSystemType(SystemTypeEnum.ON_GRID);
+        project.setIsActive(true);
+
+        Project savedProject = projectRepository.save(project);
+
         Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
 
         return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
