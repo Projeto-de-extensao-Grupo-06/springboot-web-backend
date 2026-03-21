@@ -89,7 +89,7 @@ public class ProjectMapper {
                 .projectFrom(entity.getProjectFrom())
                 .createdAt(entity.getCreatedAt())
                 .systemType(entity.getSystemType())
-                .coworkerId(entity.getResponsible().getId())
+                .coworkerId(entity.getResponsible() != null ? entity.getResponsible().getId() : null)
                 .clientId(entity.getClient().getId())
                 .addressId(entity.getAddress().getId())
                 .build();

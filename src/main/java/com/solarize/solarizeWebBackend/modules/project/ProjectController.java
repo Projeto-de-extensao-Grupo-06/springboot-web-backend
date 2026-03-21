@@ -104,7 +104,6 @@ public class ProjectController {
         return ResponseEntity.ok(ProjectMapper.of(leads));
     }
 
-    @PreAuthorize("hasAuthority('PROJECT_WRITE')")
     @PostMapping("/awaiting-contact/{projectId}")
     public ResponseEntity<Void> clientAwaitingContactStatus(@PathVariable Long projectId) {
         projectService.changeStatusClientAwaitingContact(projectId);
@@ -156,6 +155,7 @@ public class ProjectController {
         Double bill = projectPreBudgetResults.get("bill");
         Double cost = projectPreBudgetResults.get("cost");
         Double paybackYears = projectPreBudgetResults.get("paybackYears");
+        Integer projectId = projectPreBudgetResults.get("projectId").intValue();
 
         String message = String.format("Lead processado no CRM! Foi gerada a estimativa técnica de %.2f kWp para cobrir uma conta de R$ %.2f. Custo estimado: R$ %.2f. Payback: %.1f anos. Pode informar o cliente!", kwp, bill, cost, paybackYears);
 
@@ -165,6 +165,7 @@ public class ProjectController {
                 .cost(cost)
                 .paybackYears(paybackYears)
                 .message(message)
+                .projectId(projectId)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

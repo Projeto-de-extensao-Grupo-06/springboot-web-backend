@@ -50,7 +50,8 @@ public class SecurityConfig {
                         "/auth/change-password/token",
                         "/auth/bot/login",
                         "/projects/site",
-                        "/h2-console/**"
+                        "/h2-console/**",
+                        "/projects/awaiting-contact/*"
                         )
                         .permitAll()
                         .anyRequest()

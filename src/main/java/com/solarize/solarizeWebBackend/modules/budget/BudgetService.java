@@ -514,6 +514,8 @@ public class BudgetService {
         budgetRepository.save(preBudget);
         eventPublisher.publishEvent(new BudgetCreateEvent(project.getId(), false));
 
+        results.put("projectId", Double.valueOf(project.getId()));
+
         return results;
     }
 

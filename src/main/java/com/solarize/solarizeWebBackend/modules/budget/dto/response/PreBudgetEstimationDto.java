@@ -15,4 +15,5 @@ public class PreBudgetEstimationDto {
     private Double cost;
     private Double paybackYears;
     private String message;
+    private Integer projectId;
 }
