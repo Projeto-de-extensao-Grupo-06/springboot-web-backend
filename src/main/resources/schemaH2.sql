@@ -96,6 +96,16 @@ INSERT INTO project (name, description, status, status_weight, preview_status, i
 ('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
 ('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
 ('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
+
+--------------------------------------------
+-- 6. BUDGET
+--------------------------------------------
+INSERT INTO budget (subtotal, total_cost, discount, material_cost, service_cost, discount_type, final_budget, created_at, fk_project) VALUES
+(18000.00, 18000.00, 0.00, 12900.00, 0.00, 'AMOUNT', FALSE, CURRENT_TIMESTAMP, 1),
+(0.00,     0.00,     0.00, 0.00,     0.00, 'AMOUNT', FALSE, CURRENT_TIMESTAMP, 3),
+(45000.00, 42750.00, 5.00, 30000.00, 0.00, 'PERCENT', TRUE,  CURRENT_TIMESTAMP, 4);
+
+
 --------------------------------------------
 -- 7. MATERIAL
 --------------------------------------------
