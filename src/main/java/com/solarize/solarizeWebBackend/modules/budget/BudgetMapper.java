@@ -13,31 +13,31 @@ public class BudgetMapper {
         if(dto == null) return null;
 
         List<FixedParameter> fixedParameters = dto.getFixedParameters().stream().map(p ->
-           FixedParameter.builder()
-                   .parameterValue(p.getValue())
-                   .template(FixedParameterTemplate.builder().uniqueName(p.getParameterName()).build())
-                   .build()
+                FixedParameter.builder()
+                        .parameterValue(p.getValue())
+                        .template(FixedParameterTemplate.builder().uniqueName(p.getParameterName()).build())
+                        .build()
         ).toList();
 
         List<PersonalizedParameter> personalizedParameters = dto.getPersonalizedParameters().stream().map(p ->
-            PersonalizedParameter.builder()
-                    .name(p.getName())
-                    .parameterValue(p.getValue())
-                    .type(p.getType())
-                    .build()
+                PersonalizedParameter.builder()
+                        .name(p.getName())
+                        .parameterValue(p.getValue())
+                        .type(p.getType())
+                        .build()
         ).toList();
 
         List<BudgetMaterial> budgetMaterials = dto.getMaterials().stream()
                 .map(m -> {
-                    MaterialUrl materialUrl = new MaterialUrl();
-                    materialUrl.setId(m.getMaterialId());
+                            MaterialUrl materialUrl = new MaterialUrl();
+                            materialUrl.setId(m.getMaterialId());
 
-                    return BudgetMaterial.builder()
-                            .materialUrl(materialUrl)
-                            .quantity(m.getQuantity())
-                            .build();
-                }
-        ).toList();
+                            return BudgetMaterial.builder()
+                                    .materialUrl(materialUrl)
+                                    .quantity(m.getQuantity())
+                                    .build();
+                        }
+                ).toList();
 
         return Budget.builder()
                 .discount(dto.getDiscount())
@@ -75,7 +75,7 @@ public class BudgetMapper {
                                 .type(p.getType())
                                 .value(p.getParameterValue())
                                 .build()
-                        ).toList();
+                ).toList();
 
         List<BudgetResponseDto.BudgetMaterialResponseDto> materialsUrl = budget.getMaterials().stream()
                 .map(m ->
@@ -141,10 +141,10 @@ public class BudgetMapper {
 
     public static List<FixedParametersTemplateDto> toDto(List<FixedParameterTemplate> fixedParameterTemplate) {
         return fixedParameterTemplate.stream().map((p) ->
-            FixedParametersTemplateDto.builder()
-                   .type(p.getType())
-                   .name(p.getUniqueName())
-                   .build()
+                FixedParametersTemplateDto.builder()
+                        .type(p.getType())
+                        .name(p.getUniqueName())
+                        .build()
         ).toList();
     }
 }
