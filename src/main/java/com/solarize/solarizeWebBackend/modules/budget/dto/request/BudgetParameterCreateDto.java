@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.dto.request;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -28,6 +29,7 @@ public class BudgetParameterCreateDto {
     private Boolean isPreBudget;
 
     @NotNull
+    @DecimalMin(value = "0.0", message = "Base value cannot be negative.")
     private Double fixedValue;
 
     @Valid

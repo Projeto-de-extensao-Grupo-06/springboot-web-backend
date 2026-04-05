@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.budget.model.BudgetParameter;
 import com.solarize.solarizeWebBackend.modules.budget.model.ParameterOption;
 import com.solarize.solarizeWebBackend.modules.budget.repository.BudgetParameterRepository;
 import com.solarize.solarizeWebBackend.modules.budget.repository.ParameterOptionRepository;
+import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,10 +20,14 @@ public class BudgetParameterService {
     private final BudgetParameterRepository budgetParameterRepository;
     private final ParameterOptionRepository parameterOptionRepository;
 
-    public Page<BudgetParameter> getAll(String search, Boolean isPreBudget, Pageable pageable) {
-        return budgetParameterRepository.findAllActive(search, isPreBudget, pageable);
+    public Page<BudgetParameter> getAll(String search, Boolean isPreBudget, String status, Pageable pageable) {
+        Boolean active = null;
+        if (status != null) {
+            if (status.equals("ATIVO")) active = true;
+            if (status.equals("INATIVO")) active = false;
+        }
+        return budgetParameterRepository.findAllActive(search, isPreBudget, active, pageable);
     }
-
     public BudgetParameter getById(Long id) {
         return budgetParameterRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Budget parameter not found."));
@@ -68,7 +73,23 @@ public class BudgetParameterService {
 
     public void deactivate(Long id) {
         BudgetParameter parameter = getById(id);
+
+        if (!parameter.getActive()) {
+            throw new BadRequestException("This parameter is already disabled.");
+        }
+
         parameter.setActive(false);
+        budgetParameterRepository.save(parameter);
+    }
+
+    public void activate(Long id) {
+        BudgetParameter parameter = getById(id);
+
+        if (parameter.getActive()) {
+            throw new BadRequestException("This parameter is already active.");
+        }
+
+        parameter.setActive(true);
         budgetParameterRepository.save(parameter);
     }
 }

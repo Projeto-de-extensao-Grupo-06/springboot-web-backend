@@ -1,7 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetParameterCreateDto;
-import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetParameterFilterDto;
+//import com.solarize.solarizeWebBackend.modules.budget.dto.request.BudgetParameterFilterDto;
 import com.solarize.solarizeWebBackend.modules.budget.dto.response.BudgetParameterResponseDto;
 import com.solarize.solarizeWebBackend.modules.budget.model.BudgetParameter;
 import com.solarize.solarizeWebBackend.modules.budget.model.ParameterOption;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,15 @@ public class BudgetParameterController {
 
     private final BudgetParameterService budgetParameterService;
 
-    @PreAuthorize("hasAuthority('BUDGET_PARAMETER_READ')")
+    @PreAuthorize("hasAuthority('BUDGET_READ')")
     @GetMapping
     public ResponseEntity<Page<BudgetParameterResponseDto>> getAll(
-            @RequestBody BudgetParameterFilterDto dto
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean isPreBudget,
+            @RequestParam(required = false) String status,
+            @PageableDefault(page = 0, size = 30) Pageable pageable
     ) {
-        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
-        Page<BudgetParameter> result = budgetParameterService.getAll(dto.getSearch(), dto.getIsPreBudget(), pageable);
+        Page<BudgetParameter> result = budgetParameterService.getAll(search, isPreBudget, status, pageable);
 
         List<BudgetParameterResponseDto> dtos = result.getContent().stream().map(parameter -> {
             List<ParameterOption> options = budgetParameterService.getOptionsByParameterId(parameter.getId());
@@ -40,15 +43,15 @@ public class BudgetParameterController {
         return ResponseEntity.ok(new PageImpl<>(dtos, pageable, result.getTotalElements()));
     }
 
-    @PreAuthorize("hasAuthority('BUDGET_PARAMETER_READ')")
+    @PreAuthorize("hasAuthority('BUDGET_READ')")
     @GetMapping("/{id}")
     public ResponseEntity<BudgetParameterResponseDto> getById(@PathVariable Long id) {
         BudgetParameter parameter = budgetParameterService.getById(id);
-        List<ParameterOption> options = budgetParameterService.getOptionsByParameterId(id);
+        List<ParameterOption> options = budgetParameterService.getOptionsByParameterId(parameter.getId());
         return ResponseEntity.ok(BudgetParameterMapper.toDto(parameter, options));
     }
 
-    @PreAuthorize("hasAuthority('BUDGET_PARAMETER_WRITE')")
+    @PreAuthorize("hasAuthority('BUDGET_WRITE')")
     @PostMapping
     public ResponseEntity<BudgetParameterResponseDto> create(@RequestBody @Valid BudgetParameterCreateDto dto) {
         BudgetParameter parameter = BudgetParameterMapper.toEntity(dto);
@@ -62,7 +65,7 @@ public class BudgetParameterController {
         return ResponseEntity.status(201).body(BudgetParameterMapper.toDto(created, savedOptions));
     }
 
-    @PreAuthorize("hasAuthority('BUDGET_PARAMETER_UPDATE')")
+    @PreAuthorize("hasAuthority('BUDGET_UPDATE')")
     @PutMapping("/{id}")
     public ResponseEntity<BudgetParameterResponseDto> update(
             @PathVariable Long id,
@@ -79,10 +82,17 @@ public class BudgetParameterController {
         return ResponseEntity.ok(BudgetParameterMapper.toDto(saved, savedOptions));
     }
 
-    @PreAuthorize("hasAuthority('BUDGET_PARAMETER_DELETE')")
+    @PreAuthorize("hasAuthority('BUDGET_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
         budgetParameterService.deactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority('BUDGET_UPDATE')")
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<Void> activate(@PathVariable Long id) {
+        budgetParameterService.activate(id);
         return ResponseEntity.noContent().build();
     }
 }

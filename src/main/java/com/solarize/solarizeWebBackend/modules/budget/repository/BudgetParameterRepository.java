@@ -13,14 +13,23 @@ import org.springframework.stereotype.Repository;
 public interface BudgetParameterRepository extends JpaRepository<BudgetParameter, Long> {
 
     @Query("""
-        SELECT p FROM BudgetParameter p
-        WHERE p.active = true
-          AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
-          AND (:isPreBudget IS NULL OR p.isPreBudget = :isPreBudget)
-    """)
+    SELECT p FROM BudgetParameter p
+    WHERE (
+        :search IS NULL OR
+        CAST(FUNCTION('UNACCENT', LOWER(p.name)) AS string)
+            LIKE CONCAT(
+                '%',
+                CAST(FUNCTION('UNACCENT', LOWER(:search)) AS string),
+                '%'
+            )
+    )
+    AND (:isPreBudget IS NULL OR p.isPreBudget = :isPreBudget)
+    AND (:active IS NULL OR p.active = :active)
+""")
     Page<BudgetParameter> findAllActive(
             @Param("search") String search,
             @Param("isPreBudget") Boolean isPreBudget,
+            @Param("active") Boolean active,
             Pageable pageable
     );
 }

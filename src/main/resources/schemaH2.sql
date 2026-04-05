@@ -276,3 +276,28 @@ WHERE
     )
 GROUP BY
     etapa;
+
+--------------------------------------------
+-- BUDGET PARAMETER
+--------------------------------------------
+INSERT INTO budget_parameter (name, description, metric, is_pre_budget, fixed_value, active, created_at) VALUES
+('Tipo de Telhado', 'Define o material do telhado da instalação', 'un', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
+('Potência do Sistema', 'Potência total do sistema solar em kWp', 'kWp', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
+('Mão de Obra', 'Custo por hora de mão de obra da equipe', 'R$/h', FALSE, 150.00, TRUE, CURRENT_TIMESTAMP),
+('Deslocamento', 'Custo de deslocamento da equipe até o local', 'km', FALSE, 2.50, TRUE, CURRENT_TIMESTAMP),
+('Engenheiro', 'Valor cobrado pelo serviço de engenharia', 'R$', FALSE, 800.00, TRUE, CURRENT_TIMESTAMP),
+('Tipo de Estrutura', 'Define o tipo de estrutura de fixação dos painéis', 'un', TRUE, 0.00, FALSE, CURRENT_TIMESTAMP);
+
+--------------------------------------------
+-- PARAMETER OPTION
+--------------------------------------------
+INSERT INTO parameter_option (type, addition_tax, fixed_cost, fk_budget_parameter) VALUES
+('Cerâmico', 0.08, 500.00, 1),
+('Metálico', 0.12, 800.00, 1),
+('Fibrocimento', 0.05, 300.00, 1),
+('até 5kWp', 0.00, 0.00, 2),
+('5kWp a 10kWp', 0.10, 0.00, 2),
+('acima de 10kWp', 0.20, 0.00, 2),
+('Solo', 0.15, 1200.00, 6),
+('Telhado Inclinado', 0.05, 400.00, 6),
+('Telhado Plano', 0.08, 600.00, 6);
