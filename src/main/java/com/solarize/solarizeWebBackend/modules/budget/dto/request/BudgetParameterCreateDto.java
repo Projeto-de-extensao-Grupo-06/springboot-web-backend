@@ -33,5 +33,6 @@ public class BudgetParameterCreateDto {
     private Double fixedValue;
 
     @Valid
+    @NotNull
     private List<ParameterOptionCreateDto> options = new ArrayList<>();
 }
