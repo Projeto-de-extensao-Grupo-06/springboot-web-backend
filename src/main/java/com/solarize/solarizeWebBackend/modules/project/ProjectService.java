@@ -10,6 +10,7 @@ import com.solarize.solarizeWebBackend.modules.client.ClientStatusEnum;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
+import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectSiteLeadCreateDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectKpiDto;
 import com.solarize.solarizeWebBackend.modules.project.dto.response.ProjectSummaryDTO;
 import com.solarize.solarizeWebBackend.modules.budget.BudgetService;
@@ -310,11 +311,34 @@ public class ProjectService {
         project.setProjectFrom(ProjectSourceEnum.WHATSAPP_BOT);
         project.setStatus(ProjectStatusEnum.NEW);
         project.setSystemType(SystemTypeEnum.ON_GRID);
-        project.setCreatedAt(LocalDateTime.now());
         project.setIsActive(true);
 
         Project savedProject = projectRepository.save(project);
         
+        Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
+
+        return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
+    }
+
+    @Transactional
+    public Map<String, Double> createSiteProject(ProjectSiteLeadCreateDto dto) {
+        Client client = clientService.findOrCreateClientSite(
+            dto.getPhone(), dto.getFirstName(), dto.getLastName(), dto.getAddress(), dto.getEmail()
+        );
+
+        Project project = new Project();
+        project.setName("Orçamento Solar - " + client.getFirstName());
+        project.setClient(client);
+        if (client.getMainAddress() != null) {
+            project.setAddress(client.getMainAddress());
+        }
+        project.setProjectFrom(ProjectSourceEnum.SITE_BUDGET_FORM);
+        project.setStatus(ProjectStatusEnum.NEW);
+        project.setSystemType(SystemTypeEnum.ON_GRID);
+        project.setIsActive(true);
+
+        Project savedProject = projectRepository.save(project);
+
         Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
 
         return budgetService.calculatePreBudget(savedProject, monthlyBillValue);

@@ -481,7 +481,7 @@ public class BudgetService {
 
 
         Double pricePerKwp = Objects.requireNonNull(parameters.stream()
-                        .filter(p -> p.getUniqueName().equals("SOLAR_SYSTEM_EFFICIENCY"))
+                        .filter(p -> p.getUniqueName().equals("SOLAR_PRICE_PER_KWP"))
                         .findFirst()
                         .orElse(null))
                 .getParameterValue();
@@ -513,6 +513,8 @@ public class BudgetService {
 
         budgetRepository.save(preBudget);
         eventPublisher.publishEvent(new BudgetCreateEvent(project.getId(), false));
+
+        results.put("projectId", Double.valueOf(project.getId()));
 
         return results;
     }

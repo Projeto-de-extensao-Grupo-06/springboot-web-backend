@@ -49,7 +49,9 @@ public class SecurityConfig {
                         "/auth/confirm-otp",
                         "/auth/change-password/token",
                         "/auth/bot/login",
-                        "/h2-console/**"
+                        "/projects/site",
+                        "/h2-console/**",
+                        "/projects/awaiting-contact/*"
                         )
                         .permitAll()
                         .anyRequest()
@@ -99,7 +101,11 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:*",
                 "http://127.0.0.1:*",
-                "http://192.168.*.*:*"
+                "http://192.168.*.*:*",
+                "http://*:8080",
+                "http://*:8081",
+                "http://*:8082",
+                "http://*:3000"
         ));
         config.setAllowedMethods(
                 Arrays.asList(

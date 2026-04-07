@@ -2,6 +2,7 @@ package com.solarize.solarizeWebBackend.modules.schedule;
 
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
+import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleRabbitDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 
 import java.util.List;
@@ -53,9 +54,21 @@ public class ScheduleMapper {
         }
 
         return schedule;
-
-
     }
 
+    public static CreateScheduleRabbitDTO toCreateScheduleMessage(Schedule schedule) {
+        if(schedule == null) {
+            return null;
+        }
 
+        return new CreateScheduleRabbitDTO(
+                schedule.getId(),
+                schedule.getProject().getName(),
+                schedule.getProject().getClient().getEmail(),
+                schedule.getProject().getClient().getPhone(),
+                schedule.getType(),
+                schedule.getStartDate(),
+                schedule.getEndDate()
+        );
+    }
 }

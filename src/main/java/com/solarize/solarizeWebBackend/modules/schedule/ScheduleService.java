@@ -12,9 +12,12 @@ import com.solarize.solarizeWebBackend.shared.event.ScheduleUpdatedEvent;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
+import com.solarize.solarizeWebBackend.shared.rabbit.RabbitPropertiesConfiguration;
 import com.solarize.solarizeWebBackend.shared.scheduler.SchedulerService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +39,10 @@ public class ScheduleService {
     private final ApplicationEventPublisher eventPublisher;
     private final ProjectRepository projectRepository;
     private final SchedulerService schedulerService;
+    private final RabbitTemplate rabbitTemplate;
+    private final RabbitPropertiesConfiguration properties;
 
+    @Transactional
     public Schedule createSchedule(Schedule schedule, Boolean force) {
         if((schedule.getProject() == null || schedule.getProject().getId() == null) && schedule.getType() != ScheduleTypeEnum.NOTE) {
             throw new BadRequestException("A project ID must be provided for this schedule type. " +
@@ -47,8 +53,11 @@ public class ScheduleService {
             throw new BadRequestException("Schedule cannot have a start date after end date");
         }
 
-        if(schedule.getProject() != null && schedule.getProject().getId() != null && !projectRepository.existsById(schedule.getProject().getId())) {
-            throw new NotFoundException("Project does not exists.");
+        if(schedule.getProject() != null && schedule.getProject().getId() != null) {
+            Project managedProject = projectRepository.findById(schedule.getProject().getId())
+                    .orElseThrow(() -> new NotFoundException("Project does not exist."));
+
+            schedule.setProject(managedProject);
         }
 
         Coworker coworker = coworkerRepository
@@ -78,6 +87,11 @@ public class ScheduleService {
                 newSchedule.getProject() != null ? newSchedule.getProject().getId() : null,
                 newSchedule.getNotificationAlertTime()
         ));
+
+        String exchangeName = properties.exchange().name();
+        String routingKey = properties.createQueue().name();
+
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, ScheduleMapper.toCreateScheduleMessage(newSchedule));
 
         return newSchedule;
     }

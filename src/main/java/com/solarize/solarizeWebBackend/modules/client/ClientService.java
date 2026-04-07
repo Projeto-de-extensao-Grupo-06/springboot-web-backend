@@ -189,4 +189,36 @@ public class ClientService {
         return client;
     }
 
+    @Transactional
+    public Client findOrCreateClientSite(String phone, String firstName, String lastName, CreateAddressDto botAddressDto, String email) {
+        Client client = clientRepository.findByPhone(phone).orElse(null);
+        if (client == null) {
+            client = new Client();
+            client.setFirstName(firstName != null && !firstName.isEmpty() ? firstName : "Cliente");
+            client.setLastName(lastName);
+            client.setPhone(phone);
+            client.setStatus(ClientStatusEnum.ACTIVE);
+            client.setEmail(email);
+
+            if (botAddressDto != null) {
+                Address address = new Address();
+                address.setPostalCode(botAddressDto.getPostalCode() != null && !botAddressDto.getPostalCode().isBlank() ? botAddressDto.getPostalCode() : "00000-000");
+                address.setStreetName(botAddressDto.getStreetName() != null && !botAddressDto.getStreetName().isBlank() ? botAddressDto.getStreetName() : "Não informado");
+                address.setNumber(botAddressDto.getNumber() != null && !botAddressDto.getNumber().isBlank() ? botAddressDto.getNumber() : "S/N");
+                address.setNeighborhood(botAddressDto.getNeighborhood() != null && !botAddressDto.getNeighborhood().isBlank() ? botAddressDto.getNeighborhood() : "Não informado");
+
+                address.setCity(botAddressDto.getCity());
+                address.setState(botAddressDto.getState());
+                address.setType(botAddressDto.getType());
+                address.setApartment(botAddressDto.getApartment());
+
+                address = addressRepository.save(address);
+                client.setMainAddress(address);
+            }
+
+            client = clientRepository.save(client);
+        }
+        return client;
+    }
+
 }
