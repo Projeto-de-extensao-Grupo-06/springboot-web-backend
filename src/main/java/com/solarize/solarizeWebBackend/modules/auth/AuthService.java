@@ -145,4 +145,14 @@ public class AuthService implements UserDetailsService {
 
         this.tokenCacheManager.invalidateCache(token);
     }
+
+    public void changePasswordAuthenticated(String email, String password) {
+        Coworker coworker = this.coworkerRepository.findByEmailAndIsActiveTrue(email)
+                .orElseThrow(() -> new BadCredentialsException("Invalid Credential"));
+
+        String passHash = bCryptPasswordEncoder.encode(password);
+        coworker.setPassword(passHash);
+
+        this.coworkerRepository.save(coworker);
+    }
 }
