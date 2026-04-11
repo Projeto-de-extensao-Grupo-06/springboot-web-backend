@@ -147,4 +147,11 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/change-password")
+    public ResponseEntity<Void> changePasswordAuthenticated(@RequestBody @Valid ChangePasswordDto body) {
+        String username = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        this.authService.changePasswordAuthenticated(username, body.getPassword());
+        return ResponseEntity.noContent().build();
+    }
+
 }
