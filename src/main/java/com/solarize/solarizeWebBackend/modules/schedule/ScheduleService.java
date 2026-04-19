@@ -4,31 +4,23 @@ import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.project.ProjectRepository;
+import com.solarize.solarizeWebBackend.modules.schedule.dto.CancelScheduleDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.helper.ScheduleValidationsHelper;
-import com.solarize.solarizeWebBackend.shared.event.ProjectDeletedEvent;
 import com.solarize.solarizeWebBackend.shared.event.ScheduleCreatedEvent;
-import com.solarize.solarizeWebBackend.shared.event.ScheduleInProgress;
-import com.solarize.solarizeWebBackend.shared.event.ScheduleUpdatedEvent;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
-import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
 import com.solarize.solarizeWebBackend.shared.rabbit.RabbitPropertiesConfiguration;
-import com.solarize.solarizeWebBackend.shared.scheduler.SchedulerService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
 
 @Slf4j
 @Service
@@ -38,7 +30,6 @@ public class ScheduleService {
     private final CoworkerRepository coworkerRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final ProjectRepository projectRepository;
-    private final SchedulerService schedulerService;
     private final RabbitTemplate rabbitTemplate;
     private final RabbitPropertiesConfiguration properties;
 
@@ -92,6 +83,7 @@ public class ScheduleService {
         String routingKey = properties.createQueue().name();
 
         rabbitTemplate.convertAndSend(exchangeName, routingKey, ScheduleMapper.toCreateScheduleMessage(newSchedule));
+        System.out.println("Mensagem enviada para o RabbitMQ");
 
         return newSchedule;
     }
@@ -155,6 +147,11 @@ public class ScheduleService {
                 existingSchedule.getNotificationAlertTime()
         ));
 
+        String exchangeName = properties.exchange().name();
+        String routingKey = properties.updateQueue().name();
+
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, ScheduleMapper.toCreateScheduleMessage(existingSchedule));
+
         return repository.save(existingSchedule);
     }
 
@@ -184,70 +181,15 @@ public class ScheduleService {
             throw new NotFoundException("Schedule not found");
         }
 
+        String exchangeName = properties.exchange().name();
+        String routingKey = properties.cancelQueue().name();
+
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, CancelScheduleDTO.builder().scheduleId(id).build());
+
         repository.deleteById(id);
     }
 
-
     public LocalDateTime findNextScheduleDateByProjectId(Long projectId) {
         return repository.findNextScheduleByProjectId(projectId);
-    }
-
-    @EventListener
-    public void scheduleCreatedNotification(ScheduleCreatedEvent event) {
-        schedulerService.scheduleTask("schedule-notification-" + event.scheduleId(), () -> {
-            System.out.println("Notification not implemented");
-        }, event.notificationDateTime());
-
-
-        schedulerService.scheduleTask("visit-in-progress-" + event.scheduleId(), () -> {
-            eventPublisher.publishEvent(new ScheduleInProgress(
-                    event.scheduleId(),
-                    event.startDate(),
-                    event.endDate()
-            ));
-        }, event.startDate());
-    }
-
-    @EventListener
-    public void scheduleUpdatedNotification(ScheduleUpdatedEvent event) {
-        schedulerService.cancelTask("schedule-notification-" + event.scheduleId());
-        schedulerService.cancelTask("visit-in-progress-" + event.scheduleId());
-
-
-        schedulerService.scheduleTask("schedule-notification-" + event.scheduleId(), () -> {
-            System.out.println("Notification not implemented");
-        }, event.notificationDateTime());
-
-        schedulerService.scheduleTask("visit-in-progress-" + event.scheduleId(), () -> {
-            eventPublisher.publishEvent(new ScheduleInProgress(
-                    event.scheduleId(),
-                    event.startDate(),
-                    event.endDate()
-            ));
-        }, event.startDate());
-    }
-
-    @EventListener
-    public void visitInProgressUpdate(ScheduleInProgress event) {
-        Schedule schedule = repository.findById(event.scheduleId())
-                .orElseThrow(() -> new NotFoundException("Schedule does not exists"));
-
-        schedule.setStatus(ScheduleStatusEnum.IN_PROGRESS);
-
-        repository.save(schedule);
-    }
-
-    @EventListener
-    public void deleteSchedulesOnProjectDelete(ProjectDeletedEvent event) {
-        Project project = event.project();
-
-        List<Schedule> schedules = repository.findAllByProject(project);
-
-        schedules.forEach(s -> {
-            schedulerService.cancelTask("visit-in-progress-" + s.getId());
-            schedulerService.cancelTask("schedule-notification-" + s.getId());
-        });
-
-        repository.deleteAll(schedules);
     }
 }

@@ -62,5 +62,4 @@ public class CreateClientDTO {
     @Schema(description = "Client main address (optional)")
     @Valid
     private CreateAddressDto mainAddress;
-
 }
