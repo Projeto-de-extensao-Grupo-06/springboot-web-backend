@@ -11,7 +11,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
-@Profile("prod")
+@Profile("dev")
 public class S3Config {
     @Value("${aws.accessKeyId}")
     private String accessKey;
