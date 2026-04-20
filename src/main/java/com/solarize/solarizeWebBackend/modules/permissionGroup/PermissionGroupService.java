@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.GetPermissionGroupDto;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +90,19 @@ public class PermissionGroupService {
         }
 
         repository.delete(existing);
+    }
+
+    public Page<GetPermissionGroupDto> findAll(String search, String mainModule, Pageable pageable) {
+        return repository
+                .findAllWithFilters(
+                        search,
+                        (mainModule != null && !mainModule.isBlank()) ? mainModule : null,
+                        pageable
+                )
+                .map(pg -> {
+                    Long userCount = repository.countCoworkersInGroup(pg);
+                    return PermissionGroupMapper.toDto(pg, userCount > 0, userCount);
+                });
     }
 
 }

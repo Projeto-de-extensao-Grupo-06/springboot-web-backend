@@ -14,4 +14,7 @@ public class GetPermissionGroupDto {
     private String role;
     private String mainModule ;
     private List<ModulePermissionsDto> permissions;
+
+    private Boolean inUse;
+    private Long userCount;
 }
