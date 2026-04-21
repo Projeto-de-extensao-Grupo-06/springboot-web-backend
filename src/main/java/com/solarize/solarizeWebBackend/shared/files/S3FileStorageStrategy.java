@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 
 @Component
-@Profile("prod")
+@Profile("dev")
 public class S3FileStorageStrategy implements FileStorageStrategy {
 
     private final S3Client s3;
