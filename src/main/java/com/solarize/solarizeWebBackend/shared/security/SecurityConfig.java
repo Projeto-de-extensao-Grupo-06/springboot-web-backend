@@ -100,12 +100,11 @@ public class SecurityConfig {
         CorsConfiguration config =  new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:*",
+                "https://localhost:*",
                 "http://127.0.0.1:*",
                 "http://192.168.*.*:*",
-                "http://*:8080",
-                "http://*:8081",
-                "http://*:8082",
-                "http://*:3000"
+                "https://solarway.cardinal-system.cloud",
+                "http://solarway.cardinal-system.cloud"
         ));
         config.setAllowedMethods(
                 Arrays.asList(
