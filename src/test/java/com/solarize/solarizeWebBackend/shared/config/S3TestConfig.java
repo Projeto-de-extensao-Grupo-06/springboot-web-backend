@@ -1,4 +1,4 @@
-package com.solarize.solarizeWebBackend.config;
+package com.solarize.solarizeWebBackend.shared.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
