@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.EqualsAndHashCode
 public class FixedParameterId implements Serializable {
     private Long template;
     private Long budget;
