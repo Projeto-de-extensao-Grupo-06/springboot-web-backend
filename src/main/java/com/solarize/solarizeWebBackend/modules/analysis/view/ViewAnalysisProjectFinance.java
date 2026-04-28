@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Immutable
-@Table(name = "VIEW_ANALYSIS_PROJECT_FINANCE")
+@Table(name = "view_analysis_project_finance")
 @Getter
 @Setter
 public class ViewAnalysisProjectFinance {

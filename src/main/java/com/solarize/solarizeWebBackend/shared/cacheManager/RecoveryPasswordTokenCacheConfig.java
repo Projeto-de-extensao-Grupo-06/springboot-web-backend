@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class RecoveryPasswordTokenCacheConfig {
     @Bean
-    @Profile("dev")
+    @Profile({"dev", "test"})
     public RecoveryPasswordTokenCache recoveryPasswordTokenCaffeineCache() {
         return new RecoveryPasswordTokenCaffeine();
     }

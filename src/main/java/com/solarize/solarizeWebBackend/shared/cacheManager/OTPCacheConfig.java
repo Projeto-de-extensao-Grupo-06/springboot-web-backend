@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class OTPCacheConfig {
     @Bean
-    @Profile("dev")
+    @Profile({"dev", "test"})
     public OTPCache otpCaffeineCache () {
         return new OTPCaffeine();
     }
