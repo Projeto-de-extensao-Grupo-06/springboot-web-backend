@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class RecoveryAttemptCacheConfig {
     @Bean
-    @Profile("dev")
+    @Profile({"dev", "test"})
     public RecoveryAttemptCache recoveryAttemptCaffeineCache() {
         return new RecoveryAttemptCaffeine();
     }
