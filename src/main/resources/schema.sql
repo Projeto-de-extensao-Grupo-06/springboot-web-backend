@@ -1,4 +1,4 @@
-CREATE FUNCTION IF NOT EXISTS unaccent(str TEXT) RETURNS TEXT DETERMINISTIC RETURN str COLLATE utf8mb4_unicode_ci;
+-- CREATE FUNCTION IF NOT EXISTS unaccent(str TEXT) RETURNS TEXT DETERMINISTIC RETURN str COLLATE utf8mb4_unicode_ci;
 --------------------------------------------
 -- 1. PERMISSION GROUP
 --------------------------------------------
