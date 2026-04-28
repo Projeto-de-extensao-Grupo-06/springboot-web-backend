@@ -9,13 +9,6 @@ INSERT INTO permission_group (role, main_module, access_client, access_project, 
 ('TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
 ('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
 
---------------------------------------------
--- 1. PERMISSION GROUP
---------------------------------------------
-INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
-('ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
-( 'TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
-('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
 
 --------------------------------------------
 -- 2. COWORKER
