@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 import static org.mockito.Mockito.mock;
 
-@Configuration
+@TestConfiguration
 @Profile("test")
 public class S3TestConfig {
     
