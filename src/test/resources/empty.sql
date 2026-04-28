@@ -1,0 +1,1 @@
+-- Arquivo vazio para evitar que o Spring carregue o schema.sql de produção durante os testes
