@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.project.dto.request;
 
+import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.SystemTypeEnum;
 
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,5 @@ public class ProjectUpdateDto {
     @Size(max = 1000)
     private String description;
     private SystemTypeEnum projectType;
+    private ProjectStatusEnum status;
 }

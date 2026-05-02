@@ -72,6 +72,7 @@ public class ProjectMapper {
         project.setDescription(dto.getDescription());
         project.setSystemType(dto.getProjectType());
         project.setResponsible(coworker);
+        project.setStatus(dto.getStatus());
 
         return project;
     }
