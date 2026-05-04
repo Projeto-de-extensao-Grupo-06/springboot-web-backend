@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 @Component
-@Profile("prod")
+@Profile("dev")
 public class LocalFileStorageStrategy implements FileStorageStrategy{
 
 
