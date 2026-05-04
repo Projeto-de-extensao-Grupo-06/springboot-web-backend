@@ -63,17 +63,33 @@ public class ScheduleMapper {
 
         Project project = schedule.getProject();
         String projectName = (project != null) ? project.getName() : "N/A";
-        String email = (project != null && project.getClient() != null) ? project.getClient().getEmail() : null;
-        String phone = (project != null && project.getClient() != null) ? project.getClient().getPhone() : null;
+
+
+        String email = null;
+        String phone = null;
+
+        if (schedule.getType() == ScheduleTypeEnum.NOTE) {
+            if (schedule.getCoworker() != null) {
+                email = schedule.getCoworker().getEmail();
+                phone = schedule.getCoworker().getPhone();
+            }
+        } else {
+            if (project != null && project.getClient() != null) {
+                email = project.getClient().getEmail();
+                phone = project.getClient().getPhone();
+            }
+        }
 
         return new CreateScheduleRabbitDTO(
                 schedule.getId(),
                 projectName,
+                schedule.getTitle(),
                 email,
                 phone,
                 schedule.getType(),
                 schedule.getStartDate(),
                 schedule.getEndDate()
         );
+
     }
 }

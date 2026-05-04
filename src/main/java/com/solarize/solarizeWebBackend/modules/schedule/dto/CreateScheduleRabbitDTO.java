@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record CreateScheduleRabbitDTO(
         Long scheduleId,
         String projectTitle,
+        String title,
         String email,
         String phone,
         ScheduleTypeEnum type,
