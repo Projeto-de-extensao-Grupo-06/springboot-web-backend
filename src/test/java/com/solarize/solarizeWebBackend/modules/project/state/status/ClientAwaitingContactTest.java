@@ -237,7 +237,7 @@ class ClientAwaitingContactTest {
 
     static Stream<Arguments> invalidTransitionsProvider() {
         return Stream.of(
-                Arguments.of("NEW -> NEW",
+                Arguments.of("CLIENT_AWAITING_CONTACT -> NEW",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> CLIENT_AWAITING_CONTACT",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),

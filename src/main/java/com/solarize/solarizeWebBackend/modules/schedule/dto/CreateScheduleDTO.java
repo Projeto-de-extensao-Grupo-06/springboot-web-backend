@@ -1,13 +1,9 @@
 package com.solarize.solarizeWebBackend.modules.schedule.dto;
 
-
-import com.solarize.solarizeWebBackend.modules.schedule.ScheduleStatusEnum;
 import com.solarize.solarizeWebBackend.modules.schedule.ScheduleTypeEnum;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter

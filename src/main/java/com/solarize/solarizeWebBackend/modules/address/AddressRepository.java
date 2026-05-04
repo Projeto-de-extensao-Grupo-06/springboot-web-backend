@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.address;
 
-import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
 import com.solarize.solarizeWebBackend.modules.address.projection.StateCityProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
-import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.PermissionGroupDto;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;

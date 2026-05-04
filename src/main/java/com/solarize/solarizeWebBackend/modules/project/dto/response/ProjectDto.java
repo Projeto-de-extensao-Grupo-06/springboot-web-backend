@@ -1,19 +1,8 @@
 package com.solarize.solarizeWebBackend.modules.project.dto.response;
 
-import com.solarize.solarizeWebBackend.modules.address.Address;
-import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
-import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
-import com.solarize.solarizeWebBackend.modules.client.Client;
-import com.solarize.solarizeWebBackend.modules.client.dto.ClientResponseDTO;
-import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
-import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.project.ProjectSourceEnum;
 import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.SystemTypeEnum;
-import com.solarize.solarizeWebBackend.modules.projectFile.ProjectFile;
-import com.solarize.solarizeWebBackend.modules.retryQueue.RetryQueue;
-import com.solarize.solarizeWebBackend.modules.schedule.Schedule;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

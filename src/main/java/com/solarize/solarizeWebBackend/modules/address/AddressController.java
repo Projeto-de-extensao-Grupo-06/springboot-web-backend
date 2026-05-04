@@ -4,7 +4,6 @@ import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.address.dto.LookupResponseDTO;
 import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import com.solarize.solarizeWebBackend.modules.address.dto.UpdateAddressDto;
-import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
 import com.solarize.solarizeWebBackend.modules.address.projection.StateCityProjection;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

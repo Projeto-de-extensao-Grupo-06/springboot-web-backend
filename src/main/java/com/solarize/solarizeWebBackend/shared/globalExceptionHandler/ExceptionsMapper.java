@@ -4,7 +4,6 @@ import com.solarize.solarizeWebBackend.shared.exceptions.BaseException;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ValidationError;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;

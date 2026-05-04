@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ConfigValueType;
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueType;
 import com.solarize.solarizeWebBackend.modules.budget.helper.BudgetCalcs;
 import com.solarize.solarizeWebBackend.modules.budget.model.*;
@@ -29,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor

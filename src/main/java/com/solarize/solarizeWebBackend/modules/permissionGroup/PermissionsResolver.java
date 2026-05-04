@@ -2,15 +2,10 @@ package com.solarize.solarizeWebBackend.modules.permissionGroup;
 
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.ModulePermission;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.annotation.Role;
-import com.solarize.solarizeWebBackend.modules.permissionGroup.dtos.ModulePermissionsDto;
 import com.solarize.solarizeWebBackend.modules.permissionGroup.permissionStrategy.PermissionVerifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 

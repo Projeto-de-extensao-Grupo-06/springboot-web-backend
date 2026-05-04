@@ -1,11 +1,7 @@
 package com.solarize.solarizeWebBackend.shared.exceptions;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import java.time.LocalDateTime;
 
 @Getter

@@ -6,7 +6,6 @@ import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.client.ClientService;
-import com.solarize.solarizeWebBackend.modules.client.ClientStatusEnum;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
@@ -34,7 +33,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -249,11 +247,11 @@ public class ProjectService {
             Project project = projectRepository.findById(event.projectId()).orElseThrow();
 
             if(event.type() == ScheduleTypeEnum.TECHNICAL_VISIT) {
-                project.getStatus().getValue().applyToScheduledTechnicalVisit(project);
+                project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
             }
 
             else if(event.type() == ScheduleTypeEnum.INSTALL_VISIT) {
-                project.getStatus().getValue().applyToScheduledInstallingVisit(project);
+                project.getStatus().getStateHandler().applyToScheduledInstallingVisit(project);
             }
 
             projectRepository.save(project);

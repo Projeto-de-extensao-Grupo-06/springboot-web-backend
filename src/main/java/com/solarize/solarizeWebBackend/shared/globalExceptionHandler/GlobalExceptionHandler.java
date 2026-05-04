@@ -3,7 +3,6 @@ package com.solarize.solarizeWebBackend.shared.globalExceptionHandler;
 import com.solarize.solarizeWebBackend.shared.exceptions.*;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.ErrorResponse;
 import com.solarize.solarizeWebBackend.shared.globalExceptionHandler.dto.FieldsResponseError;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
