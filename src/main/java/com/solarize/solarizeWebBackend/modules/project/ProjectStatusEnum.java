@@ -34,8 +34,5 @@ public enum ProjectStatusEnum {
         return weight;
     }
 
-    public Status getValue(){
-        return stateHandler;
-    }
 
 }

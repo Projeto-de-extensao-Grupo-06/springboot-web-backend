@@ -5,9 +5,6 @@ import com.solarize.solarizeWebBackend.modules.project.ProjectStatusEnum;
 import com.solarize.solarizeWebBackend.modules.project.state.StateMachineHelper;
 import com.solarize.solarizeWebBackend.modules.project.state.Status;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class PreBudget implements Status {
     @Override
     public void applyToClientAwaitingContact(Project project) {

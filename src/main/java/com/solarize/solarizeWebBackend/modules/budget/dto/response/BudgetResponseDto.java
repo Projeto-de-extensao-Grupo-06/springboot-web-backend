@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget.dto.response;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueType;
 import lombok.Builder;
 import lombok.Data;

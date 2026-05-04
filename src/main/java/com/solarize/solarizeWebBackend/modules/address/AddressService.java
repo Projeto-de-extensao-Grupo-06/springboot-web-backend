@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.address;
 
 import br.com.caelum.stella.format.CEPFormatter;
-import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
 import com.solarize.solarizeWebBackend.modules.address.helper.CepValidator;
 import com.solarize.solarizeWebBackend.modules.address.projection.StateCityProjection;
 import com.solarize.solarizeWebBackend.shared.exceptions.BadRequestException;

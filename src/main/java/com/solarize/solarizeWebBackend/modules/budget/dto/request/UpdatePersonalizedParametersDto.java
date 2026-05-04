@@ -4,8 +4,6 @@ import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueT
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

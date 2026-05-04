@@ -24,7 +24,7 @@ import java.util.*;
 
 public class AuthFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
 
     private final AuthService authService;
 

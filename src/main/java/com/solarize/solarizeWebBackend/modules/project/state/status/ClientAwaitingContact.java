@@ -21,4 +21,16 @@ public class ClientAwaitingContact implements Status {
         project.setPreviewStatus(project.getStatus());
         project.setStatus(ProjectStatusEnum.SCHEDULED_TECHNICAL_VISIT);
     }
+
+    @Override
+    public void applyToPreBudget(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.PRE_BUDGET);
+    }
+
+    @Override
+    public void applyToNegotiationFailed(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.NEGOTIATION_FAILED);
+    }
 }

@@ -3,7 +3,6 @@ package com.solarize.solarizeWebBackend.shared.cacheManager;
 import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryAttemptCache;
 import com.solarize.solarizeWebBackend.shared.cacheManager.caffeine.RecoveryAttemptCaffeine;
 import com.solarize.solarizeWebBackend.shared.cacheManager.redis.RecoveryAttemptRedis;
-import com.solarize.solarizeWebBackend.shared.cacheManager.redis.Templates;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

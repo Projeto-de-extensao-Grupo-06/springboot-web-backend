@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.projectComment.dto;
 
-import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto;
 import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerWithoutCredentialDto;
 import lombok.*;
 

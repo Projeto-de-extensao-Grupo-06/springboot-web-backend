@@ -1,7 +1,6 @@
 package com.solarize.solarizeWebBackend.modules.budget.dto.request;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
