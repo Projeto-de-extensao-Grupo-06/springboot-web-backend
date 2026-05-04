@@ -124,21 +124,31 @@ public class ProjectService {
     }
 
     private void applyStatusTransition(Project project, ProjectStatusEnum targetStatus) {
+        if (targetStatus == null) {
+            throw new IllegalArgumentException("Target status must not be null");
+        }
+
+        ProjectStatusEnum currentStatus = project.getStatus();
+        if (currentStatus == null) {
+            throw new InvalidStateTransitionException(
+                    "Cannot transition project status because the current status is null");
+        }
+
         switch (targetStatus) {
-            case NEW -> project.getStatus().getStateHandler().applyToNew(project);
-            case PRE_BUDGET -> project.getStatus().getStateHandler().applyToPreBudget(project);
-            case CLIENT_AWAITING_CONTACT -> project.getStatus().getStateHandler().applyToClientAwaitingContact(project);
-            case AWAITING_RETRY -> project.getStatus().getStateHandler().applyToAwaitingRetry(project);
-            case RETRYING -> project.getStatus().getStateHandler().applyToRetrying(project);
-            case SCHEDULED_TECHNICAL_VISIT -> project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
-            case TECHNICAL_VISIT_COMPLETED -> project.getStatus().getStateHandler().applyToTechnicalVisitCompleted(project);
-            case FINAL_BUDGET -> project.getStatus().getStateHandler().applyToFinalBudget(project);
-            case AWAITING_MATERIALS -> project.getStatus().getStateHandler().applyToAwaitingMaterials(project);
-            case SCHEDULED_INSTALLING_VISIT -> project.getStatus().getStateHandler().applyToScheduledInstallingVisit(project);
-            case INSTALLED -> project.getStatus().getStateHandler().applyToInstalled(project);
-            case COMPLETED -> project.getStatus().getStateHandler().applyToCompleted(project);
-            case NEGOTIATION_FAILED -> project.getStatus().getStateHandler().applyToNegotiationFailed(project);
-            case CONTACT_NOT_REQUESTED -> project.getStatus().getStateHandler().applyToContactNotRequested(project);
+            case NEW -> currentStatus.getStateHandler().applyToNew(project);
+            case PRE_BUDGET -> currentStatus.getStateHandler().applyToPreBudget(project);
+            case CLIENT_AWAITING_CONTACT -> currentStatus.getStateHandler().applyToClientAwaitingContact(project);
+            case AWAITING_RETRY -> currentStatus.getStateHandler().applyToAwaitingRetry(project);
+            case RETRYING -> currentStatus.getStateHandler().applyToRetrying(project);
+            case SCHEDULED_TECHNICAL_VISIT -> currentStatus.getStateHandler().applyToScheduledTechnicalVisit(project);
+            case TECHNICAL_VISIT_COMPLETED -> currentStatus.getStateHandler().applyToTechnicalVisitCompleted(project);
+            case FINAL_BUDGET -> currentStatus.getStateHandler().applyToFinalBudget(project);
+            case AWAITING_MATERIALS -> currentStatus.getStateHandler().applyToAwaitingMaterials(project);
+            case SCHEDULED_INSTALLING_VISIT -> currentStatus.getStateHandler().applyToScheduledInstallingVisit(project);
+            case INSTALLED -> currentStatus.getStateHandler().applyToInstalled(project);
+            case COMPLETED -> currentStatus.getStateHandler().applyToCompleted(project);
+            case NEGOTIATION_FAILED -> currentStatus.getStateHandler().applyToNegotiationFailed(project);
+            case CONTACT_NOT_REQUESTED -> currentStatus.getStateHandler().applyToContactNotRequested(project);
             default -> throw new IllegalArgumentException("Unsupported status transition to: " + targetStatus);
         }
     }
