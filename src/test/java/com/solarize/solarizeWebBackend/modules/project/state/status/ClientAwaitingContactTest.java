@@ -97,6 +97,32 @@ class ClientAwaitingContactTest {
         assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
     }
 
+    @Test
+    @DisplayName("Should set status to PRE_BUDGET and preserve previous status when transitioning from CLIENT_AWAITING_CONTACT")
+    void applyToPreBudgetSetCorrectStatusAndPreviewStatus() {
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .build();
+
+        project.getStatus().getStateHandler().applyToPreBudget(project);
+
+        assertEquals(ProjectStatusEnum.PRE_BUDGET, project.getStatus());
+        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
+    }
+
+    @Test
+    @DisplayName("Should set status to NEGOTIATION_FAILED and preserve previous status when transitioning from CLIENT_AWAITING_CONTACT")
+    void applyToNegotiationFailedSetCorrectStatusAndPreviewStatus() {
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .build();
+
+        project.getStatus().getStateHandler().applyToNegotiationFailed(project);
+
+        assertEquals(ProjectStatusEnum.NEGOTIATION_FAILED, project.getStatus());
+        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
+    }
+
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("invalidTransitionsProvider")
@@ -213,8 +239,6 @@ class ClientAwaitingContactTest {
         return Stream.of(
                 Arguments.of("NEW -> NEW",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
-                Arguments.of("CLIENT_AWAITING_CONTACT -> PRE_BUDGET",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToPreBudget(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> CLIENT_AWAITING_CONTACT",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> RETRYING",
@@ -230,9 +254,7 @@ class ClientAwaitingContactTest {
                 Arguments.of("CLIENT_AWAITING_CONTACT -> INSTALLED",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToInstalled(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> COMPLETED",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p)),
-                Arguments.of("CLIENT_AWAITING_CONTACT -> NEGOTIATION_FAILED",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNegotiationFailed(p))
+                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToCompleted(p))
         );
     }
 
