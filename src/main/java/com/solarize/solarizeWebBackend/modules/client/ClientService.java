@@ -2,11 +2,9 @@ package com.solarize.solarizeWebBackend.modules.client;
 
 import com.solarize.solarizeWebBackend.modules.address.Address;
 import com.solarize.solarizeWebBackend.modules.address.AddressRepository;
-import com.solarize.solarizeWebBackend.modules.address.enumerated.BrazilianState;
 import com.solarize.solarizeWebBackend.shared.exceptions.ConflictException;
 import com.solarize.solarizeWebBackend.shared.exceptions.InvalidDocumentException;
 import com.solarize.solarizeWebBackend.shared.exceptions.NotFoundException;
-import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.client.dto.ClientExistsResponseDto;
 import jakarta.transaction.Transactional;

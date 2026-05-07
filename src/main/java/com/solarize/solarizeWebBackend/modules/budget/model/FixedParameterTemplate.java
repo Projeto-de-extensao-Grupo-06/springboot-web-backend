@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
-import com.solarize.solarizeWebBackend.modules.budget.enumerated.FixedParameterName;
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.ParameterValueType;
 import jakarta.persistence.*;
 import lombok.*;

@@ -61,11 +61,16 @@ public class ScheduleMapper {
             return null;
         }
 
+        Project project = schedule.getProject();
+        String projectName = (project != null) ? project.getName() : "N/A";
+        String email = (project != null && project.getClient() != null) ? project.getClient().getEmail() : null;
+        String phone = (project != null && project.getClient() != null) ? project.getClient().getPhone() : null;
+
         return new CreateScheduleRabbitDTO(
                 schedule.getId(),
-                schedule.getProject().getName(),
-                schedule.getProject().getClient().getEmail(),
-                schedule.getProject().getClient().getPhone(),
+                projectName,
+                email,
+                phone,
                 schedule.getType(),
                 schedule.getStartDate(),
                 schedule.getEndDate()

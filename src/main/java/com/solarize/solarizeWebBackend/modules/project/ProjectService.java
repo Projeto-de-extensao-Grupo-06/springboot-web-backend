@@ -6,7 +6,6 @@ import com.solarize.solarizeWebBackend.modules.budget.model.Budget;
 import com.solarize.solarizeWebBackend.modules.client.Client;
 import com.solarize.solarizeWebBackend.modules.client.ClientRepository;
 import com.solarize.solarizeWebBackend.modules.client.ClientService;
-import com.solarize.solarizeWebBackend.modules.client.ClientStatusEnum;
 import com.solarize.solarizeWebBackend.modules.coworker.Coworker;
 import com.solarize.solarizeWebBackend.modules.coworker.CoworkerRepository;
 import com.solarize.solarizeWebBackend.modules.project.dto.request.ProjectBotLeadCreateDto;
@@ -34,7 +33,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -118,7 +116,41 @@ public class ProjectService {
                         .orElse(existing.getSystemType())
         );
 
+        if (incoming.getStatus() != null && incoming.getStatus() != existing.getStatus()) {
+            applyStatusTransition(existing, incoming.getStatus());
+        }
+
         return projectRepository.save(existing);
+    }
+
+    private void applyStatusTransition(Project project, ProjectStatusEnum targetStatus) {
+        if (targetStatus == null) {
+            throw new IllegalArgumentException("Target status must not be null");
+        }
+
+        ProjectStatusEnum currentStatus = project.getStatus();
+        if (currentStatus == null) {
+            throw new InvalidStateTransitionException(
+                    "Cannot transition project status because the current status is null");
+        }
+
+        switch (targetStatus) {
+            case NEW -> currentStatus.getStateHandler().applyToNew(project);
+            case PRE_BUDGET -> currentStatus.getStateHandler().applyToPreBudget(project);
+            case CLIENT_AWAITING_CONTACT -> currentStatus.getStateHandler().applyToClientAwaitingContact(project);
+            case AWAITING_RETRY -> currentStatus.getStateHandler().applyToAwaitingRetry(project);
+            case RETRYING -> currentStatus.getStateHandler().applyToRetrying(project);
+            case SCHEDULED_TECHNICAL_VISIT -> currentStatus.getStateHandler().applyToScheduledTechnicalVisit(project);
+            case TECHNICAL_VISIT_COMPLETED -> currentStatus.getStateHandler().applyToTechnicalVisitCompleted(project);
+            case FINAL_BUDGET -> currentStatus.getStateHandler().applyToFinalBudget(project);
+            case AWAITING_MATERIALS -> currentStatus.getStateHandler().applyToAwaitingMaterials(project);
+            case SCHEDULED_INSTALLING_VISIT -> currentStatus.getStateHandler().applyToScheduledInstallingVisit(project);
+            case INSTALLED -> currentStatus.getStateHandler().applyToInstalled(project);
+            case COMPLETED -> currentStatus.getStateHandler().applyToCompleted(project);
+            case NEGOTIATION_FAILED -> currentStatus.getStateHandler().applyToNegotiationFailed(project);
+            case CONTACT_NOT_REQUESTED -> currentStatus.getStateHandler().applyToContactNotRequested(project);
+            default -> throw new IllegalArgumentException("Unsupported status transition to: " + targetStatus);
+        }
     }
 
     public Project createManualProject(Project project, @NotNull(message = "Client ID is required") Long clientId, Long addressId){
@@ -225,11 +257,11 @@ public class ProjectService {
             Project project = projectRepository.findById(event.projectId()).orElseThrow();
 
             if(event.type() == ScheduleTypeEnum.TECHNICAL_VISIT) {
-                project.getStatus().getValue().applyToScheduledTechnicalVisit(project);
+                project.getStatus().getStateHandler().applyToScheduledTechnicalVisit(project);
             }
 
             else if(event.type() == ScheduleTypeEnum.INSTALL_VISIT) {
-                project.getStatus().getValue().applyToScheduledInstallingVisit(project);
+                project.getStatus().getStateHandler().applyToScheduledInstallingVisit(project);
             }
 
             projectRepository.save(project);

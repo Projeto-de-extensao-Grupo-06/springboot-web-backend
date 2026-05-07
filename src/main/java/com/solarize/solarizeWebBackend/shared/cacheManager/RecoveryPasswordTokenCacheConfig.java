@@ -3,7 +3,6 @@ package com.solarize.solarizeWebBackend.shared.cacheManager;
 import com.solarize.solarizeWebBackend.shared.cacheManager.cacheInterfaces.RecoveryPasswordTokenCache;
 import com.solarize.solarizeWebBackend.shared.cacheManager.caffeine.RecoveryPasswordTokenCaffeine;
 import com.solarize.solarizeWebBackend.shared.cacheManager.redis.RecoveryPasswordTokenRedis;
-import com.solarize.solarizeWebBackend.shared.cacheManager.redis.Templates;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class RecoveryPasswordTokenCacheConfig {
     @Bean
-    @Profile("dev")
+    @Profile({"dev", "test"})
     public RecoveryPasswordTokenCache recoveryPasswordTokenCaffeineCache() {
         return new RecoveryPasswordTokenCaffeine();
     }

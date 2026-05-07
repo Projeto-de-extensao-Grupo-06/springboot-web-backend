@@ -1,6 +1,5 @@
 package com.solarize.solarizeWebBackend.modules.client.dto;
 
-import com.solarize.solarizeWebBackend.modules.address.dto.CreateAddressDto;
 import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

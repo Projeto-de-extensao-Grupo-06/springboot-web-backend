@@ -12,8 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 
 @Getter
 @NoArgsConstructor
@@ -62,5 +60,4 @@ public class CreateClientDTO {
     @Schema(description = "Client main address (optional)")
     @Valid
     private CreateAddressDto mainAddress;
-
 }
