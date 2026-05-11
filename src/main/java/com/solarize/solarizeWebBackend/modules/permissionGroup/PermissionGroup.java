@@ -32,4 +32,10 @@ public class PermissionGroup {
 
     @ModulePermission("SCHEDULE")
     private Integer accessSchedule;
+
+    @ModulePermission("MATERIAL")
+    private Integer accessMaterial;
+
+    @ModulePermission("CONFIGURATION")
+    private Integer accessConfiguration;
 }

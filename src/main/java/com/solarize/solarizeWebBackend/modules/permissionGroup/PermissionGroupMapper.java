@@ -116,4 +116,11 @@ public class PermissionGroupMapper {
 
         return permissionGroup;
     }
+
+    public static GetPermissionGroupDto toDto(PermissionGroup permissionGroup, Boolean inUse, Long userCount) {
+        GetPermissionGroupDto dto = toDto(permissionGroup);
+        dto.setInUse(inUse);
+        dto.setUserCount(userCount);
+        return dto;
+    }
 }

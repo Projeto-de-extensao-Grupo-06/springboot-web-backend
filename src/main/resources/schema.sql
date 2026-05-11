@@ -2,10 +2,10 @@ CREATE FUNCTION IF NOT EXISTS unaccent(str TEXT) RETURNS TEXT DETERMINISTIC RETU
 --------------------------------------------
 -- 1. PERMISSION GROUP
 --------------------------------------------
-INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule) VALUES
-('ADMIN', 'PROJECT_LIST', 15, 15, 15, 15),
-('TÉCNICO', 'SCHEDULE', 1, 7, 1, 15),
-('SECRETÁRIA', 'CLIENT_LIST', 15, 3, 15, 1);
+INSERT INTO permission_group (role, main_module, access_client, access_project, access_budget, access_schedule, access_material, access_configuration) VALUES
+('ADMIN',      'PROJECT', 15, 15, 15, 15, 15, 15),
+('TÉCNICO',    'SCHEDULE',      1,  7,  1, 15,  1,  1),
+('SECRETÁRIA', 'CLIENT',  15,  3, 15,  1,  1,  1);
 
 --------------------------------------------
 -- 2. COWORKER
