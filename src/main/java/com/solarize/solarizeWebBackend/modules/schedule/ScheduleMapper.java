@@ -3,6 +3,7 @@ package com.solarize.solarizeWebBackend.modules.schedule;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.CreateScheduleRabbitDTO;
+import com.solarize.solarizeWebBackend.modules.schedule.dto.RecipientDTO;
 import com.solarize.solarizeWebBackend.modules.schedule.dto.ScheduleResponseDTO;
 
 import java.util.List;
@@ -63,17 +64,18 @@ public class ScheduleMapper {
 
         Project project = schedule.getProject();
         String projectName = (project != null) ? project.getName() : "N/A";
-        String email = (project != null && project.getClient() != null) ? project.getClient().getEmail() : null;
-        String phone = (project != null && project.getClient() != null) ? project.getClient().getPhone() : null;
+
+        List<RecipientDTO> recipients = schedule.getType().recipientStrategy.resolve(schedule);
 
         return new CreateScheduleRabbitDTO(
                 schedule.getId(),
                 projectName,
-                email,
-                phone,
+                schedule.getTitle(),
+                recipients,
                 schedule.getType(),
                 schedule.getStartDate(),
                 schedule.getEndDate()
         );
+
     }
 }
