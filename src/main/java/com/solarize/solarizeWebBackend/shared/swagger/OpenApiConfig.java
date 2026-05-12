@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Projeto Solarize",
+                title = "Projeto Solarway",
                 description = "Implementação de JWT com Spring Security",
                 contact = @Contact(
-                        name = "Solarize",
+                        name = "Solarway",
                         url = "https://github.com/Projeto-de-extensao-Grupo-06"
                 ),
                 license = @License(name = "UNLICENSED"),

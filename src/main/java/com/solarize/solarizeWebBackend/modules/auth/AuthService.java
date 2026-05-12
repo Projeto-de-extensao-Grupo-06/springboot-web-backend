@@ -94,7 +94,7 @@ public class AuthService implements UserDetailsService {
 
             PasswordRecoveryEmail emailModel = PasswordRecoveryEmail.builder()
                     .to(email)
-                    .subject("Recuperação de Senha Solarize")
+                    .subject("Recuperação de Senha Solarway")
                     .name(user.getFirstName())
                     .code(otpCode)
                     .operatingSystem(operationalSystem)
@@ -104,7 +104,7 @@ public class AuthService implements UserDetailsService {
 
             String template = EmailTemplateProcessor.buildTemplate(emailModel);
 
-            this.emailService.sendEmail(email, "Recuperação de senha Solarize", template);
+            this.emailService.sendEmail(email, "Recuperação de senha Solarway", template);
 
             this.recoveryAttemptCache.saveCache(email, true);
         }
