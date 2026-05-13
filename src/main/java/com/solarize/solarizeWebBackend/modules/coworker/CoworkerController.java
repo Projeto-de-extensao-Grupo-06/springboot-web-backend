@@ -26,10 +26,19 @@ public class CoworkerController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping()
-    public ResponseEntity<List<CoworkerResponseDto>> getCoworkers() {
-        final List<Coworker> entities = SERVICE.getCoworkers();
+    public ResponseEntity<List<CoworkerResponseDto>> getCoworkers(
+            @RequestParam(required = false) String search
+    ) {
+        final List<Coworker> entities;
+        if (search != null && !search.trim().isEmpty()) {
+            entities = SERVICE.searchCoworkers(search);
+        } else {
+            entities = SERVICE.getCoworkers();
+        }
         final List<CoworkerResponseDto> dtos = CoworkerMapper.toDtoList(entities);
-        if(dtos.isEmpty()) return ResponseEntity.status(204).build();
+        if (dtos.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
         return ResponseEntity.ok(dtos);
     }
 
