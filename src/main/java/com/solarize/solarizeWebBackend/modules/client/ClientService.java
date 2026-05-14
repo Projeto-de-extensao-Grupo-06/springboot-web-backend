@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ClientService {
+public class    ClientService {
 
     private final ClientRepository clientRepository;
     private final AddressRepository addressRepository;

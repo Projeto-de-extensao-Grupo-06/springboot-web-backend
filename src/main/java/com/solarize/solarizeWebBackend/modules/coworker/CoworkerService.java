@@ -35,6 +35,13 @@ public class CoworkerService {
         return REPOSITORY.findAllByisActiveTrue();
     }
 
+    public List<Coworker> searchCoworkers(String search) {
+        if (search == null || search.trim().isEmpty()) {
+            return REPOSITORY.findAllByisActiveTrue();
+        }
+        return REPOSITORY.searchCoworkers(search.trim());
+    }
+
     public Coworker updateCoworker(long id, Coworker coworkerUpdate) {
         Coworker coworker = REPOSITORY.findById(id)
                 .orElseThrow(() -> new NotFoundException("Coworker not found."));

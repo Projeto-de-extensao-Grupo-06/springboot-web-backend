@@ -1,6 +1,7 @@
+
 openapi: 3.0.3
 info:
-  title: Solarize Web Backend API
+  title: Solarway Web Backend API
   description: API para gerenciamento de projetos solares, clientes, orçamentos e agendamentos.
   version: 1.0.0
 servers:
