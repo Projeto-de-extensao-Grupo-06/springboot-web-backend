@@ -4,6 +4,7 @@ import com.solarize.solarizeWebBackend.modules.address.dto.ResponseAddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Schema(name = "Client Response", description = "Client response data")
-public class ClientResponseDTO {
+public class ClientResponseDTO implements Serializable {
 
     @Schema(description = "Client identifier number", example = "101")
     private Long id;
