@@ -18,6 +18,7 @@ public class ProjectBotLeadCreateDto {
     
     private String cityState;
     private String propertyType;
+    private String roofType;
     
     @Valid
     private CreateAddressDto address;

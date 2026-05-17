@@ -349,7 +349,7 @@ public class ProjectService {
         
         Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
 
-        return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
+        return budgetService.calculatePreBudget(savedProject, monthlyBillValue, dto.getPropertyType(), dto.getRoofType());
     }
 
     @Transactional
@@ -373,7 +373,7 @@ public class ProjectService {
 
         Double monthlyBillValue = Double.parseDouble(dto.getMonthlyBill());
 
-        return budgetService.calculatePreBudget(savedProject, monthlyBillValue);
+        return budgetService.calculatePreBudget(savedProject, monthlyBillValue, dto.getPropertyType(), dto.getRoofType());
     }
 
     public ProjectKpiDto getProjectKpis() {
