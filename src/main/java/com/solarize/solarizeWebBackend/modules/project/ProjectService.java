@@ -29,6 +29,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -57,6 +59,7 @@ public class ProjectService {
     private final ClientService clientService;
     private final BudgetService budgetService;
 
+    @CacheEvict(value = {"projects", "project-kpis"}, allEntries = true)
     public Project projectManualCreate(Project project) {
         if(project.getAddress().getId() != null && !addressRepository.existsById(project.getAddress().getId())) {
             throw new NotFoundException("Address does not exists on database");
@@ -82,6 +85,7 @@ public class ProjectService {
     }
 
     @Transactional
+    @CacheEvict(value = {"projects", "project-kpis"}, allEntries = true,beforeInvocation = false)
     public Project projectUpdate(Project incoming, Long projectId) {
         Project existing = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project not found."));
@@ -211,6 +215,7 @@ public class ProjectService {
         return savedProject;
     }
 
+    @Cacheable(value = "projects", key = "#search + '_' + #statusList + '_' + #responsibleId + '_' + #clientId + '_' + #pageable")
     public Page<ProjectSummaryDTO> findAllProjectsSummary(String search,
                                                           List<ProjectStatusEnum> statusList,
                                                           Long responsibleId,
@@ -233,6 +238,7 @@ public class ProjectService {
                 .orElseThrow(() -> new NotFoundException("Project does not exists."));
     }
 
+    @CacheEvict(value = {"projects", "project-kpis"}, allEntries = true)
     public void softDeleteProject(Long projectId) {
         Project project = projectRepository.findByIdAndIsActiveTrue(projectId)
                 .orElseThrow(() -> new NotFoundException("Project does not exists"));
@@ -376,6 +382,7 @@ public class ProjectService {
         return budgetService.calculatePreBudget(savedProject, monthlyBillValue, dto.getPropertyType(), dto.getRoofType());
     }
 
+    @Cacheable(value = "project-kpis")
     public ProjectKpiDto getProjectKpis() {
         return projectRepository.getProjectKpis();
     }
