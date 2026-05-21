@@ -1,6 +1,7 @@
 package com.solarize.solarizeWebBackend.modules.budget.model;
 
 import com.solarize.solarizeWebBackend.modules.budget.enumerated.DiscountType;
+import com.solarize.solarizeWebBackend.modules.payment.model.Payment;
 import com.solarize.solarizeWebBackend.modules.project.Project;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,4 +53,7 @@ public class Budget {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_project")
     private Project project;
+
+    @OneToOne(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Payment payment;
 }

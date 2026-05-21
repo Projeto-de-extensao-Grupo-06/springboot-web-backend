@@ -78,29 +78,78 @@ INSERT INTO client (first_name, last_name, phone, email, status, document_number
 --------------------------------------------
 -- 5. PROJECT
 --------------------------------------------
-INSERT INTO project (name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
-('Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
-('Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
-('Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
-('Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
-('Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
-('Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
-('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
-('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
-('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATEADD('DAY', 30, '2025-11-20'), 4, 1, 4);
+-- PROJECTS
+INSERT INTO project (id_project, name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
+(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -5, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-09-15'), 1, 2, 1),
+(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -60, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-09-20'), 2, 3, 2),
+(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', DATEADD('DAY', -70, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-10-02'), 3, 1, 3),
+(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -45, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-10-15'), 4, 4, 4),
+(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', DATEADD('DAY', -1, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-10-28'), 5, 2, 5),
+(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -10, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-11-05'), 1, 2, 1),
+(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -30, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-11-10'), 3, 3, 3),
+(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATEADD('DAY', -40, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-11-12'), 2, 4, 2),
+(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATEADD('DAY', -2, CURRENT_TIMESTAMP), DATEADD('DAY', 30, '2025-11-20'), 4, 1, 2);
 
---------------------------------------------
--- 6. BUDGET
---------------------------------------------
-INSERT INTO budget (subtotal, total_cost, discount, material_cost, service_cost, discount_type, final_budget, created_at, fk_project) VALUES
-(18000.00, 18000.00, 0.00, 12900.00, 0.00, 'AMOUNT', FALSE, CURRENT_TIMESTAMP, 1),
-(0.00,     0.00,     0.00, 0.00,     0.00, 'AMOUNT', FALSE, CURRENT_TIMESTAMP, 3),
-(45000.00, 42750.00, 5.00, 30000.00, 0.00, 'PERCENT', TRUE,  CURRENT_TIMESTAMP, 4);
+-- BUDGETS
+INSERT INTO budget (id_budget, subtotal, total_cost, discount, material_cost, service_cost, created_at, discount_type, final_budget, fk_project) VALUES
+(10, 18000.00, 18000.00, 0.00, 12900.00, 0.00, DATEADD('DAY', -3, CURRENT_TIMESTAMP), 'AMOUNT', FALSE, 1),
+(2, 24535.10, 24000.00, 535.10, 19535.10, 5000.00, DATEADD('DAY', -45, CURRENT_TIMESTAMP), 'AMOUNT', TRUE, 2),
+(3, 44387.30, 43000.00, 1387.30, 36387.30, 8000.00, DATEADD('DAY', -55, CURRENT_TIMESTAMP), 'AMOUNT', TRUE, 3),
+(4, 18292.55, 18000.00, 292.55, 15292.55, 3000.00, DATEADD('DAY', -30, CURRENT_TIMESTAMP), 'AMOUNT', TRUE, 4),
+(6, 10000.00, 9500.00, 5.00, 8000.00, 2000.00, DATEADD('DAY', -2, CURRENT_TIMESTAMP), 'PERCENT', FALSE, 6),
+(7, 76025.50, 75000.00, 1025.50, 61025.50, 15000.00, DATEADD('DAY', -15, CURRENT_TIMESTAMP), 'AMOUNT', TRUE, 7),
+(8, 38270.20, 38270.20, 0.00, 32270.20, 6000.00, DATEADD('DAY', -25, CURRENT_TIMESTAMP), 'AMOUNT', TRUE, 8),
+(9, 15000.00, 15000.00, 0.00, 10000.00, 5000.00, DATEADD('DAY', -1, CURRENT_TIMESTAMP), 'AMOUNT', FALSE, 9);
+
+-- SCHEDULES
+INSERT INTO schedule (id_schedule, title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
+(1, 'Visita Técnica João', 'Medição de telhado', DATEADD('HOUR', 24, CURRENT_TIMESTAMP), DATEADD('HOUR', 26, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
+(2, 'Visita Técnica Maria', 'Análise de local', DATEADD('DAY', -50, CURRENT_TIMESTAMP), DATEADD('DAY', -50, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 2, 3),
+(3, 'Instalação Maria', 'Instalação Off-grid', DATEADD('DAY', -20, CURRENT_TIMESTAMP), DATEADD('DAY', -18, CURRENT_TIMESTAMP), 'INSTALL_VISIT', 'FINISHED', TRUE, 2, 3),
+(4, 'Visita Técnica Pedro', 'Medição comercial', DATEADD('DAY', -60, CURRENT_TIMESTAMP), DATEADD('DAY', -60, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 3, 1),
+(5, 'Instalação Pedro', 'Instalação On-grid', DATEADD('DAY', -30, CURRENT_TIMESTAMP), DATEADD('DAY', -25, CURRENT_TIMESTAMP), 'INSTALL_VISIT', 'FINISHED', TRUE, 3, 1),
+(6, 'Visita Técnica Lucia', 'Análise Off-grid', DATEADD('DAY', -40, CURRENT_TIMESTAMP), DATEADD('DAY', -40, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
+(7, 'Visita Técnica Shopping', 'Avaliação Carport', DATEADD('DAY', -20, CURRENT_TIMESTAMP), DATEADD('DAY', -20, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 7, 3),
+(8, 'Instalação Shopping', 'Montagem Carport', DATEADD('DAY', 5, CURRENT_TIMESTAMP), DATEADD('DAY', 15, CURRENT_TIMESTAMP), 'INSTALL_VISIT', 'MARKED', TRUE, 7, 3),
+(9, 'Visita Técnica Sítio', 'Medição bombeamento', DATEADD('DAY', -30, CURRENT_TIMESTAMP), DATEADD('DAY', -30, CURRENT_TIMESTAMP), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 8, 4);
+
+-- COMMENTS
+INSERT INTO project_comment (id_project_comment, comment, created_at, fk_project, fk_coworker) VALUES
+(1, 'Visita Técnica concluída com sucesso. Local preparado para instalação off-grid.', DATEADD('DAY', -49, CURRENT_TIMESTAMP), 2, 3),
+(2, 'Instalação Off-grid finalizada e testada. Cliente satisfeito.', DATEADD('DAY', -15, CURRENT_TIMESTAMP), 2, 3),
+(3, 'Documentação de homologação enviada e aprovada pela concessionária.', DATEADD('DAY', -5, CURRENT_TIMESTAMP), 7, 3),
+(4, 'Visita técnica no comércio realizada. Estrutura suporta os painéis.', DATEADD('DAY', -59, CURRENT_TIMESTAMP), 3, 1),
+(5, 'Instalação On-grid finalizada e sistema operando.', DATEADD('DAY', -25, CURRENT_TIMESTAMP), 3, 1),
+(6, 'Homologação aprovada.', DATEADD('DAY', -5, CURRENT_TIMESTAMP), 3, 1),
+(7, 'Projeto Elétrico elaborado e aprovado.', DATEADD('DAY', -44, CURRENT_TIMESTAMP), 2, 3),
+(8, 'Visita técnica concluída. Cliente solicitou alteração no escopo.', DATEADD('DAY', -38, CURRENT_TIMESTAMP), 4, 4),
+(9, 'Estrutura metálica do estacionamento vistoriada.', DATEADD('DAY', -19, CURRENT_TIMESTAMP), 7, 3);
+
+-- FILES
+INSERT INTO project_file (id_project_file, filename, original_filename, created_at, mb_size, check_sum, homologation_doc, content_type, fk_project, fk_coworker) VALUES
+(1, 'homologacao_shopping.pdf', 'Homologação Copel.pdf', DATEADD('DAY', -5, CURRENT_TIMESTAMP), 2, 'abc123checksum', TRUE, 'application/pdf', 7, 3),
+(2, 'homologacao_maria.pdf', 'Homologação CPFL Maria.pdf', DATEADD('DAY', -5, CURRENT_TIMESTAMP), 1, 'def456checksum', TRUE, 'application/pdf', 2, 3),
+(3, 'homologacao_pedro.pdf', 'Homologação Elektro Pedro.pdf', DATEADD('DAY', -5, CURRENT_TIMESTAMP), 3, 'ghi789checksum', TRUE, 'application/pdf', 3, 1),
+(4, 'projeto_eletrico_maria.pdf', 'Projeto Eletrico.pdf', DATEADD('DAY', -44, CURRENT_TIMESTAMP), 4, 'jkl012checksum', FALSE, 'application/pdf', 2, 3);
+
+-- PAYMENTS
+INSERT INTO payment (id_payment, method, installments_count, total_amount, created_at, fk_budget) VALUES
+(1, 'PIX', 1, 24000.00, DATEADD('DAY', -45, CURRENT_TIMESTAMP), 2),
+(2, 'CREDIT_CARD', 3, 43000.00, DATEADD('DAY', -55, CURRENT_TIMESTAMP), 3),
+(3, 'FINANCING', 60, 75000.00, DATEADD('DAY', -15, CURRENT_TIMESTAMP), 7);
+
+-- PAYMENT INSTALLMENTS
+INSERT INTO payment_installment (id_payment_installment, installment_number, amount, due_date, paid_at, status, fk_payment) VALUES
+(1, 1, 24000.00, DATEADD('DAY', -40, CURRENT_TIMESTAMP), DATEADD('DAY', -44, CURRENT_TIMESTAMP), 'PAID', 1),
+(2, 1, 14333.33, DATEADD('DAY', -50, CURRENT_TIMESTAMP), DATEADD('DAY', -54, CURRENT_TIMESTAMP), 'PAID', 2),
+(3, 2, 14333.33, DATEADD('DAY', -20, CURRENT_TIMESTAMP), DATEADD('DAY', -19, CURRENT_TIMESTAMP), 'PAID', 2),
+(4, 3, 14333.34, DATEADD('DAY', 10, CURRENT_TIMESTAMP), NULL, 'PENDING', 2),
+(5, 1, 1250.00, DATEADD('DAY', 15, CURRENT_TIMESTAMP), NULL, 'PENDING', 3),
+(6, 2, 1250.00, DATEADD('DAY', 45, CURRENT_TIMESTAMP), NULL, 'PENDING', 3),
+(7, 3, 1250.00, DATEADD('DAY', 75, CURRENT_TIMESTAMP), NULL, 'PENDING', 3);
 
 
---------------------------------------------
--- 7. MATERIAL
---------------------------------------------
+
 INSERT INTO material (name, metric, hidden, description) VALUES
 ('Painel Solar 550W (Solar Center)', 'UNIT', FALSE, 'Ficha Técnica Painel'),
 ('Inversor On-Grid 5kW (Painel Forte)', 'UNIT', FALSE, 'Manual Inversor'),
@@ -108,60 +157,52 @@ INSERT INTO material (name, metric, hidden, description) VALUES
 ('Bateria 5kWh (EcoSolar)', 'UNIT', FALSE, 'Certificação Bateria'),
 ('Estrutura de Fixação Telhado', 'UNIT', FALSE, NULL);
 
---------------------------------------------
--- 8. MATERIAL URL
---------------------------------------------
 INSERT INTO material_url (url, fk_material, price, hidden) VALUES
 ('https://solarcenter.com/fichas/painel550w.pdf', 1, 900.00, FALSE),
 ('https://painelforte.com.br/manual/inversor5kw.pdf', 2, 3500.00, FALSE),
 ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 2800.00, FALSE),
-('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE);
+('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE),
+('https://www.mercadolivre.com.br/painel-placa-solar-fotovoltaica-50w--controlador--cabos/up/MLBU1167249603#polycard_client=search-desktop&search_layout=grid&position=2&type=product&tracking_id=b9346980-69e9-42ee-bd8b-13f7d2334d32&wid=MLB690995630&sid=search', 1, 820.00, FALSE),
+('https://www.mercadolivre.com.br/inversor-growatt-min-5000tl-x2-5kw-gerador-220v-afci/p/MLB41505710?pdp_filters=item_id%3AMLB5495151532&from=gshop&matt_tool=47518833&matt_word=&matt_source=google&matt_campaign_id=22090354007&matt_ad_group_id=173090504316&matt_match_type=&matt_network=g&matt_device=c&matt_creative=727882725753&matt_keyword=&matt_ad_position=&matt_ad_type=pla&matt_merchant_id=735098660&matt_product_id=MLB41505710-product&matt_product_partition_id=2388858354208&matt_target_id=aud-1966857867496:pla-2388858354208&cq_src=google_ads&cq_cmp=22090354007&cq_net=g&cq_plt=gp&cq_med=pla&gad_source=1&gad_campaignid=22090354007&gclid=Cj0KCQjwy_fOBhC6ARIsAHKFB7_9MV1jjRU_f-S7dKRMRt--OTSMVnrvloMuIFZbN9WJ_2jnDvghkFQaAg2ZEALw_wcB', 2, 2999.00, FALSE),
+('https://www.mercadolivre.com.br/cabo-solar-6mm-flexivel-100-metros-pretovermelho-cabel-preto/p/MLB61100209?pdp_filters=item_id:MLB4587600165#is_advertising=true&searchVariation=MLB61100209&backend_model=search-backend&position=1&search_layout=grid&type=pad&tracking_id=709c4c4a-38d8-46b0-bc66-396a6b6a665d&ad_domain=VQCATCORE_LST&ad_position=1&ad_click_id=MGExMjViMDktMGU5NS00NDA3LTkzYzItNzBiNTFjMWE1NmQ4', 3, 285.00, FALSE),
+('https://www.mercadolivre.com.br/bateria-solar-felicity-lifepo4-48v-100ah-alta-performance/p/MLB2072983676#polycard_client=search-desktop&search_layout=grid&position=1&type=product&tracking_id=e8684cee-65bc-406a-9885-7aacb1740c4f&wid=MLB3927023235&sid=search', 4, 5975.00, FALSE),
+('https://www.mercadolivre.com.br/kit-16-parafuso-estrutura-painel-solar-telha-fibro-madeira/p/MLB67069391#polycard_client=search-desktop&search_layout=grid&position=1&type=product&tracking_id=98cdb6db-e2c5-4f5f-af97-cae489e22705&wid=MLB6505776872&sid=search', 5, 417.55, FALSE);
 
---------------------------------------------
--- 10. COWORKER PROJECT
---------------------------------------------
 INSERT INTO coworker_project (fk_coworker, fk_project, is_responsible) VALUES
 (2, 1, TRUE),
 (3, 2, TRUE),
 (1, 3, TRUE),
 (4, 4, TRUE),
-(2, 5, TRUE),
-(2, 6, FALSE),
-(3, 7, TRUE);
+(2, 5, TRUE);
 
---------------------------------------------
--- 11. SCHEDULE
---------------------------------------------
-INSERT INTO schedule (title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
-('Visita Técnica João', 'Medição de telhado', DATEADD('HOUR', 24, NOW()), DATEADD('HOUR', 26, NOW()), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
-('Instalação Maria', 'Instalação Off-grid', DATEADD('DAY', -10, NOW()), DATEADD('DAY', -7, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
-('Visita Técnica Lucia', 'Avaliação local', DATEADD('DAY', -5, NOW()), DATEADD('DAY', -5, NOW()), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
-('Instalação Shopping', 'Montagem Carport', DATEADD('DAY', -15, NOW()), DATEADD('DAY', -10, NOW()), 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
-
---------------------------------------------
--- 12. PORTFOLIO
---------------------------------------------
 INSERT INTO portfolio (title, description, image_path, fk_project) VALUES
 ('Residência Sustentável', 'Sistema 5kWp em telhado cerâmico', '/images/portfolio/joao_v1.jpg', 1),
 ('Backup Hospitalar', 'Sistema de segurança energética', '/images/portfolio/maria_clinic.jpg', 2);
 
---------------------------------------------
--- 13. RETRY QUEUE
---------------------------------------------
-INSERT INTO retry_queue (scheduled_date, retrying, fk_project) VALUES
-(DATEADD('DAY', -1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
-(DATEADD('DAY', 1, NOW()), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
+INSERT INTO budget_material (fk_budget, fk_material_url, quantity, price) VALUES
+(2, 1, 10, 900.00),
+(2, 2, 1, 3500.00),
+(2, 3, 2, 2800.00),
+(2, 4, 50, 12.00),
+(2, 9, 2, 417.55),
+(3, 5, 30, 820.00),
+(3, 6, 3, 2999.00),
+(3, 7, 1, 285.00),
+(3, 9, 6, 417.55),
+(4, 1, 6, 900.00),
+(4, 2, 1, 3500.00),
+(4, 8, 1, 5975.00),
+(4, 9, 1, 417.55),
+(7, 5, 50, 820.00),
+(7, 6, 5, 2999.00),
+(7, 7, 3, 285.00),
+(7, 9, 10, 417.55),
+(8, 1, 20, 900.00),
+(8, 2, 2, 3500.00),
+(8, 3, 2, 2800.00),
+(8, 9, 4, 417.55);
 
-DROP TABLE IF EXISTS VIEW_ANALYSIS_PROJECT_FINANCE CASCADE;
 
-/*
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECT_FINANCE AS
-...
-*/
-
---------------------------------------------
--- BUDGET PARAMETER
---------------------------------------------
 INSERT INTO budget_parameter (name, description, metric, is_pre_budget, fixed_value, active, created_at) VALUES
 ('Tipo de Telhado', 'Define o material do telhado da instalação', 'un', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
 ('Potência do Sistema', 'Potência total do sistema solar em kWp', 'kWp', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
