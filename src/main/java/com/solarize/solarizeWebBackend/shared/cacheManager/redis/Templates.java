@@ -7,6 +7,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Objects;
 
@@ -19,12 +21,13 @@ public class Templates {
         this.env = env;
     }
 
-    private LettuceConnectionFactory loadFactory(int db) {
+    private LettuceConnectionFactory loadFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(
                 Objects.requireNonNull(env.getProperty("spring.data.redis.host")),
                 Integer.parseInt(Objects.requireNonNull(env.getProperty("spring.data.redis.port")))
         );
-        config.setDatabase(db);
+        config.setDatabase(0);
+        config.setPassword(Objects.requireNonNull(env.getProperty("spring.data.redis.password")));
 
 
         LettuceConnectionFactory factory = new LettuceConnectionFactory(config);
@@ -36,7 +39,9 @@ public class Templates {
     @Bean
     public RedisTemplate<String, String> otpTemplate() {
         RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory(0));
+        template.setConnectionFactory(loadFactory());
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
 
         return template;
@@ -45,7 +50,9 @@ public class Templates {
     @Bean
     public RedisTemplate<String, String> recoveryTokenTemplate() {
         RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory(1));
+        template.setConnectionFactory(loadFactory());
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
 
         return template;
@@ -54,7 +61,9 @@ public class Templates {
     @Bean
     public RedisTemplate<String, Boolean> recoveryAttemptTemplate() {
         RedisTemplate<String, Boolean> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory(2));
+        template.setConnectionFactory(loadFactory());
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericToStringSerializer<>(Boolean.class));
         template.afterPropertiesSet();
 
         return template;

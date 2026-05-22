@@ -12,16 +12,16 @@ public class OTPRedis implements OTPCache {
 
     @Override
     public void saveCache(String code, String userId) {
-        redisTemplate.opsForValue().set(code, userId, Duration.ofMinutes(10));
+        redisTemplate.opsForValue().set("otp:" + code, userId, Duration.ofMinutes(10));
     }
 
     @Override
     public String getCache(String code) {
-        return redisTemplate.opsForValue().get(code);
+        return redisTemplate.opsForValue().get("otp:" + code);
     }
 
     @Override
     public void invalidateCache(String code) {
-        redisTemplate.delete(code);
+        redisTemplate.delete("otp:" + code);
     }
 }
