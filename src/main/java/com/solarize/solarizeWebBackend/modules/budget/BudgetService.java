@@ -455,7 +455,7 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
-    public Map<String, Double> calculatePreBudget(Project project, Double monthlyBill) {
+    public Map<String, Double> calculatePreBudget(Project project, Double monthlyBill, String propertyType, String roofType) {
         List<ConfigParameter> parameters = configParameterRepository.findAll();
 
         Double tariff = Objects.requireNonNull(parameters.stream()
@@ -483,6 +483,18 @@ public class BudgetService {
                         .orElse(null))
                 .getParameterValue();
 
+        Double propertyAdjust = parameters.stream()
+                .filter(p -> p.getUniqueName().equals(propertyType))
+                .findFirst()
+                .map(ConfigParameter::getParameterValue)
+                .orElse(0.0);
+
+        Double roofAdjust = parameters.stream()
+                .filter(p -> p.getUniqueName().equals(roofType))
+                .findFirst()
+                .map(ConfigParameter::getParameterValue)
+                .orElse(0.0);
+
         Map<String, Double> results = BudgetCalcs.preBudgetCalc(
                 monthlyBill,
                 tariff,
@@ -491,6 +503,11 @@ public class BudgetService {
                 pricePerKwp
         );
 
+        Double baseCost = results.get("cost");
+        Double totalAdjustPercent = (propertyAdjust + roofAdjust) / 100.0;
+        Double adjustedCost = baseCost * (1 + totalAdjustPercent);
+        results.put("cost", adjustedCost);
+
         Budget preBudget = new Budget();
         preBudget.setProject(project);
         preBudget.setFinalBudget(false);
@@ -498,7 +515,7 @@ public class BudgetService {
         PersonalizedParameter preBudgetParam = PersonalizedParameter.builder()
                 .name("Pré-orçamento")
                 .type(ParameterValueType.AMOUNT)
-                .parameterValue(results.get("cost"))
+                .parameterValue(adjustedCost)
                 .budget(preBudget)
                 .build();
                 

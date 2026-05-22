@@ -33,4 +33,10 @@ public class ClientAwaitingContact implements Status {
         project.setPreviewStatus(project.getStatus());
         project.setStatus(ProjectStatusEnum.NEGOTIATION_FAILED);
     }
+    
+    @Override
+    public void applyToRetrying(Project project) {
+        project.setPreviewStatus(project.getStatus());
+        project.setStatus(ProjectStatusEnum.RETRYING);
+    }
 }

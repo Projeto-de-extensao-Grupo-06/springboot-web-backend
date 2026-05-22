@@ -123,6 +123,19 @@ class ClientAwaitingContactTest {
         assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
     }
 
+    @Test
+    @DisplayName("Should set status to RETRYING and preserve previous status when transitioning from CLIENT_AWAITING_CONTACT")
+    void applyToRetryingSetCorrectStatusAndPreviewStatus() {
+        Project project = ProjectBuilder.builder()
+                .withStatus(ProjectStatusEnum.CLIENT_AWAITING_CONTACT)
+                .build();
+
+        project.getStatus().getStateHandler().applyToRetrying(project);
+
+        assertEquals(ProjectStatusEnum.RETRYING, project.getStatus());
+        assertEquals(ProjectStatusEnum.CLIENT_AWAITING_CONTACT, project.getPreviewStatus());
+    }
+
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("invalidTransitionsProvider")
@@ -241,8 +254,6 @@ class ClientAwaitingContactTest {
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToNew(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> CLIENT_AWAITING_CONTACT",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToClientAwaitingContact(p)),
-                Arguments.of("CLIENT_AWAITING_CONTACT -> RETRYING",
-                        (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToRetrying(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> TECHNICAL_VISIT_COMPLETED",
                         (Consumer<Project>) p -> p.getStatus().getStateHandler().applyToTechnicalVisitCompleted(p)),
                 Arguments.of("CLIENT_AWAITING_CONTACT -> FINAL_BUDGET",
