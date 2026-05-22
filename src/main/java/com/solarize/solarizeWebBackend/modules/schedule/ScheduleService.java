@@ -120,10 +120,7 @@ public class ScheduleService {
                         .orElse(existingSchedule.getStartDate())
         );
 
-        existingSchedule.setEndDate(
-                Optional.ofNullable(schedule.getEndDate())
-                        .orElse(existingSchedule.getEndDate())
-        );
+        existingSchedule.setEndDate(schedule.getEndDate());
 
         existingSchedule.setType(
                 Optional.ofNullable(schedule.getType())
