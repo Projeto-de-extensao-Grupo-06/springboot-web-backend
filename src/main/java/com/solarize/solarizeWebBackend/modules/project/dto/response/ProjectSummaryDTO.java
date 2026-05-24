@@ -5,6 +5,7 @@ import com.solarize.solarizeWebBackend.modules.coworker.dtos.CoworkerResponseDto
 import com.solarize.solarizeWebBackend.modules.project.SystemTypeEnum;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProjectSummaryDTO {
+public class ProjectSummaryDTO implements Serializable {
     private Long id;
     private String projectTitle;
     private String status;
