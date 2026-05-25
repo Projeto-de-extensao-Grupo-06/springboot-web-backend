@@ -12,16 +12,16 @@ public class RecoveryPasswordTokenRedis implements RecoveryPasswordTokenCache {
 
     @Override
     public void saveCache(String key, String value) {
-        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(15));
+        redisTemplate.opsForValue().set("recovery-token:" + key, value, Duration.ofMinutes(15));
     }
 
     @Override
     public String getCache(String key) {
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get("recovery-token:" + key);
     }
 
     @Override
     public void invalidateCache(String key) {
-        redisTemplate.delete(key);
+        redisTemplate.delete("recovery-token:" + key);
     }
 }

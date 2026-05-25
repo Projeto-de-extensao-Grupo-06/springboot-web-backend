@@ -12,16 +12,16 @@ public class RecoveryAttemptRedis implements RecoveryAttemptCache {
 
     @Override
     public void saveCache(String key, Boolean value) {
-        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(1));
+        redisTemplate.opsForValue().set("recovery-attempt:" + key, value, Duration.ofMinutes(1));
     }
 
     @Override
     public Boolean getCache(String key) {
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get("recovery-attempt:" + key);
     }
 
     @Override
     public void invalidateCache(String key) {
-        redisTemplate.delete(key);
+        redisTemplate.delete("recovery-attempt:" + key);
     }
 }
