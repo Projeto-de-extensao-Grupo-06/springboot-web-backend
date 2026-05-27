@@ -76,20 +76,78 @@ INSERT INTO client (first_name, last_name, phone, email, status, document_number
 --------------------------------------------
 -- 5. PROJECT
 --------------------------------------------
-INSERT INTO project (name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
-('Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-09-15', INTERVAL 30 DAY), 1, 2, 1),
-('Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-09-20', INTERVAL 30 DAY), 2, 3, 2),
-('Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATE_ADD('2025-10-02', INTERVAL 30 DAY), 3, 1, 3),
-('Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-10-15', INTERVAL 30 DAY), 4, 4, 4),
-('Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', CURRENT_TIMESTAMP, DATE_ADD('2025-10-28', INTERVAL 30 DAY), 5, 2, 5),
-('Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-11-05', INTERVAL 30 DAY), 1, 2, 1),
-('Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-11-10', INTERVAL 30 DAY), 3, 3, 3),
-('Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', CURRENT_TIMESTAMP, DATE_ADD('2025-11-12', INTERVAL 30 DAY), 2, 4, 2),
-('Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', CURRENT_TIMESTAMP, DATE_ADD('2025-11-20', INTERVAL 30 DAY), 4, 1, 4);
+-- PROJECTS
+INSERT INTO project (id_project, name, description, status, status_weight, preview_status, is_active, system_type, project_from, created_at, deadline, fk_client, fk_responsible, fk_address) VALUES
+(1, 'Residência João Silva', 'Instalação 5kWp', 'SCHEDULED_TECHNICAL_VISIT', 5, 'CLIENT_AWAITING_CONTACT', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATE_ADD(NOW(), INTERVAL -5 DAY), DATE_ADD('2025-09-15', INTERVAL 30 DAY), 1, 2, 1),
+(2, 'Clínica Maria Oliveira', 'Backup Off-grid', 'INSTALLED', 10, 'SCHEDULED_INSTALLING_VISIT', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATE_ADD(NOW(), INTERVAL -60 DAY), DATE_ADD('2025-09-20', INTERVAL 30 DAY), 2, 3, 2),
+(3, 'Comércio Pedro Santos', 'Sistema Comercial', 'COMPLETED', 13, 'INSTALLED', TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', DATE_ADD(NOW(), INTERVAL -70 DAY), DATE_ADD('2025-10-02', INTERVAL 30 DAY), 3, 1, 3),
+(4, 'Casa de Praia Lucia', 'Off-grid simples', 'FINAL_BUDGET', 7, 'TECHNICAL_VISIT_COMPLETED', TRUE, 'OFF_GRID', 'SITE_BUDGET_FORM', DATE_ADD(NOW(), INTERVAL -45 DAY), DATE_ADD('2025-10-15', INTERVAL 30 DAY), 4, 4, 4),
+(5, 'Tech Solar Sede', 'Alta demanda', 'NEW', 3, NULL, TRUE, 'ON_GRID', 'INTERNAL_MANUAL_ENTRY', DATE_ADD(NOW(), INTERVAL -1 DAY), DATE_ADD('2025-10-28', INTERVAL 30 DAY), 5, 2, 5),
+(6, 'Expansão João Silva', 'Adição de painéis', 'PRE_BUDGET', 4, 'NEW', TRUE, 'ON_GRID', 'WHATSAPP_BOT', DATE_ADD(NOW(), INTERVAL -10 DAY), DATE_ADD('2025-11-05', INTERVAL 30 DAY), 1, 2, 1),
+(7, 'Estacionamento Shopping', 'Carport Solar', 'SCHEDULED_INSTALLING_VISIT', 6, 'AWAITING_MATERIALS', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATE_ADD(NOW(), INTERVAL -30 DAY), DATE_ADD('2025-11-10', INTERVAL 30 DAY), 3, 3, 3),
+(8, 'Sítio Recanto', 'Bombeamento Solar', 'NEGOTIATION_FAILED', 12, 'FINAL_BUDGET', TRUE, 'OFF_GRID', 'WHATSAPP_BOT', DATE_ADD(NOW(), INTERVAL -40 DAY), DATE_ADD('2025-11-12', INTERVAL 30 DAY), 2, 4, 2),
+(9, 'Condomínio Flores', 'Área comum', 'CLIENT_AWAITING_CONTACT', 1, 'PRE_BUDGET', TRUE, 'ON_GRID', 'SITE_BUDGET_FORM', DATE_ADD(NOW(), INTERVAL -2 DAY), DATE_ADD('2025-11-20', INTERVAL 30 DAY), 4, 1, 2);
 
---------------------------------------------
--- 7. MATERIAL
---------------------------------------------
+-- BUDGETS
+INSERT INTO budget (id_budget, subtotal, total_cost, discount, material_cost, service_cost, created_at, discount_type, final_budget, fk_project) VALUES
+(10, 18000.00, 18000.00, 0.00, 12900.00, 0.00, DATE_ADD(NOW(), INTERVAL -3 DAY), 'AMOUNT', FALSE, 1),
+(2, 24535.10, 24000.00, 535.10, 19535.10, 5000.00, DATE_ADD(NOW(), INTERVAL -45 DAY), 'AMOUNT', TRUE, 2),
+(3, 44387.30, 43000.00, 1387.30, 36387.30, 8000.00, DATE_ADD(NOW(), INTERVAL -55 DAY), 'AMOUNT', TRUE, 3),
+(4, 18292.55, 18000.00, 292.55, 15292.55, 3000.00, DATE_ADD(NOW(), INTERVAL -30 DAY), 'AMOUNT', TRUE, 4),
+(6, 10000.00, 9500.00, 5.00, 8000.00, 2000.00, DATE_ADD(NOW(), INTERVAL -2 DAY), 'PERCENT', FALSE, 6),
+(7, 76025.50, 75000.00, 1025.50, 61025.50, 15000.00, DATE_ADD(NOW(), INTERVAL -15 DAY), 'AMOUNT', TRUE, 7),
+(8, 38270.20, 38270.20, 0.00, 32270.20, 6000.00, DATE_ADD(NOW(), INTERVAL -25 DAY), 'AMOUNT', TRUE, 8),
+(9, 15000.00, 15000.00, 0.00, 10000.00, 5000.00, DATE_ADD(NOW(), INTERVAL -1 DAY), 'AMOUNT', FALSE, 9);
+
+-- SCHEDULES
+INSERT INTO schedule (id_schedule, title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
+(1, 'Visita Técnica João', 'Medição de telhado', DATE_ADD(NOW(), INTERVAL 24 HOUR), DATE_ADD(NOW(), INTERVAL 26 HOUR), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
+(2, 'Visita Técnica Maria', 'Análise de local', DATE_ADD(NOW(), INTERVAL -50 DAY), DATE_ADD(NOW(), INTERVAL -50 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 2, 3),
+(3, 'Instalação Maria', 'Instalação Off-grid', DATE_ADD(NOW(), INTERVAL -20 DAY), DATE_ADD(NOW(), INTERVAL -18 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 2, 3),
+(4, 'Visita Técnica Pedro', 'Medição comercial', DATE_ADD(NOW(), INTERVAL -60 DAY), DATE_ADD(NOW(), INTERVAL -60 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 3, 1),
+(5, 'Instalação Pedro', 'Instalação On-grid', DATE_ADD(NOW(), INTERVAL -30 DAY), DATE_ADD(NOW(), INTERVAL -25 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 3, 1),
+(6, 'Visita Técnica Lucia', 'Análise Off-grid', DATE_ADD(NOW(), INTERVAL -40 DAY), DATE_ADD(NOW(), INTERVAL -40 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
+(7, 'Visita Técnica Shopping', 'Avaliação Carport', DATE_ADD(NOW(), INTERVAL -20 DAY), DATE_ADD(NOW(), INTERVAL -20 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 7, 3),
+(8, 'Instalação Shopping', 'Montagem Carport', DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 15 DAY), 'INSTALL_VISIT', 'MARKED', TRUE, 7, 3),
+(9, 'Visita Técnica Sítio', 'Medição bombeamento', DATE_ADD(NOW(), INTERVAL -30 DAY), DATE_ADD(NOW(), INTERVAL -30 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 8, 4);
+
+-- COMMENTS
+INSERT INTO project_comment (id_project_comment, comment, created_at, fk_project, fk_coworker) VALUES
+(1, 'Visita Técnica concluída com sucesso. Local preparado para instalação off-grid.', DATE_ADD(NOW(), INTERVAL -49 DAY), 2, 3),
+(2, 'Instalação Off-grid finalizada e testada. Cliente satisfeito.', DATE_ADD(NOW(), INTERVAL -15 DAY), 2, 3),
+(3, 'Documentação de homologação enviada e aprovada pela concessionária.', DATE_ADD(NOW(), INTERVAL -5 DAY), 7, 3),
+(4, 'Visita técnica no comércio realizada. Estrutura suporta os painéis.', DATE_ADD(NOW(), INTERVAL -59 DAY), 3, 1),
+(5, 'Instalação On-grid finalizada e sistema operando.', DATE_ADD(NOW(), INTERVAL -25 DAY), 3, 1),
+(6, 'Homologação aprovada.', DATE_ADD(NOW(), INTERVAL -5 DAY), 3, 1),
+(7, 'Projeto Elétrico elaborado e aprovado.', DATE_ADD(NOW(), INTERVAL -44 DAY), 2, 3),
+(8, 'Visita técnica concluída. Cliente solicitou alteração no escopo.', DATE_ADD(NOW(), INTERVAL -38 DAY), 4, 4),
+(9, 'Estrutura metálica do estacionamento vistoriada.', DATE_ADD(NOW(), INTERVAL -19 DAY), 7, 3);
+
+-- FILES
+INSERT INTO project_file (id_project_file, filename, original_filename, created_at, mb_size, check_sum, homologation_doc, content_type, fk_project, fk_coworker) VALUES
+(1, 'homologacao_shopping.pdf', 'Homologação Copel.pdf', DATE_ADD(NOW(), INTERVAL -5 DAY), 2, 'abc123checksum', TRUE, 'application/pdf', 7, 3),
+(2, 'homologacao_maria.pdf', 'Homologação CPFL Maria.pdf', DATE_ADD(NOW(), INTERVAL -5 DAY), 1, 'def456checksum', TRUE, 'application/pdf', 2, 3),
+(3, 'homologacao_pedro.pdf', 'Homologação Elektro Pedro.pdf', DATE_ADD(NOW(), INTERVAL -5 DAY), 3, 'ghi789checksum', TRUE, 'application/pdf', 3, 1),
+(4, 'projeto_eletrico_maria.pdf', 'Projeto Eletrico.pdf', DATE_ADD(NOW(), INTERVAL -44 DAY), 4, 'jkl012checksum', FALSE, 'application/pdf', 2, 3);
+
+-- PAYMENTS
+INSERT INTO payment (id_payment, method, installments_count, total_amount, created_at, fk_budget) VALUES
+(1, 'PIX', 1, 24000.00, DATE_ADD(NOW(), INTERVAL -45 DAY), 2),
+(2, 'CREDIT_CARD', 3, 43000.00, DATE_ADD(NOW(), INTERVAL -55 DAY), 3),
+(3, 'FINANCING', 60, 75000.00, DATE_ADD(NOW(), INTERVAL -15 DAY), 7);
+
+-- PAYMENT INSTALLMENTS
+INSERT INTO payment_installment (id_payment_installment, installment_number, amount, due_date, paid_at, status, fk_payment) VALUES
+(1, 1, 24000.00, DATE_ADD(NOW(), INTERVAL -40 DAY), DATE_ADD(NOW(), INTERVAL -44 DAY), 'PAID', 1),
+(2, 1, 14333.33, DATE_ADD(NOW(), INTERVAL -50 DAY), DATE_ADD(NOW(), INTERVAL -54 DAY), 'PAID', 2),
+(3, 2, 14333.33, DATE_ADD(NOW(), INTERVAL -20 DAY), DATE_ADD(NOW(), INTERVAL -19 DAY), 'PAID', 2),
+(4, 3, 14333.34, DATE_ADD(NOW(), INTERVAL 10 DAY), NULL, 'PENDING', 2),
+(5, 1, 1250.00, DATE_ADD(NOW(), INTERVAL 15 DAY), NULL, 'PENDING', 3),
+(6, 2, 1250.00, DATE_ADD(NOW(), INTERVAL 45 DAY), NULL, 'PENDING', 3),
+(7, 3, 1250.00, DATE_ADD(NOW(), INTERVAL 75 DAY), NULL, 'PENDING', 3);
+
+
+
 INSERT INTO material (name, metric, hidden, description) VALUES
 ('Painel Solar 550W (Solar Center)', 'UNIT', FALSE, 'Ficha Técnica Painel'),
 ('Inversor On-Grid 5kW (Painel Forte)', 'UNIT', FALSE, 'Manual Inversor'),
@@ -97,184 +155,52 @@ INSERT INTO material (name, metric, hidden, description) VALUES
 ('Bateria 5kWh (EcoSolar)', 'UNIT', FALSE, 'Certificação Bateria'),
 ('Estrutura de Fixação Telhado', 'UNIT', FALSE, NULL);
 
---------------------------------------------
--- 8. MATERIAL URL
---------------------------------------------
 INSERT INTO material_url (url, fk_material, price, hidden) VALUES
 ('https://solarcenter.com/fichas/painel550w.pdf', 1, 900.00, FALSE),
 ('https://painelforte.com.br/manual/inversor5kw.pdf', 2, 3500.00, FALSE),
 ('https://ecosolar.com.br/docs/bateria5kwh.pdf', 4, 2800.00, FALSE),
-('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE);
+('https://solarcenter.com/fichas/cabo6mm.pdf', 3, 12.00, FALSE),
+('https://www.mercadolivre.com.br/painel-placa-solar-fotovoltaica-50w--controlador--cabos/up/MLBU1167249603#polycard_client=search-desktop&search_layout=grid&position=2&type=product&tracking_id=b9346980-69e9-42ee-bd8b-13f7d2334d32&wid=MLB690995630&sid=search', 1, 820.00, FALSE),
+('https://www.mercadolivre.com.br/inversor-growatt-min-5000tl-x2-5kw-gerador-220v-afci/p/MLB41505710?pdp_filters=item_id%3AMLB5495151532&from=gshop&matt_tool=47518833&matt_word=&matt_source=google&matt_campaign_id=22090354007&matt_ad_group_id=173090504316&matt_match_type=&matt_network=g&matt_device=c&matt_creative=727882725753&matt_keyword=&matt_ad_position=&matt_ad_type=pla&matt_merchant_id=735098660&matt_product_id=MLB41505710-product&matt_product_partition_id=2388858354208&matt_target_id=aud-1966857867496:pla-2388858354208&cq_src=google_ads&cq_cmp=22090354007&cq_net=g&cq_plt=gp&cq_med=pla&gad_source=1&gad_campaignid=22090354007&gclid=Cj0KCQjwy_fOBhC6ARIsAHKFB7_9MV1jjRU_f-S7dKRMRt--OTSMVnrvloMuIFZbN9WJ_2jnDvghkFQaAg2ZEALw_wcB', 2, 2999.00, FALSE),
+('https://www.mercadolivre.com.br/cabo-solar-6mm-flexivel-100-metros-pretovermelho-cabel-preto/p/MLB61100209?pdp_filters=item_id:MLB4587600165#is_advertising=true&searchVariation=MLB61100209&backend_model=search-backend&position=1&search_layout=grid&type=pad&tracking_id=709c4c4a-38d8-46b0-bc66-396a6b6a665d&ad_domain=VQCATCORE_LST&ad_position=1&ad_click_id=MGExMjViMDktMGU5NS00NDA3LTkzYzItNzBiNTFjMWE1NmQ4', 3, 285.00, FALSE),
+('https://www.mercadolivre.com.br/bateria-solar-felicity-lifepo4-48v-100ah-alta-performance/p/MLB2072983676#polycard_client=search-desktop&search_layout=grid&position=1&type=product&tracking_id=e8684cee-65bc-406a-9885-7aacb1740c4f&wid=MLB3927023235&sid=search', 4, 5975.00, FALSE),
+('https://www.mercadolivre.com.br/kit-16-parafuso-estrutura-painel-solar-telha-fibro-madeira/p/MLB67069391#polycard_client=search-desktop&search_layout=grid&position=1&type=product&tracking_id=98cdb6db-e2c5-4f5f-af97-cae489e22705&wid=MLB6505776872&sid=search', 5, 417.55, FALSE);
 
---------------------------------------------
--- 10. COWORKER PROJECT
---------------------------------------------
 INSERT INTO coworker_project (fk_coworker, fk_project, is_responsible) VALUES
 (2, 1, TRUE),
 (3, 2, TRUE),
 (1, 3, TRUE),
 (4, 4, TRUE),
-(2, 5, TRUE),
-(2, 6, FALSE),
-(3, 7, TRUE);
+(2, 5, TRUE);
 
---------------------------------------------
--- 11. SCHEDULE
---------------------------------------------
-INSERT INTO schedule (title, description, start_date, end_date, type, status, is_active, fk_project, fk_coworker) VALUES
-('Visita Técnica João', 'Medição de telhado', DATE_ADD(NOW(), INTERVAL 24 HOUR), DATE_ADD(NOW(), INTERVAL 26 HOUR), 'TECHNICAL_VISIT', 'MARKED', TRUE, 1, 2),
-('Instalação Maria', 'Instalação Off-grid', DATE_ADD(NOW(), INTERVAL -10 DAY), DATE_ADD(NOW(), INTERVAL -7 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 1, 3),
-('Visita Técnica Lucia', 'Avaliação local', DATE_ADD(NOW(), INTERVAL -5 DAY), DATE_ADD(NOW(), INTERVAL -5 DAY), 'TECHNICAL_VISIT', 'FINISHED', TRUE, 4, 4),
-('Instalação Shopping', 'Montagem Carport', DATE_ADD(NOW(), INTERVAL -15 DAY), DATE_ADD(NOW(), INTERVAL -10 DAY), 'INSTALL_VISIT', 'FINISHED', TRUE, 7, 3);
-
---------------------------------------------
--- 12. PORTFOLIO
---------------------------------------------
 INSERT INTO portfolio (title, description, image_path, fk_project) VALUES
 ('Residência Sustentável', 'Sistema 5kWp em telhado cerâmico', '/images/portfolio/joao_v1.jpg', 1),
 ('Backup Hospitalar', 'Sistema de segurança energética', '/images/portfolio/maria_clinic.jpg', 2);
 
---------------------------------------------
--- 13. RETRY QUEUE (comentado: projetos referenciados não existem)
---------------------------------------------
--- INSERT INTO retry_queue (scheduled_date, retrying, fk_project) VALUES
--- (DATE_ADD(NOW(), INTERVAL -1 DAY), FALSE, (SELECT id_project FROM project WHERE name = 'Retorno de Lead Frio')),
--- (DATE_ADD(NOW(), INTERVAL 1 DAY), FALSE, (SELECT id_project FROM project WHERE name = 'Lead Futuro'));
-
---------------------------------------------
--- VIEWS
---------------------------------------------
-DROP TABLE IF EXISTS VIEW_ANALYSIS_PROJECT_FINANCE;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECT_FINANCE AS
-SELECT
-    p.id_project,
-    p.project_from AS acquisition_channel,
-    p.created_at,
-    p.status,
-    COALESCE(b.total_cost, 0) AS total_revenue,
-    COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0) AS total_project_cost,
-    COALESCE(b.total_cost, 0) - (COALESCE(b.material_cost, 0) + COALESCE(b.service_cost, 0)) AS profit_margin,
-    CASE
-        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
-        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado'
-        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
-        ELSE 'Outras Etapas'
-    END AS funnel_stage
-FROM
-    project p
-LEFT JOIN
-    budget b ON b.fk_project = p.id_project
-WHERE
-    p.is_active = true;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_KPIS AS
-WITH ProjectCounts AS (
-    SELECT
-        COUNT(id_project) AS total_projects,
-        SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS completed_projects,
-        SUM(CASE WHEN status = 'NEW' THEN 1 ELSE 0 END) AS new_projects,
-        SUM(CASE WHEN status IN ('FINAL_BUDGET', 'INSTALLED', 'COMPLETED') THEN 1 ELSE 0 END) AS contracts_signed_projects
-    FROM
-        project
-    WHERE
-        is_active = true
-),
-FinancialSummary AS (
-    SELECT
-        acquisition_channel,
-        SUM(total_project_cost) AS total_cost_by_channel,
-        ROW_NUMBER() OVER (ORDER BY SUM(total_project_cost) DESC) as rn
-    FROM
-        VIEW_ANALYSIS_PROJECT_FINANCE
-    GROUP BY
-        acquisition_channel
-)
-SELECT
-    (SELECT SUM(profit_margin) FROM VIEW_ANALYSIS_PROJECT_FINANCE) AS total_profit_margin,
-    (SELECT acquisition_channel FROM FinancialSummary WHERE rn = 1) AS most_costly_channel,
-    (PC.completed_projects * 100.0 / NULLIF(PC.total_projects, 0)) AS project_completion_rate,
-    (PC.contracts_signed_projects * 100.0 / NULLIF(PC.new_projects, 0)) AS funnel_conversion_rate
-FROM
-    ProjectCounts PC;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_ACQUISITION_CHANNELS AS
-WITH ChannelCounts AS (
-    SELECT
-        acquisition_channel,
-        COUNT(id_project) AS channel_project_count
-    FROM
-        VIEW_ANALYSIS_PROJECT_FINANCE
-    GROUP BY
-        acquisition_channel
-),
-TotalProjects AS (
-    SELECT COUNT(id_project) AS total_projects FROM project WHERE is_active = true
-)
-SELECT
-    CC.acquisition_channel AS nome,
-    CC.channel_project_count,
-    (CC.channel_project_count * 100.0 / NULLIF((SELECT total_projects FROM TotalProjects), 0)) AS percentual
-FROM
-    ChannelCounts CC
-ORDER BY
-    percentual DESC;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROFIT_COST_MONTHLY AS
-SELECT
-    YEAR(created_at) AS ano,
-    MONTH(created_at) AS mes,
-    SUM(total_project_cost) AS total_cost,
-    SUM(profit_margin) AS total_profit
-FROM
-    VIEW_ANALYSIS_PROJECT_FINANCE
-GROUP BY
-    YEAR(created_at), MONTH(created_at)
-ORDER BY
-    ano ASC, mes ASC;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_PROJECTS_STATUS_SUMMARY AS
-SELECT
-    CASE p.status
-        WHEN 'COMPLETED' THEN 'Finalizado'
-        WHEN 'NEGOTIATION_FAILED' THEN 'Finalizado'
-        WHEN 'SCHEDULED_TECHNICAL_VISIT' THEN 'Agendado'
-        WHEN 'SCHEDULED_INSTALLING_VISIT' THEN 'Agendado'
-        WHEN 'NEW' THEN 'Novo'
-        ELSE 'Em andamento'
-    END AS status_group,
-    COUNT(p.id_project) AS quantidade
-FROM
-    project p
-WHERE
-    p.is_active = true
-GROUP BY
-    status_group;
-
-CREATE OR REPLACE VIEW VIEW_ANALYSIS_SALES_FUNNEL_STAGES AS
-SELECT
-    CASE
-        WHEN p.status IN ('NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS') THEN 'Leads'
-        WHEN p.status IN ('FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT') THEN 'Contrato Assinado'
-        WHEN p.status IN ('INSTALLED', 'COMPLETED') THEN 'Instalado/Finalizado'
-        ELSE 'Outras Etapas'
-    END AS etapa,
-    COUNT(p.id_project) AS valor
-FROM
-    project p
-WHERE
-    p.is_active = true AND p.status IN (
-        'NEW', 'PRE_BUDGET', 'NEGOTIATION_FAILED', 'RETRYING', 'CLIENT_AWAITING_CONTACT', 'AWAITING_RETRY', 'SCHEDULED_TECHNICAL_VISIT', 'TECHNICAL_VISIT_COMPLETED', 'AWAITING_MATERIALS',
-        'FINAL_BUDGET', 'SCHEDULED_INSTALLING_VISIT',
-        'INSTALLED', 'COMPLETED'
-    )
-GROUP BY
-    etapa;
+INSERT INTO budget_material (fk_budget, fk_material_url, quantity, price) VALUES
+(2, 1, 10, 900.00),
+(2, 2, 1, 3500.00),
+(2, 3, 2, 2800.00),
+(2, 4, 50, 12.00),
+(2, 9, 2, 417.55),
+(3, 5, 30, 820.00),
+(3, 6, 3, 2999.00),
+(3, 7, 1, 285.00),
+(3, 9, 6, 417.55),
+(4, 1, 6, 900.00),
+(4, 2, 1, 3500.00),
+(4, 8, 1, 5975.00),
+(4, 9, 1, 417.55),
+(7, 5, 50, 820.00),
+(7, 6, 5, 2999.00),
+(7, 7, 3, 285.00),
+(7, 9, 10, 417.55),
+(8, 1, 20, 900.00),
+(8, 2, 2, 3500.00),
+(8, 3, 2, 2800.00),
+(8, 9, 4, 417.55);
 
 
---------------------------------------------
--- BUDGET PARAMETER
---------------------------------------------
 INSERT INTO budget_parameter (name, description, metric, is_pre_budget, fixed_value, active, created_at) VALUES
 ('Tipo de Telhado', 'Define o material do telhado da instalação', 'un', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
 ('Potência do Sistema', 'Potência total do sistema solar em kWp', 'kWp', TRUE, 0.00, TRUE, CURRENT_TIMESTAMP),
