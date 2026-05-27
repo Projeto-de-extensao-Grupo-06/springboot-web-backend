@@ -21,4 +21,7 @@ COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Usando variáveis de ambiente para o perfil ativo, permitindo fácil alteração em diferentes ambientes
+ENV SPRING_PROFILES_ACTIVE=dev
+
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
