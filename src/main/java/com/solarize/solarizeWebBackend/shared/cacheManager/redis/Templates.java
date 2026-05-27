@@ -1,71 +1,64 @@
 package com.solarize.solarizeWebBackend.shared.cacheManager.redis;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.util.Objects;
-
 @Configuration
 @Profile("prod")
 public class Templates {
-    final private Environment env;
 
-    public Templates(Environment env) {
-        this.env = env;
-    }
+    @Value("${spring.data.redis.host:localhost}")
+    private String redisHost;
 
-    private LettuceConnectionFactory loadFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(
-                Objects.requireNonNull(env.getProperty("spring.data.redis.host")),
-                Integer.parseInt(Objects.requireNonNull(env.getProperty("spring.data.redis.port")))
-        );
+    @Value("${spring.data.redis.port:6379}")
+    private int redisPort;
+
+    @Value("${spring.data.redis.password:}")
+    private String redisPassword;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
         config.setDatabase(0);
-        config.setPassword(Objects.requireNonNull(env.getProperty("spring.data.redis.password")));
-
-
-        LettuceConnectionFactory factory = new LettuceConnectionFactory(config);
-        factory.afterPropertiesSet();
-
-        return factory;
+        if (redisPassword != null && !redisPassword.isEmpty()) {
+            config.setPassword(redisPassword);
+        }
+        return new LettuceConnectionFactory(config);
     }
 
     @Bean
-    public RedisTemplate<String, String> otpTemplate() {
+    public RedisTemplate<String, String> otpTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory());
+        template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());
-        template.afterPropertiesSet();
-
         return template;
     }
 
     @Bean
-    public RedisTemplate<String, String> recoveryTokenTemplate() {
+    public RedisTemplate<String, String> recoveryTokenTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory());
+        template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());
-        template.afterPropertiesSet();
-
         return template;
     }
 
     @Bean
-    public RedisTemplate<String, Boolean> recoveryAttemptTemplate() {
+    public RedisTemplate<String, Boolean> recoveryAttemptTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Boolean> template = new RedisTemplate<>();
-        template.setConnectionFactory(loadFactory());
+        template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericToStringSerializer<>(Boolean.class));
-        template.afterPropertiesSet();
-
         return template;
     }
 }
+
