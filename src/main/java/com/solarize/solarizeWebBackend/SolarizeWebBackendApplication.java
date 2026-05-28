@@ -1,5 +1,6 @@
 package com.solarize.solarizeWebBackend;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +9,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.util.TimeZone;
 
 @EnableAsync
 @EnableScheduling
@@ -19,6 +22,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SolarizeWebBackendApplication implements CommandLineRunner {
     @Value("${app.env}")
     private String env;
+
+    @PostConstruct
+    public void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
+    }
 
 
 	public static void main(String[] args) {
